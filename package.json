@@ -1,0 +1,29 @@
+{
+  "name": "react-native-slider",
+  "version": "0.0.1",
+  "description": "A <Slider /> component for react-native",
+  "main": "Slider.js",
+  "author": "Jean Regisser <jean.regisser@gmail.com> (https://github.com/jeanregisser)",
+  "keywords": [
+    "react-native",
+    "slider"
+  ],
+  "license": "MIT",
+  "scripts": {
+    "start": "node_modules/react-native/packager/packager.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:jeanregisser/react-native-slider.git"
+  },
+  "dependencies": {
+  },
+  "peerDependencies": {
+    "react-native": ">=0.4.4"
+  },
+  "devDependencies": {
+    "babel-eslint": "^3.1.15",
+    "eslint": "^0.23.0",
+    "eslint-plugin-react": "^2.5.2"
+  }
+}
