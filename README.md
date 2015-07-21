@@ -8,7 +8,7 @@
 A pure JavaScript `<Slider>` component for react-native. This is still very much a work
 in progress, ideas and contributions are very welcome.
 
-<!---![Demo](https://raw.githubusercontent.com/jeanregisser/react-native-slider/master/Screenshots/demo.gif)-->
+![Demo](https://raw.githubusercontent.com/jeanregisser/react-native-slider/master/Screenshots/basic.png)
 
 ## Install
 
