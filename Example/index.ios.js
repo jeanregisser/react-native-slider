@@ -7,6 +7,7 @@ var {
   StyleSheet,
   Text,
   TouchableHighlight,
+  ScrollView,
   View,
   SliderIOS,
 } = React;
@@ -59,7 +60,7 @@ var SliderExample = React.createClass({
 
   render() {
     return (
-      <View style={styles.container}>
+      <ScrollView contentContainerStyle={styles.container}>
         <SliderContainer caption='<SliderIOS/>'>
           <SliderIOS />
         </SliderContainer>
@@ -72,7 +73,28 @@ var SliderExample = React.createClass({
         <SliderContainer caption='<Slider/> with custom style'>
           <Slider styles={iosStyles} minimumTrackTintColor='#1073ff' maximumTrackTintColor='#b7b7b7' />
         </SliderContainer>
-      </View>
+        <SliderContainer caption='<Slider/> with custom style #2'>
+          <Slider styles={customStyles2} minimumTrackTintColor='#30a935' />
+        </SliderContainer>
+        <SliderContainer caption='<Slider/> with custom style #3'>
+          <Slider styles={customStyles3} minimumTrackTintColor='#eecba8' />
+        </SliderContainer>
+        <SliderContainer caption='<Slider/> with custom style #4'>
+          <Slider styles={customStyles4} minimumTrackTintColor='#d14ba6' />
+        </SliderContainer>
+        <SliderContainer caption='<Slider/> with custom style #5'>
+          <Slider styles={customStyles5} minimumTrackTintColor='#ec4c46' />
+        </SliderContainer>
+        <SliderContainer caption='<Slider/> with custom style #6'>
+          <Slider styles={customStyles6} minimumTrackTintColor='#e6a954' />
+        </SliderContainer>
+        <SliderContainer caption='<Slider/> with custom style #7'>
+          <Slider styles={customStyles7} minimumTrackTintColor='#2f2f2f' />
+        </SliderContainer>
+        <SliderContainer caption='<Slider/> with custom style #8'>
+          <Slider styles={customStyles8} minimumTrackTintColor='#31a4db' />
+        </SliderContainer>
+      </ScrollView>
     );
   },
 
@@ -94,13 +116,10 @@ var SliderExample = React.createClass({
 
 var styles = StyleSheet.create({
   container: {
-    flex: 1,
-    marginTop: 40,
+    margin: 20,
+    paddingBottom: 20,
     justifyContent: 'flex-start',
     alignItems: 'stretch',
-    marginLeft: 20,
-    marginRight: 20,
-    //backgroundColor: 'rgb(43, 186, 180)',
   },
   titleContainer: {
     flexDirection: 'row',
@@ -137,6 +156,165 @@ var iosStyles = StyleSheet.create({
     shadowOffset: {width: 0, height: 2},
     shadowRadius: 2,
     shadowOpacity: 0.35,
+  }
+});
+
+var customStyles2 = StyleSheet.create({
+  container: {
+    height: 40,
+    justifyContent: 'center',
+  },
+  track: {
+    height: 4,
+    borderRadius: 2,
+  },
+  thumb: {
+    marginTop: -17,
+    position: 'absolute',
+    width: 30,
+    height: 30,
+    borderRadius: 30 / 2,
+    backgroundColor: 'white',
+    borderColor: '#30a935',
+    borderWidth: 2,
+  }
+});
+
+var customStyles3 = StyleSheet.create({
+  container: {
+    height: 40,
+    justifyContent: 'center',
+  },
+  track: {
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: '#d0d0d0',
+  },
+  thumb: {
+    marginTop: -20,
+    position: 'absolute',
+    width: 10,
+    height: 30,
+    borderRadius: 5,
+    backgroundColor: '#eb6e1b',
+  }
+});
+
+var customStyles4 = StyleSheet.create({
+  container: {
+    height: 40,
+    justifyContent: 'center',
+  },
+  track: {
+    height: 10,
+    borderRadius: 4,
+    backgroundColor: 'white',
+    shadowColor: 'black',
+    shadowOffset: {width: 0, height: 1},
+    shadowRadius: 1,
+    shadowOpacity: 0.15,
+  },
+  thumb: {
+    marginTop: -15,
+    position: 'absolute',
+    width: 20,
+    height: 20,
+    backgroundColor: '#f8a1d6',
+    borderColor: '#a4126e',
+    borderWidth: 5,
+    borderRadius: 10,
+    shadowColor: 'black',
+    shadowOffset: {width: 0, height: 2},
+    shadowRadius: 2,
+    shadowOpacity: 0.35,
+  }
+});
+
+var customStyles5 = StyleSheet.create({
+  container: {
+    height: 40,
+    justifyContent: 'center',
+  },
+  track: {
+    height: 18,
+    borderRadius: 1,
+    backgroundColor: '#d5d8e8',
+  },
+  thumb: {
+    marginTop: -24,
+    position: 'absolute',
+    width: 20,
+    height: 30,
+    borderRadius: 1,
+    backgroundColor: '#838486',
+  }
+});
+
+var customStyles6 = StyleSheet.create({
+  container: {
+    height: 40,
+    justifyContent: 'center',
+  },
+  track: {
+    height: 14,
+    borderRadius: 2,
+    backgroundColor: 'white',
+    borderColor: '#9a9a9a',
+    borderWidth: 1,
+  },
+  thumb: {
+    marginTop: -17,
+    position: 'absolute',
+    width: 20,
+    height: 20,
+    borderRadius: 2,
+    backgroundColor: '#eaeaea',
+    borderColor: '#9a9a9a',
+    borderWidth: 1,
+  }
+});
+
+var customStyles7 = StyleSheet.create({
+  container: {
+    height: 40,
+    justifyContent: 'center',
+  },
+  track: {
+    height: 1,
+    backgroundColor: '#303030',
+  },
+  thumb: {
+    marginTop: - 31 / 2,
+    position: 'absolute',
+    width: 30,
+    height: 30,
+    backgroundColor: 'rgba(150, 150, 150, 0.3)',
+    borderColor: 'rgba(150, 150, 150, 0.6)',
+    borderWidth: 14,
+    borderRadius: 15,
+  }
+});
+
+var customStyles8 = StyleSheet.create({
+  container: {
+    height: 40,
+    justifyContent: 'center',
+  },
+  track: {
+    height: 2,
+    backgroundColor: '#303030',
+  },
+  thumb: {
+    marginTop: - 6,
+    position: 'absolute',
+    width: 10,
+    height: 10,
+    backgroundColor: '#31a4db',
+    borderRadius: 10 / 2,
+    shadowColor: '#31a4db',
+    shadowOffset: {width: 0, height: 0},
+    shadowRadius: 2,
+    shadowOpacity: 1,
   }
 });
 
