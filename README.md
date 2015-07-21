@@ -5,7 +5,7 @@
 [![Issue Stats](http://issuestats.com/github/jeanregisser/react-native-slider/badge/pr?style=flat-square)](https://github.com/jeanregisser/react-native-slider/pulls?q=is%3Apr+is%3Aclosed)
 [![Issue Stats](http://issuestats.com/github/jeanregisser/react-native-slider/badge/issue?style=flat-square)](https://github.com/jeanregisser/react-native-slider/issues?q=is%3Aissue+is%3Aclosed)
 
-A pure Javascript `<Slider>` component for react-native. This is still very much a work
+A pure JavaScript `<Slider>` component for react-native. This is still very much a work
 in progress, ideas and contributions are very welcome.
 
 <!---![Demo](https://raw.githubusercontent.com/jeanregisser/react-native-slider/master/Screenshots/demo.gif)-->
