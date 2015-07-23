@@ -66,16 +66,18 @@ AppRegistry.registerComponent('SliderExample', () => SliderExample);
 
 ## Props
 
-Prop                  | Type     | Optional | Default     | Description
---------------------- | -------- | -------- | ----------- | -----------
-value                 | number   | Yes      | 0           | Initial value of the slider
-minimumValue          | number   | Yes      | 0           | Initial minimum value of the slider
-maximumValue          | number   | Yes      | 1           | Initial maximum value of the slider
-minimumTrackTintColor | string   | Yes      | '#3f3f3f'   | The color used for the track to the left of the button
-maximumTrackTintColor | string   | Yes      | '#b3b3b3'   | The color used for the track to the right of the button
-thumbTintColor        | string   | Yes      | '#343434'   | The color used for the thumb
-onValueChange         | function | Yes      |             | Callback continuously called while the user is dragging the slider
-onSlidingComplete     | function | Yes      |             | Callback called when the user finishes changing the value (e.g. when the slider is released)
+Prop                  | Type     | Optional | Default                   | Description
+--------------------- | -------- | -------- | ------------------------- | -----------
+value                 | number   | Yes      | 0                         | Initial value of the slider
+minimumValue          | number   | Yes      | 0                         | Initial minimum value of the slider
+maximumValue          | number   | Yes      | 1                         | Initial maximum value of the slider
+minimumTrackTintColor | string   | Yes      | '#3f3f3f'                 | The color used for the track to the left of the button
+maximumTrackTintColor | string   | Yes      | '#b3b3b3'                 | The color used for the track to the right of the button
+thumbTintColor        | string   | Yes      | '#343434'                 | The color used for the thumb
+thumbTouchSize        | object   | Yes      | `{width: 40, height: 40}` | The size of the touch area that allows moving the thumb. The touch area has the same center has the visible thumb. This allows to have a visually small thumb while still allowing the user to move it easily.
+onValueChange         | function | Yes      |                           | Callback continuously called while the user is dragging the slider
+onSlidingComplete     | function | Yes      |                           | Callback called when the user finishes changing the value (e.g. when the slider is released)
+debugTouchArea        | bool     | Yes      | false                     | Set this to true to visually see the thumb touch rect in green.
 
 ---
 
