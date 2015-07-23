@@ -10,6 +10,8 @@ in progress, ideas and contributions are very welcome.
 
 ![Demo](https://raw.githubusercontent.com/jeanregisser/react-native-slider/master/Screenshots/basic.png)
 
+It is a drop-in replacement for [SliderIOS](http://facebook.github.io/react-native/docs/sliderios.html).
+
 ## Install
 
 ```shell
