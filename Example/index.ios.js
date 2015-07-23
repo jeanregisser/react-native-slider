@@ -37,8 +37,8 @@ var SliderContainer = React.createClass({
 
   _renderChildren() {
     return React.Children.map(this.props.children, (child) => {
-      if (child.type === Slider.type
-          || child.type === SliderIOS.type) {
+      if (child.type === Slider
+          || child.type === SliderIOS) {
         var value = this.state.value;
         return React.addons.cloneWithProps(child, {
           value: value,
