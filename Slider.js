@@ -14,6 +14,20 @@ var StyleSheetRegistry = require('StyleSheetRegistry');
 var TRACK_SIZE = 4;
 var THUMB_SIZE = 20;
 
+function Rect(x, y, width, height) {
+  this.x = x;
+  this.y = y;
+  this.width = width;
+  this.height = height;
+}
+
+Rect.prototype.containsPoint = function(x, y) {
+  return (x >= this.x 
+          && y >= this.y
+          && x <= this.x + this.width
+          && y <= this.y + this.height);
+}
+
 var Slider = React.createClass({
   propTypes: {
     /**
@@ -54,6 +68,17 @@ var Slider = React.createClass({
     thumbTintColor: PropTypes.string,
 
     /**
+     * The size of the touch area that allows moving the thumb.
+     * The touch area has the same center has the visible thumb.
+     * This allows to have a visually small thumb while still allowing the user 
+     * to move it easily.
+     * The default is {width: 40, height: 40}.
+     */
+    thumbTouchSize: PropTypes.shape(
+      {width: PropTypes.number, height: PropTypes.number}
+    ),
+
+    /**
      * Callback continuously called while the user is dragging the slider.
      */
     onValueChange: PropTypes.func,
@@ -63,6 +88,11 @@ var Slider = React.createClass({
      * the slider is released).
      */
     onSlidingComplete: PropTypes.func,
+
+    /**
+     * Set this to true to visually see the thumb touch rect in green.
+     */
+    debugTouchArea: PropTypes.bool,
   },
   getInitialState() {
     return {
@@ -81,6 +111,8 @@ var Slider = React.createClass({
       minimumTrackTintColor: '#3f3f3f',
       maximumTrackTintColor: '#b3b3b3',
       thumbTintColor: '#343434',
+      thumbTouchSize: {width: 40, height: 40},
+      debugTouchArea: false,
     };
   },
   componentWillMount() {
@@ -94,13 +126,15 @@ var Slider = React.createClass({
     });
   },
   render() {
-    var value = this.state.value;
-    var styles = this.props.styles || DefaultStyles;
+    var state = this.state;
+    var props = this.props;
+    var value = state.value;
+    var styles = props.styles || DefaultStyles;
     var thumbLeft = this._getThumbLeft(value);
     var valueVisibleStyle = {};
-    if (this.state.containerSize.width === undefined
-        || this.state.trackSize.width === undefined
-        || this.state.thumbSize.width === undefined) {
+    if (state.containerSize.width === undefined
+        || state.trackSize.width === undefined
+        || state.thumbSize.width === undefined) {
       valueVisibleStyle.opacity = 0;
     }
 
@@ -108,38 +142,45 @@ var Slider = React.createClass({
     var minimumTrackStyle = {
       position: 'absolute',
       width: 300, // needed to workaround a bug for borderRadius
-      marginTop: - this.state.trackSize.height,
-      backgroundColor: this.props.minimumTrackTintColor,
+      marginTop: - state.trackSize.height,
+      backgroundColor: props.minimumTrackTintColor,
       ...valueVisibleStyle
     }
 
-    if (thumbLeft >= 0 && this.state.thumbSize.width >= 0) {
-      minimumTrackStyle.width = thumbLeft + this.state.thumbSize.width / 2;
+    if (thumbLeft >= 0 && state.thumbSize.width >= 0) {
+      minimumTrackStyle.width = thumbLeft + state.thumbSize.width / 2;
     } 
+
+    var touchOverflowStyle = this._getTouchOverflowStyle();
 
     return (
       <View style={styles.container} onLayout={this._measureContainer}>
         <View 
-          style={[{backgroundColor: this.props.maximumTrackTintColor}, styles.track]}
+          style={[{backgroundColor: props.maximumTrackTintColor}, styles.track]}
           onLayout={this._measureTrack} />
         <View style={[styles.track, minimumTrackStyle]} />
         <View 
           ref={(thumb) => this.thumb = thumb} 
           onLayout={this._measureThumb}
-          style={[{backgroundColor: this.props.thumbTintColor}, styles.thumb, {left: thumbLeft, ...valueVisibleStyle}]} 
-          {...this._panResponder.panHandlers} />
+          style={[{backgroundColor: props.thumbTintColor}, styles.thumb, {left: thumbLeft, ...valueVisibleStyle}]} 
+        />
+        <View 
+          style={[DefaultStyles.touchArea, touchOverflowStyle]}
+          {...this._panResponder.panHandlers}>
+          {props.debugTouchArea === true && this._renderDebugThumbTouchRect()}
+        </View>
       </View>
     );
   },
 
   _handleStartShouldSetPanResponder: function(e: Object, gestureState: Object): boolean {
     // Should we become active when the user presses down on the thumb?
-    return true;
+    return this._thumbHitTest(e);
   },
 
   _handleMoveShouldSetPanResponder: function(e: Object, gestureState: Object): boolean {
     // Should we become active when the user moves a touch over the thumb?
-    return true;
+    return false;
   },
 
   _handlePanResponderGrant: function(e: Object, gestureState: Object) {
@@ -195,6 +236,79 @@ var Slider = React.createClass({
       this.props[event](this.state.value);
     }
   },
+
+  _getTouchOverflowSize() {
+    var state = this.state;
+    var props = this.props;
+
+    var size = {};
+    if (state.containerSize.width !== undefined
+        && state.thumbSize.width !== undefined) {
+
+      size.width = Math.max(0, props.thumbTouchSize.width - state.thumbSize.width);
+      size.height = Math.max(0, props.thumbTouchSize.height - state.containerSize.height);
+    }
+
+    return size;
+  },
+
+  _getTouchOverflowStyle() {
+    var {width, height} = this._getTouchOverflowSize();
+
+    var touchOverflowStyle = {};
+    if (width !== undefined && height !== undefined) {
+      var verticalMargin = - height / 2;
+      touchOverflowStyle.marginTop = verticalMargin;
+      touchOverflowStyle.marginBottom = verticalMargin;
+
+      var horizontalMargin = - width / 2;
+      touchOverflowStyle.marginLeft = horizontalMargin;
+      touchOverflowStyle.marginRight = horizontalMargin;
+    }
+
+    if (this.props.debugTouchArea === true) {
+      touchOverflowStyle.backgroundColor = 'orange';
+      touchOverflowStyle.opacity = 0.5;
+    }
+
+    return touchOverflowStyle;
+  },
+
+  _thumbHitTest(e: object) {
+    var nativeEvent = e.nativeEvent;
+    var thumbTouchRect = this._getThumbTouchRect();
+    return thumbTouchRect.containsPoint(nativeEvent.locationX, nativeEvent.locationY);
+  },
+
+  _getThumbTouchRect() {
+    var state = this.state;
+    var props = this.props;
+    var touchOverflowSize = this._getTouchOverflowSize();
+
+    return new Rect(
+        touchOverflowSize.width / 2 + this._getThumbLeft(state.value) + (state.thumbSize.width - props.thumbTouchSize.width) / 2,
+        touchOverflowSize.height / 2 + (state.containerSize.height - props.thumbTouchSize.height) / 2,
+        props.thumbTouchSize.width,
+        props.thumbTouchSize.height
+      )
+  },
+
+  _renderDebugThumbTouchRect() {
+    var thumbTouchRect = this._getThumbTouchRect();
+    var positionStyle = {
+      left: thumbTouchRect.x,
+      top: thumbTouchRect.y,
+      width: thumbTouchRect.width,
+      height: thumbTouchRect.height,
+    }
+
+    return (
+      <View 
+        style={[DefaultStyles.debugThumbTouchArea, positionStyle]}
+        pointerEvents='none'
+      />
+    );
+  }
 });
 
 
@@ -202,7 +316,6 @@ var DefaultStyles = StyleSheet.create({
   container: {
     height: 40,
     justifyContent: 'center',
-    //backgroundColor: 'orange',
   },
   track: {
     height: TRACK_SIZE,
@@ -214,6 +327,19 @@ var DefaultStyles = StyleSheet.create({
     width: THUMB_SIZE,
     height: THUMB_SIZE,
     borderRadius: THUMB_SIZE / 2,
+  },
+  touchArea: {
+    position: 'absolute',
+    backgroundColor: 'transparent',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+  debugThumbTouchArea: {
+    position: 'absolute',
+    backgroundColor: 'green',
+    opacity: 0.5,
   }
 });
 

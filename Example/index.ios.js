@@ -91,8 +91,8 @@ var SliderExample = React.createClass({
         <SliderContainer caption='<Slider/> with custom style #7'>
           <Slider styles={customStyles7} minimumTrackTintColor='#2f2f2f' />
         </SliderContainer>
-        <SliderContainer caption='<Slider/> with custom style #8'>
-          <Slider styles={customStyles8} minimumTrackTintColor='#31a4db' />
+        <SliderContainer caption='<Slider/> with custom style #8 and thumbTouchSize'>
+          <Slider styles={customStyles8} minimumTrackTintColor='#31a4db' thumbTouchSize={{width: 50, height: 40}} />
         </SliderContainer>
       </ScrollView>
     );
@@ -297,7 +297,7 @@ var customStyles7 = StyleSheet.create({
 
 var customStyles8 = StyleSheet.create({
   container: {
-    height: 40,
+    height: 20,
     justifyContent: 'center',
   },
   track: {
