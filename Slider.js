@@ -9,7 +9,6 @@ var {
   TouchableWithoutFeedback,
   View
 } = React;
-var StyleSheetRegistry = require('StyleSheetRegistry');
 
 var TRACK_SIZE = 4;
 var THUMB_SIZE = 20;
@@ -138,7 +137,6 @@ var Slider = React.createClass({
       valueVisibleStyle.opacity = 0;
     }
 
-    //var arrowColor = StyleSheetRegistry.getStyleByID(styles.content).backgroundColor;
     var minimumTrackStyle = {
       position: 'absolute',
       width: 300, // needed to workaround a bug for borderRadius
