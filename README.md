@@ -81,4 +81,10 @@ debugTouchArea        | bool     | Yes      | false                     | Set th
 
 ---
 
+## Set Value Programatically
+
+If you put ref='slider' on your <Slider> component, you can change the current value with `this.refs.slider.setValue(newValue);`
+
+---
+
 **MIT Licensed**
