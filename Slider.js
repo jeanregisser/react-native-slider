@@ -21,7 +21,7 @@ function Rect(x, y, width, height) {
 }
 
 Rect.prototype.containsPoint = function(x, y) {
-  return (x >= this.x 
+  return (x >= this.x
           && y >= this.y
           && x <= this.x + this.width
           && y <= this.y + this.height);
@@ -69,7 +69,7 @@ var Slider = React.createClass({
     /**
      * The size of the touch area that allows moving the thumb.
      * The touch area has the same center has the visible thumb.
-     * This allows to have a visually small thumb while still allowing the user 
+     * This allows to have a visually small thumb while still allowing the user
      * to move it easily.
      * The default is {width: 40, height: 40}.
      */
@@ -147,22 +147,22 @@ var Slider = React.createClass({
 
     if (thumbLeft >= 0 && state.thumbSize.width >= 0) {
       minimumTrackStyle.width = thumbLeft + state.thumbSize.width / 2;
-    } 
+    }
 
     var touchOverflowStyle = this._getTouchOverflowStyle();
 
     return (
       <View style={styles.container} onLayout={this._measureContainer}>
-        <View 
+        <View
           style={[{backgroundColor: props.maximumTrackTintColor}, styles.track]}
           onLayout={this._measureTrack} />
         <View style={[styles.track, minimumTrackStyle]} />
-        <View 
-          ref={(thumb) => this.thumb = thumb} 
+        <View
+          ref={(thumb) => this.thumb = thumb}
           onLayout={this._measureThumb}
-          style={[{backgroundColor: props.thumbTintColor}, styles.thumb, {left: thumbLeft, ...valueVisibleStyle}]} 
+          style={[{backgroundColor: props.thumbTintColor}, styles.thumb, {left: thumbLeft, ...valueVisibleStyle}]}
         />
-        <View 
+        <View
           style={[DefaultStyles.touchArea, touchOverflowStyle]}
           {...this._panResponder.panHandlers}>
           {props.debugTouchArea === true && this._renderDebugThumbTouchRect()}
@@ -182,10 +182,10 @@ var Slider = React.createClass({
   },
 
   _handlePanResponderGrant: function(e: Object, gestureState: Object) {
-    this.setState({ previousLeft: this._getThumbLeft(this.state.value) }); 
+    this.setState({ previousLeft: this._getThumbLeft(this.state.value) });
   },
   _handlePanResponderMove: function(e: Object, gestureState: Object) {
-    this.setState({ value: this._getValue(gestureState) }, 
+    this.setState({ value: this._getValue(gestureState) },
       this._fireChangeEvent.bind(this, 'onValueChange'));
   },
   _handlePanResponderEnd: function(e: Object, gestureState: Object) {
@@ -202,13 +202,13 @@ var Slider = React.createClass({
   _measureTrack(x: Object) {
     var {width, height} = x.nativeEvent.layout;
     var trackSize = {width: width, height: height};
-    this.setState({ trackSize: trackSize }); 
+    this.setState({ trackSize: trackSize });
   },
 
   _measureThumb(x: Object) {
     var {width, height} = x.nativeEvent.layout;
     var thumbSize = {width: width, height: height};
-    this.setState({ thumbSize: thumbSize }); 
+    this.setState({ thumbSize: thumbSize });
   },
 
   _getRatio(value: number) {
@@ -222,7 +222,7 @@ var Slider = React.createClass({
 
   _getValue(gestureState: Object) {
     var length = this.state.containerSize.width - this.state.thumbSize.width
-    var thumbLeft = Math.min(length, 
+    var thumbLeft = Math.min(length,
       Math.max(0, this.state.previousLeft + gestureState.dx));
 
     var ratio = thumbLeft / length;
@@ -301,7 +301,7 @@ var Slider = React.createClass({
     }
 
     return (
-      <View 
+      <View
         style={[DefaultStyles.debugThumbTouchArea, positionStyle]}
         pointerEvents='none'
       />
