@@ -185,7 +185,8 @@ var Slider = React.createClass({
   },
 
   _handlePanResponderGrant: function(e: Object, gestureState: Object) {
-    this.setState({ previousLeft: this._getThumbLeft(this.state.value) });
+    this.setState({ previousLeft: this._getThumbLeft(this.state.value) },
+      this._fireChangeEvent.bind(this, 'onSlidingStart'));
   },
   _handlePanResponderMove: function(e: Object, gestureState: Object) {
     this.setState({ value: this._getValue(gestureState) },

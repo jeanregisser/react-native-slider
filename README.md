@@ -76,6 +76,7 @@ maximumTrackTintColor | string   | Yes      | '#b3b3b3'                 | The co
 thumbTintColor        | string   | Yes      | '#343434'                 | The color used for the thumb
 thumbTouchSize        | object   | Yes      | `{width: 40, height: 40}` | The size of the touch area that allows moving the thumb. The touch area has the same center has the visible thumb. This allows to have a visually small thumb while still allowing the user to move it easily.
 onValueChange         | function | Yes      |                           | Callback continuously called while the user is dragging the slider
+onSlidingStart        | function | Yes      |                           | Callback called when the user starts changing the value (e.g. when the slider is pressed)
 onSlidingComplete     | function | Yes      |                           | Callback called when the user finishes changing the value (e.g. when the slider is released)
 debugTouchArea        | bool     | Yes      | false                     | Set this to true to visually see the thumb touch rect in green.
 
