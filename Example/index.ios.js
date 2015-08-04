@@ -138,21 +138,6 @@ var SliderExample = React.createClass({
       </ScrollView>
     );
   },
-
-  _addSlider(i, comp) {
-    var valueKey = 'value' + i;
-    var value = this.state[valueKey] !== undefined ? this.state[valueKey] : DEFAULT_VALUE;
-
-    comp.props.value = value;
-    comp.props.onValueChange = (value) => this.setState({[valueKey]: value});
-
-    return (
-      <View>
-        {comp}
-        <Text>Value: {value}</Text>
-      </View>
-    );
-  }
 });
 
 var styles = StyleSheet.create({
