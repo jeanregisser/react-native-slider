@@ -68,31 +68,72 @@ var SliderExample = React.createClass({
           <Slider />
         </SliderContainer>
         <SliderContainer caption='<Slider/> with min, max and custom tints '>
-          <Slider minimumValue={-10} maximumValue={42} minimumTrackTintColor='#1fb28a' maximumTrackTintColor='#d3d3d3' thumbTintColor='#1a9274' />
+          <Slider
+            minimumValue={-10}
+            maximumValue={42}
+            minimumTrackTintColor='#1fb28a'
+            maximumTrackTintColor='#d3d3d3'
+            thumbTintColor='#1a9274'
+          />
         </SliderContainer>
         <SliderContainer caption='<Slider/> with custom style'>
-          <Slider styles={iosStyles} minimumTrackTintColor='#1073ff' maximumTrackTintColor='#b7b7b7' />
+          <Slider
+            trackStyle={iosStyles.track}
+            thumbStyle={iosStyles.thumb}
+            minimumTrackTintColor='#1073ff'
+            maximumTrackTintColor='#b7b7b7'
+          />
         </SliderContainer>
         <SliderContainer caption='<Slider/> with custom style #2'>
-          <Slider styles={customStyles2} minimumTrackTintColor='#30a935' />
+          <Slider
+            trackStyle={customStyles2.track}
+            thumbStyle={customStyles2.thumb}
+            minimumTrackTintColor='#30a935'
+          />
         </SliderContainer>
         <SliderContainer caption='<Slider/> with custom style #3'>
-          <Slider styles={customStyles3} minimumTrackTintColor='#eecba8' />
+          <Slider
+            trackStyle={customStyles3.track}
+            thumbStyle={customStyles3.thumb}
+            minimumTrackTintColor='#eecba8'
+          />
         </SliderContainer>
         <SliderContainer caption='<Slider/> with custom style #4'>
-          <Slider styles={customStyles4} minimumTrackTintColor='#d14ba6' />
+          <Slider
+            trackStyle={customStyles4.track}
+            thumbStyle={customStyles4.thumb}
+            minimumTrackTintColor='#d14ba6'
+          />
         </SliderContainer>
         <SliderContainer caption='<Slider/> with custom style #5'>
-          <Slider styles={customStyles5} minimumTrackTintColor='#ec4c46' />
+          <Slider
+            trackStyle={customStyles5.track}
+            thumbStyle={customStyles5.thumb}
+            minimumTrackTintColor='#ec4c46'
+          />
         </SliderContainer>
         <SliderContainer caption='<Slider/> with custom style #6'>
-          <Slider styles={customStyles6} minimumTrackTintColor='#e6a954' />
+          <Slider
+            trackStyle={customStyles6.track}
+            thumbStyle={customStyles6.thumb}
+            minimumTrackTintColor='#e6a954'
+          />
         </SliderContainer>
         <SliderContainer caption='<Slider/> with custom style #7'>
-          <Slider styles={customStyles7} minimumTrackTintColor='#2f2f2f' />
+          <Slider
+            trackStyle={customStyles7.track}
+            thumbStyle={customStyles7.thumb}
+            minimumTrackTintColor='#2f2f2f'
+          />
         </SliderContainer>
         <SliderContainer caption='<Slider/> with custom style #8 and thumbTouchSize'>
-          <Slider styles={customStyles8} minimumTrackTintColor='#31a4db' thumbTouchSize={{width: 50, height: 40}} />
+          <Slider
+            style={customStyles8.container}
+            trackStyle={customStyles8.track}
+            thumbStyle={customStyles8.thumb}
+            minimumTrackTintColor='#31a4db'
+            thumbTouchSize={{width: 50, height: 40}}
+          />
         </SliderContainer>
       </ScrollView>
     );
@@ -104,7 +145,7 @@ var SliderExample = React.createClass({
 
     comp.props.value = value;
     comp.props.onValueChange = (value) => this.setState({[valueKey]: value});
-    
+
     return (
       <View>
         {comp}
@@ -137,17 +178,12 @@ var styles = StyleSheet.create({
 });
 
 var iosStyles = StyleSheet.create({
-  container: {
-    height: 40,
-    justifyContent: 'center',
-  },
   track: {
     height: 2,
     borderRadius: 1,
   },
   thumb: {
     marginTop: -16,
-    position: 'absolute',
     width: 30,
     height: 30,
     borderRadius: 30 / 2,
@@ -160,17 +196,12 @@ var iosStyles = StyleSheet.create({
 });
 
 var customStyles2 = StyleSheet.create({
-  container: {
-    height: 40,
-    justifyContent: 'center',
-  },
   track: {
     height: 4,
     borderRadius: 2,
   },
   thumb: {
     marginTop: -17,
-    position: 'absolute',
     width: 30,
     height: 30,
     borderRadius: 30 / 2,
@@ -181,10 +212,6 @@ var customStyles2 = StyleSheet.create({
 });
 
 var customStyles3 = StyleSheet.create({
-  container: {
-    height: 40,
-    justifyContent: 'center',
-  },
   track: {
     height: 10,
     borderRadius: 5,
@@ -192,7 +219,6 @@ var customStyles3 = StyleSheet.create({
   },
   thumb: {
     marginTop: -20,
-    position: 'absolute',
     width: 10,
     height: 30,
     borderRadius: 5,
@@ -201,10 +227,6 @@ var customStyles3 = StyleSheet.create({
 });
 
 var customStyles4 = StyleSheet.create({
-  container: {
-    height: 40,
-    justifyContent: 'center',
-  },
   track: {
     height: 10,
     borderRadius: 4,
@@ -216,7 +238,6 @@ var customStyles4 = StyleSheet.create({
   },
   thumb: {
     marginTop: -15,
-    position: 'absolute',
     width: 20,
     height: 20,
     backgroundColor: '#f8a1d6',
@@ -231,10 +252,6 @@ var customStyles4 = StyleSheet.create({
 });
 
 var customStyles5 = StyleSheet.create({
-  container: {
-    height: 40,
-    justifyContent: 'center',
-  },
   track: {
     height: 18,
     borderRadius: 1,
@@ -242,7 +259,6 @@ var customStyles5 = StyleSheet.create({
   },
   thumb: {
     marginTop: -24,
-    position: 'absolute',
     width: 20,
     height: 30,
     borderRadius: 1,
@@ -251,10 +267,6 @@ var customStyles5 = StyleSheet.create({
 });
 
 var customStyles6 = StyleSheet.create({
-  container: {
-    height: 40,
-    justifyContent: 'center',
-  },
   track: {
     height: 14,
     borderRadius: 2,
@@ -264,7 +276,6 @@ var customStyles6 = StyleSheet.create({
   },
   thumb: {
     marginTop: -17,
-    position: 'absolute',
     width: 20,
     height: 20,
     borderRadius: 2,
@@ -275,17 +286,12 @@ var customStyles6 = StyleSheet.create({
 });
 
 var customStyles7 = StyleSheet.create({
-  container: {
-    height: 40,
-    justifyContent: 'center',
-  },
   track: {
     height: 1,
     backgroundColor: '#303030',
   },
   thumb: {
     marginTop: - 31 / 2,
-    position: 'absolute',
     width: 30,
     height: 30,
     backgroundColor: 'rgba(150, 150, 150, 0.3)',
@@ -298,7 +304,6 @@ var customStyles7 = StyleSheet.create({
 var customStyles8 = StyleSheet.create({
   container: {
     height: 20,
-    justifyContent: 'center',
   },
   track: {
     height: 2,
@@ -306,7 +311,6 @@ var customStyles8 = StyleSheet.create({
   },
   thumb: {
     marginTop: - 6,
-    position: 'absolute',
     width: 10,
     height: 10,
     backgroundColor: '#31a4db',

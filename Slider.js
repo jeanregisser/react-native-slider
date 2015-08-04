@@ -95,6 +95,21 @@ var Slider = React.createClass({
     onSlidingComplete: PropTypes.func,
 
     /**
+     * The style applied to the slider container.
+     */
+    style: View.propTypes.style,
+
+    /**
+     * The style applied to the track.
+     */
+    trackStyle: View.propTypes.style,
+
+    /**
+     * The style applied to the thumb.
+     */
+    thumbStyle: View.propTypes.style,
+
+    /**
      * Set this to true to visually see the thumb touch rect in green.
      */
     debugTouchArea: PropTypes.bool,
@@ -135,9 +150,19 @@ var Slider = React.createClass({
   },
   render() {
     var state = this.state;
-    var props = this.props;
+    var {
+      minimumTrackTintColor,
+      maximumTrackTintColor,
+      thumbTintColor,
+      styles,
+      style,
+      trackStyle,
+      thumbStyle,
+      debugTouchArea,
+      ...other
+    } = this.props;
     var value = state.value;
-    var styles = props.styles || DefaultStyles;
+    var mainStyles = styles || defaultStyles;
     var thumbLeft = this._getThumbLeft(value);
     var valueVisibleStyle = {};
     if (state.containerSize.width === undefined
@@ -150,7 +175,7 @@ var Slider = React.createClass({
       position: 'absolute',
       width: 300, // needed to workaround a bug for borderRadius
       marginTop: - state.trackSize.height,
-      backgroundColor: props.minimumTrackTintColor,
+      backgroundColor: minimumTrackTintColor,
       ...valueVisibleStyle
     }
 
@@ -161,20 +186,20 @@ var Slider = React.createClass({
     var touchOverflowStyle = this._getTouchOverflowStyle();
 
     return (
-      <View style={styles.container} onLayout={this._measureContainer}>
+      <View {...other} style={[mainStyles.container, style]} onLayout={this._measureContainer}>
         <View
-          style={[{backgroundColor: props.maximumTrackTintColor}, styles.track]}
+          style={[{backgroundColor: maximumTrackTintColor}, mainStyles.track, trackStyle]}
           onLayout={this._measureTrack} />
-        <View style={[styles.track, minimumTrackStyle]} />
+        <View style={[mainStyles.track, trackStyle, minimumTrackStyle]} />
         <View
           ref={(thumb) => this.thumb = thumb}
           onLayout={this._measureThumb}
-          style={[{backgroundColor: props.thumbTintColor}, styles.thumb, {left: thumbLeft, ...valueVisibleStyle}]}
+          style={[{backgroundColor: thumbTintColor}, mainStyles.thumb, thumbStyle, {left: thumbLeft, ...valueVisibleStyle}]}
         />
         <View
-          style={[DefaultStyles.touchArea, touchOverflowStyle]}
+          style={[defaultStyles.touchArea, touchOverflowStyle]}
           {...this._panResponder.panHandlers}>
-          {props.debugTouchArea === true && this._renderDebugThumbTouchRect()}
+          {debugTouchArea === true && this._renderDebugThumbTouchRect()}
         </View>
       </View>
     );
@@ -312,7 +337,7 @@ var Slider = React.createClass({
 
     return (
       <View
-        style={[DefaultStyles.debugThumbTouchArea, positionStyle]}
+        style={[defaultStyles.debugThumbTouchArea, positionStyle]}
         pointerEvents='none'
       />
     );
@@ -320,7 +345,7 @@ var Slider = React.createClass({
 });
 
 
-var DefaultStyles = StyleSheet.create({
+var defaultStyles = StyleSheet.create({
   container: {
     height: 40,
     justifyContent: 'center',
