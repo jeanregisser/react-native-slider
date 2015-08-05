@@ -168,7 +168,6 @@ var iosStyles = StyleSheet.create({
     borderRadius: 1,
   },
   thumb: {
-    marginTop: -16,
     width: 30,
     height: 30,
     borderRadius: 30 / 2,
@@ -186,7 +185,6 @@ var customStyles2 = StyleSheet.create({
     borderRadius: 2,
   },
   thumb: {
-    marginTop: -17,
     width: 30,
     height: 30,
     borderRadius: 30 / 2,
@@ -203,7 +201,6 @@ var customStyles3 = StyleSheet.create({
     backgroundColor: '#d0d0d0',
   },
   thumb: {
-    marginTop: -20,
     width: 10,
     height: 30,
     borderRadius: 5,
@@ -222,7 +219,6 @@ var customStyles4 = StyleSheet.create({
     shadowOpacity: 0.15,
   },
   thumb: {
-    marginTop: -15,
     width: 20,
     height: 20,
     backgroundColor: '#f8a1d6',
@@ -243,7 +239,6 @@ var customStyles5 = StyleSheet.create({
     backgroundColor: '#d5d8e8',
   },
   thumb: {
-    marginTop: -24,
     width: 20,
     height: 30,
     borderRadius: 1,
@@ -260,7 +255,6 @@ var customStyles6 = StyleSheet.create({
     borderWidth: 1,
   },
   thumb: {
-    marginTop: -17,
     width: 20,
     height: 20,
     borderRadius: 2,
@@ -276,7 +270,6 @@ var customStyles7 = StyleSheet.create({
     backgroundColor: '#303030',
   },
   thumb: {
-    marginTop: - 31 / 2,
     width: 30,
     height: 30,
     backgroundColor: 'rgba(150, 150, 150, 0.3)',
@@ -295,7 +288,6 @@ var customStyles8 = StyleSheet.create({
     backgroundColor: '#303030',
   },
   thumb: {
-    marginTop: - 6,
     width: 10,
     height: 10,
     backgroundColor: '#31a4db',

@@ -149,7 +149,6 @@ var Slider = React.createClass({
     this.setState({value: nextProps.value});
   },
   render() {
-    var state = this.state;
     var {
       minimumTrackTintColor,
       maximumTrackTintColor,
@@ -161,26 +160,26 @@ var Slider = React.createClass({
       debugTouchArea,
       ...other
     } = this.props;
-    var value = state.value;
+    var {value, containerSize, trackSize, thumbSize} = this.state;
     var mainStyles = styles || defaultStyles;
     var thumbLeft = this._getThumbLeft(value);
     var valueVisibleStyle = {};
-    if (state.containerSize.width === undefined
-        || state.trackSize.width === undefined
-        || state.thumbSize.width === undefined) {
+    if (containerSize.width === undefined
+        || trackSize.width === undefined
+        || thumbSize.width === undefined) {
       valueVisibleStyle.opacity = 0;
     }
 
     var minimumTrackStyle = {
       position: 'absolute',
       width: 300, // needed to workaround a bug for borderRadius
-      marginTop: - state.trackSize.height,
+      marginTop: - trackSize.height,
       backgroundColor: minimumTrackTintColor,
       ...valueVisibleStyle
     }
 
-    if (thumbLeft >= 0 && state.thumbSize.width >= 0) {
-      minimumTrackStyle.width = thumbLeft + state.thumbSize.width / 2;
+    if (thumbLeft >= 0 && thumbSize.width >= 0) {
+      minimumTrackStyle.width = thumbLeft + thumbSize.width / 2;
     }
 
     var touchOverflowStyle = this._getTouchOverflowStyle();
@@ -194,7 +193,10 @@ var Slider = React.createClass({
         <View
           ref={(thumb) => this.thumb = thumb}
           onLayout={this._measureThumb}
-          style={[{backgroundColor: thumbTintColor}, mainStyles.thumb, thumbStyle, {left: thumbLeft, ...valueVisibleStyle}]}
+          style={[
+            {backgroundColor: thumbTintColor, marginTop: - (trackSize.height + thumbSize.height) / 2},
+            mainStyles.thumb, thumbStyle, {left: thumbLeft, ...valueVisibleStyle}
+          ]}
         />
         <View
           style={[defaultStyles.touchArea, touchOverflowStyle]}
@@ -355,7 +357,6 @@ var defaultStyles = StyleSheet.create({
     borderRadius: TRACK_SIZE / 2,
   },
   thumb: {
-    marginTop: - (TRACK_SIZE + THUMB_SIZE) / 2,
     position: 'absolute',
     width: THUMB_SIZE,
     height: THUMB_SIZE,
