@@ -1,9 +1,8 @@
 ## react-native-slider
 
 [![npm version](http://img.shields.io/npm/v/react-native-slider.svg?style=flat-square)](https://npmjs.org/package/react-native-slider "View this project on npm")
-[![npm version](http://img.shields.io/npm/dm/react-native-slider.svg?style=flat-square)](https://npmjs.org/package/react-native-slider "View this project on npm")
-[![Issue Stats](http://issuestats.com/github/jeanregisser/react-native-slider/badge/pr?style=flat-square)](https://github.com/jeanregisser/react-native-slider/pulls?q=is%3Apr+is%3Aclosed)
-[![Issue Stats](http://issuestats.com/github/jeanregisser/react-native-slider/badge/issue?style=flat-square)](https://github.com/jeanregisser/react-native-slider/issues?q=is%3Aissue+is%3Aclosed)
+[![npm downloads](http://img.shields.io/npm/dm/react-native-slider.svg?style=flat-square)](https://npmjs.org/package/react-native-slider "View this project on npm")
+[![npm licence](http://img.shields.io/npm/l/react-native-slider.svg?style=flat-square)](https://npmjs.org/package/react-native-slider "View this project on npm")
 
 A pure JavaScript `<Slider>` component for react-native. This is still very much a work
 in progress, ideas and contributions are very welcome.
