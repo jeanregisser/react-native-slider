@@ -77,9 +77,9 @@ thumbTouchSize        | object   | Yes      | `{width: 40, height: 40}` | The si
 onValueChange         | function | Yes      |                           | Callback continuously called while the user is dragging the slider
 onSlidingStart        | function | Yes      |                           | Callback called when the user starts changing the value (e.g. when the slider is pressed)
 onSlidingComplete     | function | Yes      |                           | Callback called when the user finishes changing the value (e.g. when the slider is released)
-style                 | style    | Yes      |                           | The style applied to the slider container
-trackStyle            | style    | Yes      |                           | The style applied to the track
-thumbStyle            | style    | Yes      |                           | The style applied to the thumb
+style                 | [style](http://facebook.github.io/react-native/docs/view.html#style)    | Yes      |                           | The style applied to the slider container
+trackStyle            | [style](http://facebook.github.io/react-native/docs/view.html#style)    | Yes      |                           | The style applied to the track
+thumbStyle            | [style](http://facebook.github.io/react-native/docs/view.html#style)    | Yes      |                           | The style applied to the thumb
 debugTouchArea        | bool     | Yes      | false                     | Set this to true to visually see the thumb touch rect in green.
 
 ---
