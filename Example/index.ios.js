@@ -6,7 +6,6 @@ var {
   AppRegistry,
   StyleSheet,
   Text,
-  TouchableHighlight,
   ScrollView,
   View,
   SliderIOS,
@@ -32,7 +31,7 @@ var SliderContainer = React.createClass({
         </View>
         {this._renderChildren()}
       </View>
-    )
+    );
   },
 
   _renderChildren() {
@@ -42,12 +41,12 @@ var SliderContainer = React.createClass({
         var value = this.state.value;
         return React.addons.cloneWithProps(child, {
           value: value,
-          onValueChange: (value) => this.setState({value: value}),
-        })
+          onValueChange: (val) => this.setState({value: val}),
+        });
       } else {
         return child;
       }
-    }.bind(this))
+    }.bind(this));
   },
 });
 

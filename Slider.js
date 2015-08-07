@@ -5,8 +5,6 @@ var {
   PropTypes,
   StyleSheet,
   PanResponder,
-  Text,
-  TouchableWithoutFeedback,
   View
 } = React;
 
@@ -25,7 +23,7 @@ Rect.prototype.containsPoint = function(x, y) {
           && y >= this.y
           && x <= this.x + this.width
           && y <= this.y + this.height);
-}
+};
 
 var Slider = React.createClass({
   propTypes: {
@@ -173,10 +171,10 @@ var Slider = React.createClass({
     var minimumTrackStyle = {
       position: 'absolute',
       width: 300, // needed to workaround a bug for borderRadius
-      marginTop: - trackSize.height,
+      marginTop: -trackSize.height,
       backgroundColor: minimumTrackTintColor,
       ...valueVisibleStyle
-    }
+    };
 
     if (thumbLeft >= 0 && thumbSize.width >= 0) {
       minimumTrackStyle.width = thumbLeft + thumbSize.width / 2;
@@ -194,7 +192,7 @@ var Slider = React.createClass({
           ref={(thumb) => this.thumb = thumb}
           onLayout={this._measureThumb}
           style={[
-            {backgroundColor: thumbTintColor, marginTop: - (trackSize.height + thumbSize.height) / 2},
+            {backgroundColor: thumbTintColor, marginTop: -(trackSize.height + thumbSize.height) / 2},
             mainStyles.thumb, thumbStyle, {left: thumbLeft, ...valueVisibleStyle}
           ]}
         />
@@ -207,17 +205,17 @@ var Slider = React.createClass({
     );
   },
 
-  _handleStartShouldSetPanResponder: function(e: Object, gestureState: Object): boolean {
+  _handleStartShouldSetPanResponder: function(e: Object, /*gestureState: Object*/): boolean {
     // Should we become active when the user presses down on the thumb?
     return this._thumbHitTest(e);
   },
 
-  _handleMoveShouldSetPanResponder: function(e: Object, gestureState: Object): boolean {
+  _handleMoveShouldSetPanResponder: function(/*e: Object, gestureState: Object*/): boolean {
     // Should we become active when the user moves a touch over the thumb?
     return false;
   },
 
-  _handlePanResponderGrant: function(e: Object, gestureState: Object) {
+  _handlePanResponderGrant: function(/*e: Object, gestureState: Object*/) {
     this.setState({ previousLeft: this._getThumbLeft(this.state.value) },
       this._fireChangeEvent.bind(this, 'onSlidingStart'));
   },
@@ -258,12 +256,12 @@ var Slider = React.createClass({
   },
 
   _getValue(gestureState: Object) {
-    var length = this.state.containerSize.width - this.state.thumbSize.width
+    var length = this.state.containerSize.width - this.state.thumbSize.width;
     var thumbLeft = Math.min(length,
       Math.max(0, this.state.previousLeft + gestureState.dx));
 
     var ratio = thumbLeft / length;
-      return ratio * (this.props.maximumValue - this.props.minimumValue) + this.props.minimumValue;
+    return ratio * (this.props.maximumValue - this.props.minimumValue) + this.props.minimumValue;
   },
 
   _fireChangeEvent(event) {
@@ -292,11 +290,11 @@ var Slider = React.createClass({
 
     var touchOverflowStyle = {};
     if (width !== undefined && height !== undefined) {
-      var verticalMargin = - height / 2;
+      var verticalMargin = -height / 2;
       touchOverflowStyle.marginTop = verticalMargin;
       touchOverflowStyle.marginBottom = verticalMargin;
 
-      var horizontalMargin = - width / 2;
+      var horizontalMargin = -width / 2;
       touchOverflowStyle.marginLeft = horizontalMargin;
       touchOverflowStyle.marginRight = horizontalMargin;
     }
@@ -309,7 +307,7 @@ var Slider = React.createClass({
     return touchOverflowStyle;
   },
 
-  _thumbHitTest(e: object) {
+  _thumbHitTest(e: Object) {
     var nativeEvent = e.nativeEvent;
     var thumbTouchRect = this._getThumbTouchRect();
     return thumbTouchRect.containsPoint(nativeEvent.locationX, nativeEvent.locationY);
@@ -321,11 +319,11 @@ var Slider = React.createClass({
     var touchOverflowSize = this._getTouchOverflowSize();
 
     return new Rect(
-        touchOverflowSize.width / 2 + this._getThumbLeft(state.value) + (state.thumbSize.width - props.thumbTouchSize.width) / 2,
-        touchOverflowSize.height / 2 + (state.containerSize.height - props.thumbTouchSize.height) / 2,
-        props.thumbTouchSize.width,
-        props.thumbTouchSize.height
-      )
+      touchOverflowSize.width / 2 + this._getThumbLeft(state.value) + (state.thumbSize.width - props.thumbTouchSize.width) / 2,
+      touchOverflowSize.height / 2 + (state.containerSize.height - props.thumbTouchSize.height) / 2,
+      props.thumbTouchSize.width,
+      props.thumbTouchSize.height
+    );
   },
 
   _renderDebugThumbTouchRect() {
@@ -335,7 +333,7 @@ var Slider = React.createClass({
       top: thumbTouchRect.y,
       width: thumbTouchRect.width,
       height: thumbTouchRect.height,
-    }
+    };
 
     return (
       <View

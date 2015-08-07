@@ -1,0 +1,70 @@
+{
+  "parser": "babel-eslint",
+  "env": {
+    "es6": true
+  },
+  "ecmaFeatures": {
+    "jsx": true
+  },
+  "plugins": [
+    "react"
+  ],
+  "globals": {
+    "__DEV__": true,
+    "__dirname": false,
+    "__fbBatchedBridgeConfig": false,
+    "cancelAnimationFrame": false,
+    "clearImmediate": true,
+    "clearInterval": false,
+    "clearTimeout": false,
+    "console": false,
+    "document": false,
+    "escape": false,
+    "exports": false,
+    "fetch": false,
+    "global": false,
+    "jest": false,
+    "Map": true,
+    "module": false,
+    "navigator": false,
+    "process": false,
+    "Promise": true,
+    "requestAnimationFrame": true,
+    "require": false,
+    "Set": true,
+    "setImmediate": true,
+    "setInterval": false,
+    "setTimeout": false,
+    "window": false,
+    "XMLHttpRequest": false,
+    "pit": false
+  },
+  "rules": {
+    "indent": [
+      2,
+      2
+    ],
+    "quotes": [
+      2,
+      "single",
+      "avoid-escape"
+    ],
+    "linebreak-style": [
+      2,
+      "unix"
+    ],
+    "semi": [
+      2,
+      "always"
+    ],
+    "strict": [
+      2,
+      "global"
+    ],
+    "global-strict": 0,
+    "no-use-before-define": 0,
+    "comma-dangle": 0,
+    "no-underscore-dangle": 0,
+    "eol-last": 1
+  }
+}
