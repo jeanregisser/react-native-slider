@@ -6,3 +6,4 @@ ratings:
    - "**.js"
 exclude_paths:
 - Example/**/*
+- Screenshots/**/*
