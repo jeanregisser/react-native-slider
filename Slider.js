@@ -5,7 +5,8 @@ var {
   PropTypes,
   StyleSheet,
   PanResponder,
-  View
+  View,
+  Platform
 } = React;
 
 var TRACK_SIZE = 4;
@@ -206,6 +207,10 @@ var Slider = React.createClass({
   },
 
   _handleStartShouldSetPanResponder: function(e: Object, /*gestureState: Object*/): boolean {
+    // Until the PR https://github.com/facebook/react-native/pull/3426 is merged, we need to always return "true" for android
+    if (Platform.OS === 'android') {
+      return true;
+    }
     // Should we become active when the user presses down on the thumb?
     return this._thumbHitTest(e);
   },
