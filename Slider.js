@@ -94,6 +94,13 @@ var Slider = React.createClass({
     onSlidingComplete: PropTypes.func,
 
     /**
+     * Callback continuously called while the user is dragging the slider.
+     * Returns the position of the thumb
+     */
+
+    onThumbPosition: PropTypes.func,
+
+    /**
      * The style applied to the slider container.
      */
     style: View.propTypes.style,
@@ -247,6 +254,10 @@ var Slider = React.createClass({
 
   _measureThumb(x: Object) {
     var {width, height} = x.nativeEvent.layout;
+
+    if (this.props.onThumbPosition) {
+      this.props.onThumbPosition({x:x.nativeEvent.layout.x, y:x.nativeEvent.layout.y})
+    }
     var thumbSize = {width: width, height: height};
     this.setState({ thumbSize: thumbSize });
   },
