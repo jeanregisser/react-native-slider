@@ -115,9 +115,9 @@ var Slider = React.createClass({
   },
   getInitialState() {
     return {
-      containerSize: {},
-      trackSize: {},
-      thumbSize: {},
+      containerSize: { width: 0, height: 0 },
+      trackSize: { width: 0, height: 0 },
+      thumbSize: { width: 0, height: 0 },
       previousLeft: 0,
       value: this.props.value,
     };
