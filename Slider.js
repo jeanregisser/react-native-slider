@@ -39,6 +39,12 @@ var Slider = React.createClass({
     value: PropTypes.number,
 
     /**
+       * If true the user won't be able to move the slider.
+       * Default value is false.
+       */
+    disabled: PropTypes.bool,
+
+    /**
      * Initial minimum value of the slider. Default value is 0.
      */
     minimumValue: PropTypes.number,
@@ -225,10 +231,18 @@ var Slider = React.createClass({
       this._fireChangeEvent.bind(this, 'onSlidingStart'));
   },
   _handlePanResponderMove: function(e: Object, gestureState: Object) {
+    if (this.props.disabled) {
+      return;
+    }
+
     this.setState({ value: this._getValue(gestureState) },
       this._fireChangeEvent.bind(this, 'onValueChange'));
   },
   _handlePanResponderEnd: function(e: Object, gestureState: Object) {
+    if (this.props.disabled) {
+      return;
+    }
+
     this.setState({ value: this._getValue(gestureState) },
       this._fireChangeEvent.bind(this, 'onSlidingComplete'));
   },
