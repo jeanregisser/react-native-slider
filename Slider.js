@@ -2,6 +2,7 @@
 
 var React = require('react-native');
 var {
+  Animated,
   PropTypes,
   StyleSheet,
   PanResponder,
@@ -120,6 +121,7 @@ var Slider = React.createClass({
       thumbSize: { width: 0, height: 0 },
       previousLeft: 0,
       value: this.props.value,
+      animatedValue: new Animated.Value(this.props.value)
     };
   },
   getDefaultProps() {
@@ -146,6 +148,13 @@ var Slider = React.createClass({
   },
   componentWillReceiveProps: function(nextProps) {
     this.setState({value: nextProps.value});
+    Animated.timing(
+     this.state.animatedValue,
+     {
+       toValue: this._getThumbLeft(nextProps.value),
+       duration: 0
+     }
+   ).start();
   },
   render() {
     var {
@@ -189,12 +198,12 @@ var Slider = React.createClass({
           style={[{backgroundColor: maximumTrackTintColor}, mainStyles.track, trackStyle]}
           onLayout={this._measureTrack} />
         <View style={[mainStyles.track, trackStyle, minimumTrackStyle]} />
-        <View
+        <Animated.View
           ref={(thumb) => this.thumb = thumb}
           onLayout={this._measureThumb}
           style={[
             {backgroundColor: thumbTintColor, marginTop: -(trackSize.height + thumbSize.height) / 2},
-            mainStyles.thumb, thumbStyle, {left: thumbLeft, ...valueVisibleStyle}
+            mainStyles.thumb, thumbStyle, {left: this.state.animatedValue, ...valueVisibleStyle}
           ]}
         />
         <View
