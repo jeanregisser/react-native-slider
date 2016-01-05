@@ -3,6 +3,7 @@
 var React = require('react-native');
 var {
   Animated,
+  Easing,
   PropTypes,
   StyleSheet,
   PanResponder,
@@ -152,7 +153,8 @@ var Slider = React.createClass({
      this.state.animatedValue,
      {
        toValue: this._getThumbLeft(nextProps.value),
-       duration: 0
+       duration: 0,
+       easing: Easing.linear
      }
    ).start();
   },
