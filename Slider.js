@@ -137,6 +137,9 @@ var Slider = React.createClass({
       debugTouchArea: false,
     };
   },
+  shouldComponentUpdate: function(nextProps, nextState) {
+    return nextProps != this.props;
+  },
   componentWillMount() {
     this._panResponder = PanResponder.create({
       onStartShouldSetPanResponder: this._handleStartShouldSetPanResponder,
@@ -236,12 +239,30 @@ var Slider = React.createClass({
       this._fireChangeEvent.bind(this, 'onSlidingStart'));
   },
   _handlePanResponderMove: function(e: Object, gestureState: Object) {
-    this.setState({ value: this._getValue(gestureState) },
+    var _value = this._getValue(gestureState);
+    this.setState({ value: _value },
       this._fireChangeEvent.bind(this, 'onValueChange'));
+    Animated.timing(
+     this.state.animatedValue,
+     {
+       toValue: this._getThumbLeft(_value),
+       duration: 0,
+       easing: Easing.linear
+     }
+   ).start();
   },
   _handlePanResponderEnd: function(e: Object, gestureState: Object) {
-    this.setState({ value: this._getValue(gestureState) },
+    var _value = this._getValue(gestureState);
+    this.setState({ value: _value },
       this._fireChangeEvent.bind(this, 'onSlidingComplete'));
+    Animated.timing(
+     this.state.animatedValue,
+     {
+       toValue: this._getThumbLeft(_value),
+       duration: 0,
+       easing: Easing.linear
+     }
+   ).start();
   },
 
   _measureContainer(x: Object) {
