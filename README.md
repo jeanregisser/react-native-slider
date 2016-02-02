@@ -20,7 +20,7 @@ npm i --save react-native-slider
 
 ## Usage
 
-```javascript
+```jsx
 'use strict';
 
 var React = require('react-native');
