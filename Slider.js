@@ -49,6 +49,12 @@ var Slider = React.createClass({
     maximumValue: PropTypes.number,
 
     /**
+     * Step value of the slider. The value should be between 0 and
+     * (maximumValue - minimumValue). Default value is 0.
+     */
+    step: PropTypes.number,
+
+    /**
      * The color used for the track to the left of the button. Overrides the
      * default blue gradient image.
      */
@@ -127,6 +133,7 @@ var Slider = React.createClass({
       value: 0,
       minimumValue: 0,
       maximumValue: 1,
+      step: 0,
       minimumTrackTintColor: '#3f3f3f',
       maximumTrackTintColor: '#b3b3b3',
       thumbTintColor: '#343434',
@@ -262,11 +269,23 @@ var Slider = React.createClass({
 
   _getValue(gestureState: Object) {
     var length = this.state.containerSize.width - this.state.thumbSize.width;
-    var thumbLeft = Math.min(length,
-      Math.max(0, this.state.previousLeft + gestureState.dx));
+    var thumbLeft = this.state.previousLeft + gestureState.dx;
 
     var ratio = thumbLeft / length;
-    return ratio * (this.props.maximumValue - this.props.minimumValue) + this.props.minimumValue;
+
+    if (this.props.step) {
+      return Math.max(this.props.minimumValue,
+        Math.min(this.props.maximumValue,
+          this.props.minimumValue + Math.round(ratio * (this.props.maximumValue - this.props.minimumValue) / this.props.step) * this.props.step
+        )
+      );
+    } else {
+      return Math.max(this.props.minimumValue,
+        Math.min(this.props.maximumValue,
+          ratio * (this.props.maximumValue - this.props.minimumValue) + this.props.minimumValue
+        )
+      );
+    }
   },
 
   _fireChangeEvent(event) {
