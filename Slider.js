@@ -39,9 +39,9 @@ var Slider = React.createClass({
     value: PropTypes.number,
 
     /**
-       * If true the user won't be able to move the slider.
-       * Default value is false.
-       */
+     * If true the user won't be able to move the slider.
+     * Default value is false.
+     */
     disabled: PropTypes.bool,
 
     /**
