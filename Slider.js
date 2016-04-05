@@ -157,6 +157,9 @@ var Slider = React.createClass({
       onPanResponderTerminate: this._handlePanResponderEnd,
     });
   },
+  componentWillReceiveProps: function(nextProps) {
+    this.setState({value: nextProps.value});
+  },
   render() {
     var {
       minimumTrackTintColor,
