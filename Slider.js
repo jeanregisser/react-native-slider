@@ -2,6 +2,8 @@
 
 var React = require('react-native');
 var {
+  Animated,
+  Easing,
   PropTypes,
   StyleSheet,
   PanResponder,
@@ -126,6 +128,7 @@ var Slider = React.createClass({
       thumbSize: { width: 0, height: 0 },
       previousLeft: 0,
       value: this.props.value,
+      animatedValue: new Animated.Value(this.props.value)
     };
   },
   getDefaultProps() {
@@ -141,6 +144,9 @@ var Slider = React.createClass({
       debugTouchArea: false,
     };
   },
+  shouldComponentUpdate: function(nextProps, nextState) {
+    return nextProps != this.props;
+  },
   componentWillMount() {
     this._panResponder = PanResponder.create({
       onStartShouldSetPanResponder: this._handleStartShouldSetPanResponder,
@@ -153,6 +159,14 @@ var Slider = React.createClass({
   },
   componentWillReceiveProps: function(nextProps) {
     this.setState({value: nextProps.value});
+    Animated.timing(
+     this.state.animatedValue,
+     {
+       toValue: this._getThumbLeft(nextProps.value),
+       duration: 0,
+       easing: Easing.linear
+     }
+   ).start();
   },
   render() {
     var {
@@ -196,12 +210,12 @@ var Slider = React.createClass({
           style={[{backgroundColor: maximumTrackTintColor}, mainStyles.track, trackStyle]}
           onLayout={this._measureTrack} />
         <View style={[mainStyles.track, trackStyle, minimumTrackStyle]} />
-        <View
+        <Animated.View
           ref={(thumb) => this.thumb = thumb}
           onLayout={this._measureThumb}
           style={[
             {backgroundColor: thumbTintColor, marginTop: -(trackSize.height + thumbSize.height) / 2},
-            mainStyles.thumb, thumbStyle, {left: thumbLeft, ...valueVisibleStyle}
+            mainStyles.thumb, thumbStyle, {left: this.state.animatedValue, ...valueVisibleStyle}
           ]}
         />
         <View
@@ -232,12 +246,30 @@ var Slider = React.createClass({
       this._fireChangeEvent.bind(this, 'onSlidingStart'));
   },
   _handlePanResponderMove: function(e: Object, gestureState: Object) {
-    this.setState({ value: this._getValue(gestureState) },
+    var _value = this._getValue(gestureState);
+    this.setState({ value: _value },
       this._fireChangeEvent.bind(this, 'onValueChange'));
+    Animated.timing(
+     this.state.animatedValue,
+     {
+       toValue: this._getThumbLeft(_value),
+       duration: 0,
+       easing: Easing.linear
+     }
+   ).start();
   },
   _handlePanResponderEnd: function(e: Object, gestureState: Object) {
-    this.setState({ value: this._getValue(gestureState) },
+    var _value = this._getValue(gestureState);
+    this.setState({ value: _value },
       this._fireChangeEvent.bind(this, 'onSlidingComplete'));
+    Animated.timing(
+     this.state.animatedValue,
+     {
+       toValue: this._getThumbLeft(_value),
+       duration: 0,
+       easing: Easing.linear
+     }
+   ).start();
   },
 
   _measureContainer(x: Object) {
