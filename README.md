@@ -69,6 +69,7 @@ AppRegistry.registerComponent('SliderExample', () => SliderExample);
 Prop                  | Type     | Optional | Default                   | Description
 --------------------- | -------- | -------- | ------------------------- | -----------
 value                 | number   | Yes      | 0                         | Initial value of the slider
+disabled              | bool     | Yes      | false                     | If true the user won't be able to move the slider
 minimumValue          | number   | Yes      | 0                         | Initial minimum value of the slider
 maximumValue          | number   | Yes      | 1                         | Initial maximum value of the slider
 step                  | number   | Yes      | 0                         | Step value of the slider. The value should be between 0 and maximumValue - minimumValue)
