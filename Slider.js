@@ -154,6 +154,7 @@ var Slider = React.createClass({
       onPanResponderGrant: this._handlePanResponderGrant,
       onPanResponderMove: this._handlePanResponderMove,
       onPanResponderRelease: this._handlePanResponderEnd,
+      onPanResponderTerminationRequest: this._handlePanResponderRequestEnd,
       onPanResponderTerminate: this._handlePanResponderEnd,
     });
   },
@@ -244,6 +245,10 @@ var Slider = React.createClass({
 
     this.setState({ value: this._getValue(gestureState) },
       this._fireChangeEvent.bind(this, 'onValueChange'));
+  },
+  _handlePanResponderRequestEnd: function(e: Object, gestureState: Object) {
+    // Should we allow another component to take over this pan?
+    return false;
   },
   _handlePanResponderEnd: function(e: Object, gestureState: Object) {
     if (this.props.disabled) {
