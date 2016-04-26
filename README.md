@@ -8,9 +8,10 @@
 A pure JavaScript `<Slider>` component for react-native. This is still very much a work
 in progress, ideas and contributions are very welcome.
 
-![Demo](https://raw.githubusercontent.com/jeanregisser/react-native-slider/master/Screenshots/basic.png)
+<img src="https://raw.githubusercontent.com/jeanregisser/react-native-slider/master/Screenshots/basic@2x.png" width="375">
+<img src="https://raw.githubusercontent.com/jeanregisser/react-native-slider/master/Screenshots/basic_android_xxhdpi.png" width="360">
 
-It is a drop-in replacement for [SliderIOS](http://facebook.github.io/react-native/docs/sliderios.html).
+It is a drop-in replacement for [Slider](http://facebook.github.io/react-native/docs/slider.html).
 
 ## Install
 
