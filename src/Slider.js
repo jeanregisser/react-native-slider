@@ -6,8 +6,7 @@ var {
   PropTypes,
   StyleSheet,
   PanResponder,
-  View,
-  Platform
+  View
 } = React;
 var PureRenderMixin = React.addons.PureRenderMixin;
 var styleEqual = require('style-equal');
@@ -256,10 +255,6 @@ var Slider = React.createClass({
   },
 
   _handleStartShouldSetPanResponder: function(e: Object, /*gestureState: Object*/): boolean {
-    // Until the PR https://github.com/facebook/react-native/pull/3426 is merged, we need to always return "true" for android
-    if (Platform.OS === 'android') {
-      return true;
-    }
     // Should we become active when the user presses down on the thumb?
     return this._thumbHitTest(e);
   },
