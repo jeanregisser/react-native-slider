@@ -2,12 +2,14 @@
 
 var React = require('react-native');
 var {
+  Animated,
   PropTypes,
   StyleSheet,
   PanResponder,
   View,
   Platform
 } = React;
+var PureRenderMixin = React.addons.PureRenderMixin;
 
 var TRACK_SIZE = 4;
 var THUMB_SIZE = 20;
@@ -127,11 +129,11 @@ var Slider = React.createClass({
   },
   getInitialState() {
     return {
-      containerSize: { width: 0, height: 0 },
-      trackSize: { width: 0, height: 0 },
-      thumbSize: { width: 0, height: 0 },
-      previousLeft: 0,
-      value: this.props.value,
+      containerSize: {width: 0, height: 0},
+      trackSize: {width: 0, height: 0},
+      thumbSize: {width: 0, height: 0},
+      allMeasured: false,
+      value: new Animated.Value(this.props.value),
     };
   },
   getDefaultProps() {
@@ -159,10 +161,43 @@ var Slider = React.createClass({
     });
   },
   componentWillReceiveProps: function(nextProps) {
-    this.setState({value: nextProps.value});
+    var oldValue = this.props.value;
+    var newValue = nextProps.value;
+    if (oldValue !== newValue) {
+      this._setCurrentValue(nextProps.value);
+    }
+  },
+  shouldComponentUpdate: function(nextProps, nextState) {
+    // We don't want to re-render in the following cases:
+    // - when only the 'value' prop changes as it's already handled with the Animated.Value
+    // - when the event handlers change (rendering doesn't depend on them)
+
+    var {
+      value,
+      onValueChange,
+      onSlidingStart,
+      onSlidingComplete,
+      ...otherProps,
+    } = this.props;
+
+    var {
+      value,
+      onValueChange,
+      onSlidingStart,
+      onSlidingComplete,
+      ...otherNextProps,
+    } = nextProps;
+
+    return PureRenderMixin.shouldComponentUpdate.call(
+      { props: otherProps, state: this.state },
+      otherNextProps,
+      nextState
+    );
   },
   render() {
     var {
+      minimumValue,
+      maximumValue,
       minimumTrackTintColor,
       maximumTrackTintColor,
       thumbTintColor,
@@ -173,27 +208,25 @@ var Slider = React.createClass({
       debugTouchArea,
       ...other
     } = this.props;
-    var {value, containerSize, trackSize, thumbSize} = this.state;
+    var {value, containerSize, trackSize, thumbSize, allMeasured} = this.state;
     var mainStyles = styles || defaultStyles;
-    var thumbLeft = this._getThumbLeft(value);
+    var thumbLeft = value.interpolate({
+        inputRange: [minimumValue, maximumValue],
+        outputRange: [0, containerSize.width - thumbSize.width],
+        //extrapolate: 'clamp',
+      })
     var valueVisibleStyle = {};
-    if (containerSize.width === undefined
-        || trackSize.width === undefined
-        || thumbSize.width === undefined) {
+    if (!allMeasured) {
       valueVisibleStyle.opacity = 0;
     }
 
     var minimumTrackStyle = {
       position: 'absolute',
-      width: 300, // needed to workaround a bug for borderRadius
+      width: Animated.add(thumbLeft, thumbSize.width / 2),
       marginTop: -trackSize.height,
       backgroundColor: minimumTrackTintColor,
       ...valueVisibleStyle
     };
-
-    if (thumbLeft >= 0 && thumbSize.width >= 0) {
-      minimumTrackStyle.width = thumbLeft + thumbSize.width / 2;
-    }
 
     var touchOverflowStyle = this._getTouchOverflowStyle();
 
@@ -202,9 +235,8 @@ var Slider = React.createClass({
         <View
           style={[{backgroundColor: maximumTrackTintColor}, mainStyles.track, trackStyle]}
           onLayout={this._measureTrack} />
-        <View style={[mainStyles.track, trackStyle, minimumTrackStyle]} />
-        <View
-          ref={(thumb) => this.thumb = thumb}
+        <Animated.View style={[mainStyles.track, trackStyle, minimumTrackStyle]} />
+        <Animated.View
           onLayout={this._measureThumb}
           style={[
             {backgroundColor: thumbTintColor, marginTop: -(trackSize.height + thumbSize.height) / 2},
@@ -214,7 +246,7 @@ var Slider = React.createClass({
         <View
           style={[defaultStyles.touchArea, touchOverflowStyle]}
           {...this._panResponder.panHandlers}>
-          {debugTouchArea === true && this._renderDebugThumbTouchRect()}
+          {debugTouchArea === true && this._renderDebugThumbTouchRect(thumbLeft)}
         </View>
       </View>
     );
@@ -235,16 +267,16 @@ var Slider = React.createClass({
   },
 
   _handlePanResponderGrant: function(/*e: Object, gestureState: Object*/) {
-    this.setState({ previousLeft: this._getThumbLeft(this.state.value) },
-      this._fireChangeEvent.bind(this, 'onSlidingStart'));
+    this._previousLeft = this._getThumbLeft(this._getCurrentValue());
+    this._fireChangeEvent('onSlidingStart');
   },
   _handlePanResponderMove: function(e: Object, gestureState: Object) {
     if (this.props.disabled) {
       return;
     }
 
-    this.setState({ value: this._getValue(gestureState) },
-      this._fireChangeEvent.bind(this, 'onValueChange'));
+    this._setCurrentValue(this._getValue(gestureState));
+    this._fireChangeEvent('onValueChange');
   },
   _handlePanResponderRequestEnd: function(e: Object, gestureState: Object) {
     // Should we allow another component to take over this pan?
@@ -255,26 +287,41 @@ var Slider = React.createClass({
       return;
     }
 
-    this.setState({ value: this._getValue(gestureState) },
-      this._fireChangeEvent.bind(this, 'onSlidingComplete'));
+    this._setCurrentValue(this._getValue(gestureState));
+    this._fireChangeEvent('onValueChange');
   },
 
   _measureContainer(x: Object) {
-    var {width, height} = x.nativeEvent.layout;
-    var containerSize = {width: width, height: height};
-    this.setState({ containerSize: containerSize });
+    this._handleMeasure('containerSize', x);
   },
 
   _measureTrack(x: Object) {
-    var {width, height} = x.nativeEvent.layout;
-    var trackSize = {width: width, height: height};
-    this.setState({ trackSize: trackSize });
+    this._handleMeasure('trackSize', x);
   },
 
   _measureThumb(x: Object) {
+    this._handleMeasure('thumbSize', x);
+  },
+
+  _handleMeasure(name: string, x: Object) {
     var {width, height} = x.nativeEvent.layout;
-    var thumbSize = {width: width, height: height};
-    this.setState({ thumbSize: thumbSize });
+    var size = {width: width, height: height};
+
+    var storeName = `_${name}`;
+    var currentSize = this[storeName];
+    if (currentSize && width === currentSize.width && height === currentSize.height) {
+      return;
+    }
+    this[storeName] = size;
+
+    if (this._containerSize && this._trackSize && this._thumbSize) {
+      this.setState({
+        containerSize: this._containerSize,
+        trackSize: this._trackSize,
+        thumbSize: this._thumbSize,
+        allMeasured: true,
+      })
+    }
   },
 
   _getRatio(value: number) {
@@ -288,7 +335,7 @@ var Slider = React.createClass({
 
   _getValue(gestureState: Object) {
     var length = this.state.containerSize.width - this.state.thumbSize.width;
-    var thumbLeft = this.state.previousLeft + gestureState.dx;
+    var thumbLeft = this._previousLeft + gestureState.dx;
 
     var ratio = thumbLeft / length;
 
@@ -307,9 +354,17 @@ var Slider = React.createClass({
     }
   },
 
+  _getCurrentValue() {
+    return this.state.value.__getValue();
+  },
+
+  _setCurrentValue(value: number) {
+    this.state.value.setValue(value);
+  },
+
   _fireChangeEvent(event) {
     if (this.props[event]) {
-      this.props[event](this.state.value);
+      this.props[event](this._getCurrentValue());
     }
   },
 
@@ -318,9 +373,7 @@ var Slider = React.createClass({
     var props = this.props;
 
     var size = {};
-    if (state.containerSize.width !== undefined
-        && state.thumbSize.width !== undefined) {
-
+    if (state.allMeasured === true) {
       size.width = Math.max(0, props.thumbTouchSize.width - state.thumbSize.width);
       size.height = Math.max(0, props.thumbTouchSize.height - state.containerSize.height);
     }
@@ -362,24 +415,24 @@ var Slider = React.createClass({
     var touchOverflowSize = this._getTouchOverflowSize();
 
     return new Rect(
-      touchOverflowSize.width / 2 + this._getThumbLeft(state.value) + (state.thumbSize.width - props.thumbTouchSize.width) / 2,
+      touchOverflowSize.width / 2 + this._getThumbLeft(this._getCurrentValue()) + (state.thumbSize.width - props.thumbTouchSize.width) / 2,
       touchOverflowSize.height / 2 + (state.containerSize.height - props.thumbTouchSize.height) / 2,
       props.thumbTouchSize.width,
       props.thumbTouchSize.height
     );
   },
 
-  _renderDebugThumbTouchRect() {
+  _renderDebugThumbTouchRect(thumbLeft) {
     var thumbTouchRect = this._getThumbTouchRect();
     var positionStyle = {
-      left: thumbTouchRect.x,
+      left: thumbLeft,
       top: thumbTouchRect.y,
       width: thumbTouchRect.width,
       height: thumbTouchRect.height,
     };
 
     return (
-      <View
+      <Animated.View
         style={[defaultStyles.debugThumbTouchArea, positionStyle]}
         pointerEvents='none'
       />
