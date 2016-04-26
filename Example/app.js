@@ -37,9 +37,9 @@ var SliderContainer = React.createClass({
   _renderChildren() {
     return React.Children.map(this.props.children, (child) => {
       if (child.type === Slider
-          || child.type === SliderIOS) {
+          || child.type === React.Slider) {
         var value = this.state.value;
-        return React.addons.cloneWithProps(child, {
+        return React.cloneElement(child, {
           value: value,
           onValueChange: (val) => this.setState({value: val}),
         });
@@ -60,8 +60,8 @@ var SliderExample = React.createClass({
   render() {
     return (
       <ScrollView contentContainerStyle={styles.container}>
-        <SliderContainer caption='<SliderIOS/>'>
-          <SliderIOS />
+        <SliderContainer caption='<React.Slider/>'>
+          <React.Slider />
         </SliderContainer>
         <SliderContainer caption='<Slider/> with default style'>
           <Slider />
