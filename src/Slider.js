@@ -10,6 +10,7 @@ var {
   Platform
 } = React;
 var PureRenderMixin = React.addons.PureRenderMixin;
+var styleEqual = require('style-equal');
 
 var TRACK_SIZE = 4;
 var THUMB_SIZE = 20;
@@ -171,28 +172,15 @@ var Slider = React.createClass({
     // We don't want to re-render in the following cases:
     // - when only the 'value' prop changes as it's already handled with the Animated.Value
     // - when the event handlers change (rendering doesn't depend on them)
-
-    var {
-      value,
-      onValueChange,
-      onSlidingStart,
-      onSlidingComplete,
-      ...otherProps,
-    } = this.props;
-
-    var {
-      value,
-      onValueChange,
-      onSlidingStart,
-      onSlidingComplete,
-      ...otherNextProps,
-    } = nextProps;
+    // - when the style props haven't actually change
 
     return PureRenderMixin.shouldComponentUpdate.call(
-      { props: otherProps, state: this.state },
-      otherNextProps,
+      { props: this._getPropsForComponentUpdate(this.props), state: this.state },
+      this._getPropsForComponentUpdate(nextProps),
       nextState
-    );
+    ) || !styleEqual(this.props.style, nextProps.style)
+      || !styleEqual(this.props.trackStyle, nextProps.trackStyle)
+      || !styleEqual(this.props.thumbStyle, nextProps.thumbStyle);
   },
   render() {
     var {
@@ -250,6 +238,21 @@ var Slider = React.createClass({
         </View>
       </View>
     );
+  },
+
+  _getPropsForComponentUpdate(props) {
+    var {
+      value,
+      onValueChange,
+      onSlidingStart,
+      onSlidingComplete,
+      style,
+      trackStyle,
+      thumbStyle,
+      ...otherProps,
+    } = props;
+
+    return otherProps;
   },
 
   _handleStartShouldSetPanResponder: function(e: Object, /*gestureState: Object*/): boolean {
