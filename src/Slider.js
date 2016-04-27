@@ -286,7 +286,7 @@ var Slider = React.createClass({
     }
 
     this._setCurrentValue(this._getValue(gestureState));
-    this._fireChangeEvent('onValueChange');
+    this._fireChangeEvent('onSlidingComplete');
   },
 
   _measureContainer(x: Object) {
