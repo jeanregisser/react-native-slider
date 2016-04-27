@@ -23,6 +23,7 @@
     "url": "git@github.com:jeanregisser/react-native-slider.git"
   },
   "dependencies": {
+    "react-addons-shallow-compare": "^0.14.8",
     "style-equal": "^1.0.0"
   },
   "devDependencies": {

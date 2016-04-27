@@ -8,7 +8,7 @@ var {
   PanResponder,
   View
 } = React;
-var PureRenderMixin = React.addons.PureRenderMixin;
+var shallowCompare = require('react-addons-shallow-compare');
 var styleEqual = require('style-equal');
 
 var TRACK_SIZE = 4;
@@ -173,7 +173,7 @@ var Slider = React.createClass({
     // - when the event handlers change (rendering doesn't depend on them)
     // - when the style props haven't actually change
 
-    return PureRenderMixin.shouldComponentUpdate.call(
+    return shallowCompare(
       { props: this._getPropsForComponentUpdate(this.props), state: this.state },
       this._getPropsForComponentUpdate(nextProps),
       nextState
