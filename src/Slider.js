@@ -41,6 +41,16 @@ var Slider = React.createClass({
     value: PropTypes.number,
 
     /**
+     * Initial value of the second slider. The value should be between the first value
+     * and maximumValue.
+     * Default value is maximumValue.
+     *
+     * *This is not a controlled component*, e.g. if you don't update
+     * the value, the component won't be reset to its inital value.
+     */
+    rightValue: PropTypes.number,
+
+    /**
      * If true the user won't be able to move the slider.
      * Default value is false.
      */
@@ -66,13 +76,46 @@ var Slider = React.createClass({
      * The color used for the track to the left of the button. Overrides the
      * default blue gradient image.
      */
-    minimumTrackTintColor: PropTypes.string,
+    minimumTrackTintColor: function(props, propName, componentName) {
+      if (props[propName] && typeof props[propName] !== 'string') {
+        return new Error(
+            `Invalid prop ${propName} supplied to ${componentName}. This prop must be a string.`
+        )
+      }
+      if (props[propName]) {
+        return new Error(
+            `Prop ${propName} supplied to ${componentName} has been deprecated, please use trackHighlightColor instead.`
+        );
+      }
+    },
 
     /**
      * The color used for the track to the right of the button. Overrides the
      * default blue gradient image.
      */
-    maximumTrackTintColor: PropTypes.string,
+    maximumTrackTintColor: function(props, propName, componentName) {
+      if (props[propName] && typeof props[propName] !== 'string') {
+        return new Error(
+            `Invalid prop ${propName} supplied to ${componentName}. This prop must be a string.`
+        )
+      }
+      if (props[propName]) {
+        return new Error(
+            `Prop ${propName} supplied to ${componentName} has been deprecated, please use trackColor instead.`
+        );
+      }
+    },
+
+    /**
+     * The color used for the track.
+     */
+    trackColor: PropTypes.string,
+
+    /**
+     * The color used for the selected portion of the track. Left of single button
+     * or in between multi buttons.
+     */
+    trackHighlightColor: PropTypes.string,
 
     /**
      * The color used for the thumb.
@@ -126,6 +169,26 @@ var Slider = React.createClass({
      * Set this to true to visually see the thumb touch rect in green.
      */
     debugTouchArea: PropTypes.bool,
+
+    /**
+     * Set this to true to have two touchpoints on slider for a range.
+     */
+    multiTouch: PropTypes.bool,
+
+  },
+  getDefaultProps() {
+    return {
+      value: 0,
+      rightValue: 1,
+      trackHighlightColor: '#3f3f3f',
+      trackColor: '#b3b3b3',
+      minimumValue: 0,
+      maximumValue: 1,
+      step: 0,
+      thumbTintColor: '#343434',
+      thumbTouchSize: {width: 40, height: 40},
+      debugTouchArea: false,
+    };
   },
   getInitialState() {
     return {
@@ -134,19 +197,7 @@ var Slider = React.createClass({
       thumbSize: {width: 0, height: 0},
       allMeasured: false,
       value: new Animated.Value(this.props.value),
-    };
-  },
-  getDefaultProps() {
-    return {
-      value: 0,
-      minimumValue: 0,
-      maximumValue: 1,
-      step: 0,
-      minimumTrackTintColor: '#3f3f3f',
-      maximumTrackTintColor: '#b3b3b3',
-      thumbTintColor: '#343434',
-      thumbTouchSize: {width: 40, height: 40},
-      debugTouchArea: false,
+      rightValue: new Animated.Value(this.props.rightValue),
     };
   },
   componentWillMount() {
@@ -161,11 +212,11 @@ var Slider = React.createClass({
     });
   },
   componentWillReceiveProps: function(nextProps) {
-    var oldValue = this.props.value;
-    var newValue = nextProps.value;
-    if (oldValue !== newValue) {
-      this._setCurrentValue(nextProps.value);
-    }
+    const oldValue = this.props.value;
+    const oldValue2 = this.props.rightValue;
+    const newValue = nextProps.value;
+    const newValue2 = nextProps.rightValue;
+    this._setCurrentValue(oldValue !== newValue ? nextProps.value: null , oldValue2 !== newValue2 ? nextProps.rightValue : null );
   },
   shouldComponentUpdate: function(nextProps, nextState) {
     // We don't want to re-render in the following cases:
@@ -181,67 +232,11 @@ var Slider = React.createClass({
       || !styleEqual(this.props.trackStyle, nextProps.trackStyle)
       || !styleEqual(this.props.thumbStyle, nextProps.thumbStyle);
   },
-  render() {
-    var {
-      minimumValue,
-      maximumValue,
-      minimumTrackTintColor,
-      maximumTrackTintColor,
-      thumbTintColor,
-      styles,
-      style,
-      trackStyle,
-      thumbStyle,
-      debugTouchArea,
-      ...other
-    } = this.props;
-    var {value, containerSize, trackSize, thumbSize, allMeasured} = this.state;
-    var mainStyles = styles || defaultStyles;
-    var thumbLeft = value.interpolate({
-        inputRange: [minimumValue, maximumValue],
-        outputRange: [0, containerSize.width - thumbSize.width],
-        //extrapolate: 'clamp',
-      })
-    var valueVisibleStyle = {};
-    if (!allMeasured) {
-      valueVisibleStyle.opacity = 0;
-    }
-
-    var minimumTrackStyle = {
-      position: 'absolute',
-      width: Animated.add(thumbLeft, thumbSize.width / 2),
-      marginTop: -trackSize.height,
-      backgroundColor: minimumTrackTintColor,
-      ...valueVisibleStyle
-    };
-
-    var touchOverflowStyle = this._getTouchOverflowStyle();
-
-    return (
-      <View {...other} style={[mainStyles.container, style]} onLayout={this._measureContainer}>
-        <View
-          style={[{backgroundColor: maximumTrackTintColor}, mainStyles.track, trackStyle]}
-          onLayout={this._measureTrack} />
-        <Animated.View style={[mainStyles.track, trackStyle, minimumTrackStyle]} />
-        <Animated.View
-          onLayout={this._measureThumb}
-          style={[
-            {backgroundColor: thumbTintColor, marginTop: -(trackSize.height + thumbSize.height) / 2},
-            mainStyles.thumb, thumbStyle, {left: thumbLeft, ...valueVisibleStyle}
-          ]}
-        />
-        <View
-          style={[defaultStyles.touchArea, touchOverflowStyle]}
-          {...this._panResponder.panHandlers}>
-          {debugTouchArea === true && this._renderDebugThumbTouchRect(thumbLeft)}
-        </View>
-      </View>
-    );
-  },
 
   _getPropsForComponentUpdate(props) {
     var {
       value,
+      rightValue,
       onValueChange,
       onSlidingStart,
       onSlidingComplete,
@@ -264,8 +259,12 @@ var Slider = React.createClass({
     return false;
   },
 
-  _handlePanResponderGrant: function(/*e: Object, gestureState: Object*/) {
-    this._previousLeft = this._getThumbLeft(this._getCurrentValue());
+  _handlePanResponderGrant: function(e: Object, /*gestureState: Object*/) {
+    this._previousLeft = this._getThumb(this._getLeftThumbValue());
+    this._previousRight = this._getThumb(this._getRightThumbValue());
+    var leftThumbTouchRect = this._getThumbTouchRect(this._getThumb(this._getLeftThumbValue()));
+    this.isLeftThumb = leftThumbTouchRect.containsPoint(e.nativeEvent.locationX, e.nativeEvent.locationY);
+
     this._fireChangeEvent('onSlidingStart');
   },
   _handlePanResponderMove: function(e: Object, gestureState: Object) {
@@ -273,7 +272,17 @@ var Slider = React.createClass({
       return;
     }
 
-    this._setCurrentValue(this._getValue(gestureState));
+    if (this.isLeftThumb) {
+      const newLeft = this._getValue(this._previousLeft, gestureState);
+      if (!this.props.multiTouch || newLeft < this._getRightThumbValue()) {
+        this._setCurrentValue(newLeft,null);
+      }
+    } else {
+      const newRight = this._getValue(this._previousRight, gestureState);
+      if (!!this.props.multiTouch  || newRight > this._getLeftThumbValue()) {
+        this._setCurrentValue(null, newRight);
+      }
+    }
     this._fireChangeEvent('onValueChange');
   },
   _handlePanResponderRequestEnd: function(e: Object, gestureState: Object) {
@@ -284,8 +293,6 @@ var Slider = React.createClass({
     if (this.props.disabled) {
       return;
     }
-
-    this._setCurrentValue(this._getValue(gestureState));
     this._fireChangeEvent('onSlidingComplete');
   },
 
@@ -326,16 +333,16 @@ var Slider = React.createClass({
     return (value - this.props.minimumValue) / (this.props.maximumValue - this.props.minimumValue);
   },
 
-  _getThumbLeft(value: number) {
+  _getThumb(value: number) {
     var ratio = this._getRatio(value);
     return ratio * (this.state.containerSize.width - this.state.thumbSize.width);
   },
 
-  _getValue(gestureState: Object) {
+  _getValue(value: number, gestureState: Object) {
     var length = this.state.containerSize.width - this.state.thumbSize.width;
-    var thumbLeft = this._previousLeft + gestureState.dx;
+    var thumb = value + gestureState.dx;
 
-    var ratio = thumbLeft / length;
+    var ratio = thumb / length;
 
     if (this.props.step) {
       return Math.max(this.props.minimumValue,
@@ -352,17 +359,26 @@ var Slider = React.createClass({
     }
   },
 
-  _getCurrentValue() {
+  _getLeftThumbValue() {
     return this.state.value.__getValue();
   },
+  _getRightThumbValue() {
+    return this.state.rightValue.__getValue();
+  },
 
-  _setCurrentValue(value: number) {
-    this.state.value.setValue(value);
+  _setCurrentValue(value: number, rightValue: number) {
+    if (value) {
+      this.state.value.setValue(value);
+    }
+    if (rightValue) {
+      this.state.rightValue.setValue(rightValue);
+    }
+
   },
 
   _fireChangeEvent(event) {
     if (this.props[event]) {
-      this.props[event](this._getCurrentValue());
+      this.props[event](this._getLeftThumbValue(), this._getRightThumbValue());
     }
   },
 
@@ -403,17 +419,18 @@ var Slider = React.createClass({
 
   _thumbHitTest(e: Object) {
     var nativeEvent = e.nativeEvent;
-    var thumbTouchRect = this._getThumbTouchRect();
-    return thumbTouchRect.containsPoint(nativeEvent.locationX, nativeEvent.locationY);
+    var leftThumbTouchRect = this._getThumbTouchRect(this._getThumb(this._getLeftThumbValue()));
+    var rightThumbTouchRect = this._getThumbTouchRect(this._getThumb(this._getRightThumbValue()));
+    return leftThumbTouchRect.containsPoint(nativeEvent.locationX, nativeEvent.locationY) || rightThumbTouchRect.containsPoint(nativeEvent.locationX, nativeEvent.locationY);
   },
 
-  _getThumbTouchRect() {
+  _getThumbTouchRect(thumbLocation: number) {
     var state = this.state;
     var props = this.props;
     var touchOverflowSize = this._getTouchOverflowSize();
 
     return new Rect(
-      touchOverflowSize.width / 2 + this._getThumbLeft(this._getCurrentValue()) + (state.thumbSize.width - props.thumbTouchSize.width) / 2,
+      touchOverflowSize.width / 2 + thumbLocation + (state.thumbSize.width - props.thumbTouchSize.width) / 2,
       touchOverflowSize.height / 2 + (state.containerSize.height - props.thumbTouchSize.height) / 2,
       props.thumbTouchSize.width,
       props.thumbTouchSize.height
@@ -434,6 +451,123 @@ var Slider = React.createClass({
         style={[defaultStyles.debugThumbTouchArea, positionStyle]}
         pointerEvents='none'
       />
+    );
+  },
+  render() {
+    var {
+        minimumValue,
+        maximumValue,
+        minimumTrackTintColor,
+        maximumTrackTintColor,
+        trackColor,
+        trackHighlightColor,
+        thumbTintColor,
+        styles,
+        style,
+        trackStyle,
+        thumbStyle,
+        debugTouchArea,
+        multiTouch,
+        ...other
+    } = this.props;
+    var {value, rightValue, containerSize, trackSize, thumbSize, allMeasured} = this.state;
+    var mainStyles = styles || defaultStyles;
+    var thumbLeft = value.interpolate({
+      inputRange: [minimumValue, maximumValue],
+      outputRange: [0, containerSize.width - thumbSize.width],
+      //extrapolate: 'clamp',
+    });
+    var thumbRight = rightValue.interpolate({
+      inputRange: [minimumValue, maximumValue],
+      outputRange: [0, containerSize.width - thumbSize.width],
+      //extrapolate: 'clamp',
+    });
+    var valueVisibleStyle = {};
+    if (!allMeasured) {
+      valueVisibleStyle.opacity = 0;
+    }
+
+    var minimumTrackStyle = {
+      position: 'absolute',
+      width:  Animated.add(thumbLeft, thumbSize.width / 2),
+      left: 0,
+      marginTop: -trackSize.height,
+      backgroundColor: minimumTrackTintColor || trackHighlightColor,
+      ...valueVisibleStyle
+    };
+    var touchOverflowStyle = this._getTouchOverflowStyle();
+
+    if (multiTouch) {
+      const trackHighlightOverrideStyle = {
+        position: 'absolute',
+        width:  thumbLeft,
+        left: 0,
+        marginTop: -trackSize.height,
+        backgroundColor: trackColor,
+        ...valueVisibleStyle
+      };
+      const trackHighlightStyle = {
+        position: 'absolute',
+        width: Animated.add(thumbRight, thumbSize.width / 2),
+        marginTop: -trackSize.height,
+        backgroundColor: trackHighlightColor,
+        ...valueVisibleStyle
+      };
+      return (
+          <View {...other} style={[mainStyles.container, style]} onLayout={this._measureContainer}>
+            <View
+                style={[{backgroundColor: maximumTrackTintColor || trackColor}, mainStyles.track, trackStyle]}
+                onLayout={this._measureTrack} />
+            <Animated.View style={[mainStyles.track, trackStyle, trackHighlightStyle]} />
+
+            <Animated.View style={[mainStyles.track, trackStyle, trackHighlightOverrideStyle]} />
+            <Animated.View
+                onLayout={this._measureThumb}
+                style={[
+            {backgroundColor: thumbTintColor, marginTop: -(trackSize.height + thumbSize.height) / 2},
+            mainStyles.thumb, thumbStyle, {left: thumbLeft, ...valueVisibleStyle}
+          ]}
+            />
+            <Animated.View
+                onLayout={this._measureThumb}
+                style={[
+            {backgroundColor: thumbTintColor, marginTop: -(trackSize.height + thumbSize.height) / 2},
+            mainStyles.thumb, thumbStyle, {left: thumbRight, ...valueVisibleStyle}
+          ]}
+            />
+
+            <View
+                style={[defaultStyles.touchArea, touchOverflowStyle]}
+                {...this._panResponder.panHandlers}>
+              {debugTouchArea === true && this._renderDebugThumbTouchRect(thumbLeft)}
+            </View>
+            <View
+                style={[defaultStyles.touchArea, touchOverflowStyle]}
+                {...this._panResponder.panHandlers}>
+              {debugTouchArea === true && this._renderDebugThumbTouchRect(thumbRight)}
+            </View>
+          </View>
+      );
+    }
+    return (
+        <View {...other} style={[mainStyles.container, style]} onLayout={this._measureContainer}>
+          <View
+              style={[{backgroundColor: maximumTrackTintColor|| trackColor}, mainStyles.track, trackStyle]}
+              onLayout={this._measureTrack} />
+          <Animated.View style={[mainStyles.track, trackStyle, minimumTrackStyle || trackHighlightColor]} />
+          <Animated.View
+              onLayout={this._measureThumb}
+              style={[
+            {backgroundColor: thumbTintColor, marginTop: -(trackSize.height + thumbSize.height) / 2},
+            mainStyles.thumb, thumbStyle, {left: thumbLeft, ...valueVisibleStyle}
+          ]}
+          />
+          <View
+              style={[defaultStyles.touchArea, touchOverflowStyle]}
+              {...this._panResponder.panHandlers}>
+            {debugTouchArea === true && this._renderDebugThumbTouchRect(thumbLeft)}
+          </View>
+        </View>
     );
   }
 });

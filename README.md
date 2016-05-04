@@ -67,25 +67,26 @@ AppRegistry.registerComponent('SliderExample', () => SliderExample);
 
 ## Props
 
-Prop                  | Type     | Optional | Default                   | Description
---------------------- | -------- | -------- | ------------------------- | -----------
-value                 | number   | Yes      | 0                         | Initial value of the slider
-disabled              | bool     | Yes      | false                     | If true the user won't be able to move the slider
-minimumValue          | number   | Yes      | 0                         | Initial minimum value of the slider
-maximumValue          | number   | Yes      | 1                         | Initial maximum value of the slider
-step                  | number   | Yes      | 0                         | Step value of the slider. The value should be between 0 and maximumValue - minimumValue)
-minimumTrackTintColor | string   | Yes      | '#3f3f3f'                 | The color used for the track to the left of the button
-maximumTrackTintColor | string   | Yes      | '#b3b3b3'                 | The color used for the track to the right of the button
-thumbTintColor        | string   | Yes      | '#343434'                 | The color used for the thumb
-thumbTouchSize        | object   | Yes      | `{width: 40, height: 40}` | The size of the touch area that allows moving the thumb. The touch area has the same center as the visible thumb. This allows to have a visually small thumb while still allowing the user to move it easily.
-onValueChange         | function | Yes      |                           | Callback continuously called while the user is dragging the slider
-onSlidingStart        | function | Yes      |                           | Callback called when the user starts changing the value (e.g. when the slider is pressed)
-onSlidingComplete     | function | Yes      |                           | Callback called when the user finishes changing the value (e.g. when the slider is released)
-style                 | [style](http://facebook.github.io/react-native/docs/view.html#style)    | Yes      |                           | The style applied to the slider container
-trackStyle            | [style](http://facebook.github.io/react-native/docs/view.html#style)    | Yes      |                           | The style applied to the track
-thumbStyle            | [style](http://facebook.github.io/react-native/docs/view.html#style)    | Yes      |                           | The style applied to the thumb
-debugTouchArea        | bool     | Yes      | false                     | Set this to true to visually see the thumb touch rect in green.
-
+Prop                                | Type     | Optional | Default                   | Description
+---------------------               | -------- | -------- | ------------------------- | -----------
+value                               | number   | Yes      | 0                         | Initial value of the slider
+disabled                            | bool     | Yes      | false                     | If true the user won't be able to move the slider
+minimumValue                        | number   | Yes      | 0                         | Initial minimum value of the slider
+maximumValue                        | number   | Yes      | 1                         | Initial maximum value of the slider
+step                                | number   | Yes      | 0                         | Step value of the slider. The value should be between 0 and maximumValue - minimumValue)
+minimumTrackTintColor(deprecated)   | string   | Yes      | '#3f3f3f'                 | The color used for the track to the left of the button
+maximumTrackTintColor(deprecated)   | string   | Yes      | '#3f3f3f'                 | The color used for the track to the left of the button
+trackColor                          | string   | Yes      | '#b3b3b3'                 | The color used for the track
+trackHighlightColor                 | string   | Yes      | '#b3b3b3'                 | The color used for the track to the right of the button in single, in between buttons in multi
+thumbTintColor                      | string   | Yes      | '#343434'                 | The color used for the thumb
+thumbTouchSize                      | object   | Yes      | `{width: 40, height: 40}` | The size of the touch area that allows moving the thumb. The touch area has the same center as the visible thumb. This allows to have a visually small thumb while still allowing the user to move it easily.
+onValueChange                       | function | Yes      |                           | Callback continuously called while the user is dragging the slider
+onSlidingStart                      | function | Yes      |                           | Callback called when the user starts changing the value (e.g. when the slider is pressed)
+onSlidingComplete                   | function | Yes      |                           | Callback called when the user finishes changing the value (e.g. when the slider is released)
+style                               | [style](http://facebook.github.io/react-native/docs/view.html#style)    | Yes      |                           | The style applied to the slider container
+trackStyle                          | [style](http://facebook.github.io/react-native/docs/view.html#style)    | Yes      |                           | The style applied to the track
+thumbStyle                          | [style](http://facebook.github.io/react-native/docs/view.html#style)    | Yes      |                           | The style applied to the thumb
+debugTouchArea                      | bool     | Yes      | false                     | Set this to true to visually see the thumb touch rect in green.
 ---
 
 **MIT Licensed**
