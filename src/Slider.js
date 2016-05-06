@@ -1,13 +1,13 @@
 'use strict';
 
-var React = require('react-native');
+var React = require('react');
 var {
   Animated,
   PropTypes,
   StyleSheet,
   PanResponder,
   View
-} = React;
+} = require('react-native');
 var shallowCompare = require('react-addons-shallow-compare');
 var styleEqual = require('style-equal');
 
