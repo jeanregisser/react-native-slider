@@ -1,6 +1,7 @@
 'use strict';
 
-var React = require('react-native');
+var React = require('react');
+var ReactNative = require('react-native');
 var Slider = require('../src/Slider');
 var {
   AppRegistry,
@@ -9,7 +10,7 @@ var {
   ScrollView,
   View,
   SliderIOS,
-} = React;
+} = ReactNative;
 
 var DEFAULT_VALUE = 0.2;
 
@@ -37,7 +38,7 @@ var SliderContainer = React.createClass({
   _renderChildren() {
     return React.Children.map(this.props.children, (child) => {
       if (child.type === Slider
-          || child.type === React.Slider) {
+          || child.type === ReactNative.Slider) {
         var value = this.state.value;
         return React.cloneElement(child, {
           value: value,
@@ -61,7 +62,7 @@ var SliderExample = React.createClass({
     return (
       <ScrollView contentContainerStyle={styles.container}>
         <SliderContainer caption='<React.Slider/>'>
-          <React.Slider />
+          <ReactNative.Slider />
         </SliderContainer>
         <SliderContainer caption='<Slider/> with default style'>
           <Slider />

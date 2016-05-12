@@ -24,14 +24,14 @@ npm i --save react-native-slider
 ```jsx
 'use strict';
 
-var React = require('react-native');
+var React = require('react');
 var Slider = require('react-native-slider');
 var {
   AppRegistry,
   StyleSheet,
   View,
   Text,
-} = React;
+} = require('react-native');
 
 var SliderExample = React.createClass({
   getInitialState() {
