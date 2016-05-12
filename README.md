@@ -19,6 +19,8 @@ It is a drop-in replacement for [Slider](http://facebook.github.io/react-native/
 npm i --save react-native-slider
 ```
 
+**Note:** For react-native < 0.25 use `npm i --save "react-native-slider@<0.7"`
+
 ## Usage
 
 ```jsx
