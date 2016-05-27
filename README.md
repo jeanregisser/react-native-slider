@@ -19,7 +19,13 @@ It is a drop-in replacement for [Slider](http://facebook.github.io/react-native/
 npm i --save react-native-slider
 ```
 
-**Note:** For react-native < 0.25 use `npm i --save "react-native-slider@<0.7"`
+**Note:** I try to maintain backward compatibility of this component with previous versions of React Native, but due to the nature of the platform, and the existence of breaking changes between releases, it is possible that you need to use a specific version of this component to support the exact version of React Native you are using. See the following table:
+
+| React Native version(s) | Supporting react-native-slider version(s) |
+|-------------------------|-------------------------------------------|
+| <0.25.0                 | <0.7.0                                    |
+| v0.25.x                 | v0.7.x                                    |
+| v0.26.0+                | v0.8.x                                    |
 
 ## Usage
 
