@@ -24,8 +24,7 @@ npm i --save react-native-slider
 | React Native version(s) | Supporting react-native-slider version(s) |
 |-------------------------|-------------------------------------------|
 | <0.25.0                 | <0.7.0                                    |
-| v0.25.x                 | v0.7.x                                    |
-| v0.26.0+                | v0.8.x                                    |
+| v0.25.0+                | v0.8.x                                    |
 
 ## Usage
 
