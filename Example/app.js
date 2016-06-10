@@ -135,6 +135,14 @@ var SliderExample = React.createClass({
             thumbTouchSize={{width: 50, height: 40}}
           />
         </SliderContainer>
+        <SliderContainer caption='<Slider/> with custom style #9 and thumbImage'>
+          <Slider
+            minimumTrackTintColor='#13a9d6'
+            thumbImage={require('./img/thumb.png')}
+            thumbStyle={customStyles9.thumb}
+            thumbTintColor='#0c6692'
+          />
+        </SliderContainer>
       </ScrollView>
     );
   },
@@ -281,7 +289,7 @@ var customStyles7 = StyleSheet.create({
 
 var customStyles8 = StyleSheet.create({
   container: {
-    height: 20,
+    height: 30,
   },
   track: {
     height: 2,
@@ -296,6 +304,17 @@ var customStyles8 = StyleSheet.create({
     shadowOffset: {width: 0, height: 0},
     shadowRadius: 2,
     shadowOpacity: 1,
+  }
+});
+
+var customStyles9 = StyleSheet.create({
+  thumb: {
+    width: 30,
+    height: 30,
+    shadowColor: 'black',
+    shadowOffset: {width: 0, height: 1},
+    shadowOpacity: 0.5,
+    shadowRadius: 1,
   }
 });
 

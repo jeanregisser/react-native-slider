@@ -7,6 +7,7 @@ import React, {
 
 import {
   Animated,
+  Image,
   StyleSheet,
   PanResponder,
   View
@@ -127,6 +128,11 @@ var Slider = React.createClass({
     thumbStyle: View.propTypes.style,
 
     /**
+     * Sets an image for the thumb.
+     */
+    thumbImage: Image.propTypes.source,
+
+    /**
      * Set this to true to visually see the thumb touch rect in green.
      */
     debugTouchArea: PropTypes.bool,
@@ -192,6 +198,7 @@ var Slider = React.createClass({
       minimumTrackTintColor,
       maximumTrackTintColor,
       thumbTintColor,
+      thumbImage,
       styles,
       style,
       trackStyle,
@@ -233,7 +240,9 @@ var Slider = React.createClass({
             {backgroundColor: thumbTintColor, marginTop: -(trackSize.height + thumbSize.height) / 2},
             mainStyles.thumb, thumbStyle, {left: thumbLeft, ...valueVisibleStyle}
           ]}
-        />
+        >
+          {this._renderThumbImage()}
+        </Animated.View>
         <View
           style={[defaultStyles.touchArea, touchOverflowStyle]}
           {...this._panResponder.panHandlers}>
@@ -439,6 +448,14 @@ var Slider = React.createClass({
         pointerEvents='none'
       />
     );
+  },
+
+  _renderThumbImage() {
+    var {thumbImage} = this.props;
+
+    if (!thumbImage) return;
+
+    return <Image source={thumbImage} />;
   }
 });
 
