@@ -9,14 +9,15 @@ import {
   Animated,
   StyleSheet,
   PanResponder,
-  View
+  View,
+  Easing
 } from "react-native";
 
-var shallowCompare = require('react-addons-shallow-compare');
-var styleEqual = require('style-equal');
+const shallowCompare = require('react-addons-shallow-compare'),
+      styleEqual = require('style-equal');
 
-var TRACK_SIZE = 4;
-var THUMB_SIZE = 20;
+const TRACK_SIZE = 4,
+      THUMB_SIZE = 20;
 
 function Rect(x, y, width, height) {
   this.x = x;
@@ -30,6 +31,22 @@ Rect.prototype.containsPoint = function(x, y) {
           && y >= this.y
           && x <= this.x + this.width
           && y <= this.y + this.height);
+};
+
+const DEFAULT_ANIMATION_CONFIGS = {
+  spring : {
+    friction : 7,
+    tension  : 100
+  },
+  timing : {
+    duration : 150,
+    easing   : Easing.inOut(Easing.ease),
+    delay    : 0
+  },
+  // decay : { // This has a serious bug
+  //   velocity     : 1,
+  //   deceleration : 0.997
+  // }
 };
 
 var Slider = React.createClass({
@@ -130,6 +147,21 @@ var Slider = React.createClass({
      * Set this to true to visually see the thumb touch rect in green.
      */
     debugTouchArea: PropTypes.bool,
+
+    /**
+    * Set to true to animate values with default 'spring' animation type
+    */
+    animateTransitions : PropTypes.bool,
+
+    /**
+    * Custom Animation type. 'spring' or 'timing'. 
+    */
+    animationType : PropTypes.oneOf(['spring', 'timing'])
+
+    /**
+    * Used to configure the animation parameters.  These are the same parameters in the Animated library. 
+    */
+    animationConfig : PropTypes.object
   },
   getInitialState() {
     return {
@@ -151,6 +183,7 @@ var Slider = React.createClass({
       thumbTintColor: '#343434',
       thumbTouchSize: {width: 40, height: 40},
       debugTouchArea: false,
+      animationType: 'spring'
     };
   },
   componentWillMount() {
@@ -165,10 +198,17 @@ var Slider = React.createClass({
     });
   },
   componentWillReceiveProps: function(nextProps) {
-    var oldValue = this.props.value;
-    var newValue = nextProps.value;
+    var props    = this.props,
+        oldValue = props.value,
+        newValue = nextProps.value;
+
     if (oldValue !== newValue) {
-      this._setCurrentValue(nextProps.value);
+      if (props.animateTransitions) {
+        this._setCurrentValueAnimated(newValue);      
+      }
+      else {
+        this._setCurrentValue(newValue);
+      }
     }
   },
   shouldComponentUpdate: function(nextProps, nextState) {
@@ -205,7 +245,7 @@ var Slider = React.createClass({
         inputRange: [minimumValue, maximumValue],
         outputRange: [0, containerSize.width - thumbSize.width],
         //extrapolate: 'clamp',
-      })
+      });
     var valueVisibleStyle = {};
     if (!allMeasured) {
       valueVisibleStyle.opacity = 0;
@@ -224,7 +264,7 @@ var Slider = React.createClass({
     return (
       <View {...other} style={[mainStyles.container, style]} onLayout={this._measureContainer}>
         <View
-          style={[{backgroundColor: maximumTrackTintColor}, mainStyles.track, trackStyle]}
+          style={[{backgroundColor: maximumTrackTintColor,}, mainStyles.track, trackStyle]}
           onLayout={this._measureTrack} />
         <Animated.View style={[mainStyles.track, trackStyle, minimumTrackStyle]} />
         <Animated.View
@@ -362,6 +402,19 @@ var Slider = React.createClass({
 
   _setCurrentValue(value: number) {
     this.state.value.setValue(value);
+  },
+
+  _setCurrentValueAnimated(value: number) {
+    var props           = this.props,
+        animationType   = props.animationType,
+        animationConfig = Object.assign(
+          {}, 
+          DEFAULT_ANIMATION_CONFIGS[animationType], 
+          props.animationConfig, 
+          {toValue : value}
+        );
+
+    Animated[animationType](this.state.value, animationConfig).start();
   },
 
   _fireChangeEvent(event) {
