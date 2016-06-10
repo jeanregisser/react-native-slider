@@ -16,8 +16,8 @@ import {
 const shallowCompare = require('react-addons-shallow-compare'),
       styleEqual = require('style-equal');
 
-const TRACK_SIZE = 4,
-      THUMB_SIZE = 20;
+var TRACK_SIZE = 4;
+var THUMB_SIZE = 20;
 
 function Rect(x, y, width, height) {
   this.x = x;
@@ -33,7 +33,7 @@ Rect.prototype.containsPoint = function(x, y) {
           && y <= this.y + this.height);
 };
 
-const DEFAULT_ANIMATION_CONFIGS = {
+var DEFAULT_ANIMATION_CONFIGS = {
   spring : {
     friction : 7,
     tension  : 100
@@ -183,7 +183,7 @@ var Slider = React.createClass({
       thumbTintColor: '#343434',
       thumbTouchSize: {width: 40, height: 40},
       debugTouchArea: false,
-      animationType: 'spring'
+      animationType: 'timing'
     };
   },
   componentWillMount() {
@@ -198,12 +198,10 @@ var Slider = React.createClass({
     });
   },
   componentWillReceiveProps: function(nextProps) {
-    var props    = this.props,
-        oldValue = props.value,
-        newValue = nextProps.value;
+    var newValue = nextProps.value;
 
-    if (oldValue !== newValue) {
-      if (props.animateTransitions) {
+    if (this.props.value !== newValue) {
+      if (this.props.animateTransitions) {
         this._setCurrentValueAnimated(newValue);      
       }
       else {
@@ -405,12 +403,11 @@ var Slider = React.createClass({
   },
 
   _setCurrentValueAnimated(value: number) {
-    var props           = this.props,
-        animationType   = props.animationType,
-        animationConfig = Object.assign(
+    var animationType   = this.props.animationType;
+    var animationConfig = Object.assign(
           {}, 
           DEFAULT_ANIMATION_CONFIGS[animationType], 
-          props.animationConfig, 
+          this.props.animationConfig, 
           {toValue : value}
         );
 
