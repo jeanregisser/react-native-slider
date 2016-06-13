@@ -1,7 +1,7 @@
 'use strict';
 
 import React, {
-  Component, 
+  Component,
   PropTypes
 } from "react";
 
@@ -154,12 +154,12 @@ var Slider = React.createClass({
     animateTransitions : PropTypes.bool,
 
     /**
-    * Custom Animation type. 'spring' or 'timing'. 
+    * Custom Animation type. 'spring' or 'timing'.
     */
     animationType : PropTypes.oneOf(['spring', 'timing'])
 
     /**
-    * Used to configure the animation parameters.  These are the same parameters in the Animated library. 
+    * Used to configure the animation parameters.  These are the same parameters in the Animated library.
     */
     animationConfig : PropTypes.object
   },
@@ -202,7 +202,7 @@ var Slider = React.createClass({
 
     if (this.props.value !== newValue) {
       if (this.props.animateTransitions) {
-        this._setCurrentValueAnimated(newValue);      
+        this._setCurrentValueAnimated(newValue);
       }
       else {
         this._setCurrentValue(newValue);
@@ -405,9 +405,9 @@ var Slider = React.createClass({
   _setCurrentValueAnimated(value: number) {
     var animationType   = this.props.animationType;
     var animationConfig = Object.assign(
-          {}, 
-          DEFAULT_ANIMATION_CONFIGS[animationType], 
-          this.props.animationConfig, 
+          {},
+          DEFAULT_ANIMATION_CONFIGS[animationType],
+          this.props.animationConfig,
           {toValue : value}
         );
 
