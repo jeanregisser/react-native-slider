@@ -149,7 +149,7 @@ var Slider = React.createClass({
     debugTouchArea: PropTypes.bool,
 
     /**
-    * Set to true to animate values with default 'spring' animation type
+    * Set to true to animate values with default 'timing' animation type
     */
     animateTransitions : PropTypes.bool,
 
