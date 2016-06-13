@@ -156,12 +156,12 @@ var Slider = React.createClass({
     /**
     * Custom Animation type. 'spring' or 'timing'.
     */
-    animationType : PropTypes.oneOf(['spring', 'timing'])
+    animationType : PropTypes.oneOf(['spring', 'timing']),
 
     /**
     * Used to configure the animation parameters.  These are the same parameters in the Animated library.
     */
-    animationConfig : PropTypes.object
+    animationConfig : PropTypes.object,
   },
   getInitialState() {
     return {
