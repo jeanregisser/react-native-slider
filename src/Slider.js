@@ -246,15 +246,15 @@ var Slider = React.createClass({
     } = this.props;
     var {value, containerSize, trackSize, thumbSize, allMeasured} = this.state;
     var mainStyles = styles || defaultStyles;
-    var outputRangeEnd = 0;
+    var outputRange;
     if (orientation === 'horizontal') {
-      outputRangeEnd = containerSize.width - thumbSize.width;
+      outputRange = [0, containerSize.width - thumbSize.width];
     } else {
-      outputRangeEnd = containerSize.height - thumbSize.height;
+      outputRange = [containerSize.height - thumbSize.height, 0];
     }
     var thumbStart = value.interpolate({
         inputRange: [minimumValue, maximumValue],
-        outputRange: [0, outputRangeEnd],
+        outputRange: outputRange,
         //extrapolate: 'clamp',
       });
     var valueVisibleStyle = {};
@@ -272,8 +272,10 @@ var Slider = React.createClass({
       minimumTrackStyle.width = Animated.add(thumbStart, thumbSize.width / 2);
       minimumTrackStyle.marginTop = -trackSize.height;
     } else {
-      minimumTrackStyle.height = Animated.add(thumbStart, thumbSize.height / 2);
       minimumTrackStyle.marginLeft = -trackSize.width;
+      minimumTrackStyle.top = thumbStart;
+      minimumTrackStyle.height = Animated.add(thumbStart, -trackSize.height);
+      minimumTrackStyle.height = Animated.multiply(minimumTrackStyle.height, -1);
     }
 
     var thumbPositionStyle = {
@@ -419,15 +421,17 @@ var Slider = React.createClass({
   _getThumbStart(value: number) {
     var ratio = this._getRatio(value);
 
-    var length = 0;
+    var start = 0;
 
     if (this.props.orientation === 'horizontal') {
-      length = this.state.containerSize.width - this.state.thumbSize.width;
+      var length = this.state.containerSize.width - this.state.thumbSize.width;
+      start = ratio * length;
     } else {
-      length = this.state.containerSize.height - this.state.thumbSize.height;
+      var length = this.state.containerSize.height - this.state.thumbSize.height;
+      start = length - (ratio * length);
     }
 
-    return ratio * length;
+    return start;
   },
 
   _getValue(gestureState: Object) {
@@ -441,13 +445,14 @@ var Slider = React.createClass({
 
     var thumbStart = this._previousStart;
 
+    var ratio;
     if (this.props.orientation === 'horizontal') {
       thumbStart += gestureState.dx;
+      ratio = thumbStart / length;
     } else {
       thumbStart += gestureState.dy;
+      ratio = 1 - (thumbStart / length);
     }
-
-    var ratio = thumbStart / length;
 
     if (this.props.step) {
       return Math.max(this.props.minimumValue,
@@ -496,8 +501,14 @@ var Slider = React.createClass({
 
     var size = {};
     if (state.allMeasured === true) {
-      size.width = Math.max(0, props.thumbTouchSize.width - state.thumbSize.width);
-      size.height = Math.max(0, props.thumbTouchSize.height - state.containerSize.height);
+
+      if (props.orientation === 'horizontal') {
+        size.width = Math.max(0, props.thumbTouchSize.width - state.thumbSize.width);
+        size.height = Math.max(0, props.thumbTouchSize.height - state.containerSize.height);
+      } else {
+        size.width = Math.max(0, props.thumbTouchSize.width - state.containerSize.width);
+        size.height = Math.max(0, props.thumbTouchSize.height - state.thumbSize.height);
+      }
     }
 
     return size;
@@ -528,6 +539,7 @@ var Slider = React.createClass({
   _thumbHitTest(e: Object) {
     var nativeEvent = e.nativeEvent;
     var thumbTouchRect = this._getThumbTouchRect();
+
     return thumbTouchRect.containsPoint(nativeEvent.locationX, nativeEvent.locationY);
   },
 
@@ -554,14 +566,21 @@ var Slider = React.createClass({
     return rect;
   },
 
-  _renderDebugThumbTouchRect(thumbLeft) {
+  _renderDebugThumbTouchRect(thumbStart) {
     var thumbTouchRect = this._getThumbTouchRect();
+
     var positionStyle = {
-      left: thumbLeft,
+      left: thumbTouchRect.x,
       top: thumbTouchRect.y,
       width: thumbTouchRect.width,
       height: thumbTouchRect.height,
     };
+
+    if (this.props.orientation === 'horizontal') {
+      positionStyle.left = thumbStart;
+    } else {
+      positionStyle.top = thumbStart;
+    }
 
     return (
       <Animated.View
