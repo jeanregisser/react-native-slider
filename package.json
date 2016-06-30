@@ -33,10 +33,11 @@
   "devDependencies": {
     "babel-cli": "^6.6.5",
     "babel-eslint": "^3.1.15",
+    "babel-preset-react-native": "^1.9.0",
     "eslint": "^0.23.0",
     "eslint-plugin-react": "^2.5.2",
-    "react": "^15.0.2",
-    "react-native": "^0.26.2",
+    "react": "15.1.0",
+    "react-native": "0.28.0",
     "rimraf": "^2.5.2"
   }
 }
