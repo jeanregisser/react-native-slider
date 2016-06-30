@@ -54,13 +54,16 @@ var SliderContainer = React.createClass({
 var SliderExample = React.createClass({
   getInitialState() {
     return {
+      scroll: true,
       //value: 0.2,
     };
   },
 
   render() {
     return (
-      <ScrollView contentContainerStyle={styles.container}>
+      <ScrollView
+        contentContainerStyle={styles.container}
+        scrollEnabled={this.state.scroll}>
         <SliderContainer caption='<React.Slider/>'>
           <ReactNative.Slider />
         </SliderContainer>
@@ -133,6 +136,17 @@ var SliderExample = React.createClass({
             thumbStyle={customStyles8.thumb}
             minimumTrackTintColor='#31a4db'
             thumbTouchSize={{width: 50, height: 40}}
+          />
+        </SliderContainer>
+        <SliderContainer caption='<Slider/> with custom style #9, vertical'>
+          <Slider
+            orientation='vertical'
+            style={customStyles9.container}
+            trackStyle={customStyles9.track}
+            thumbStyle={customStyles9.thumb}
+            minimumTrackTintColor='blue'
+            onSlidingStart={() => this.setState({scroll: false})}
+            onSlidingComplete={() => this.setState({scroll: true})}
           />
         </SliderContainer>
       </ScrollView>
@@ -297,6 +311,22 @@ var customStyles8 = StyleSheet.create({
     shadowRadius: 2,
     shadowOpacity: 1,
   }
+});
+
+var customStyles9 = StyleSheet.create({
+  container: {
+    height: 100,
+  },
+  track: {
+    width: 10,
+    height: 100,
+    borderRadius: 50,
+  },
+  thumb: {
+    width: 16,
+    height: 16,
+    borderRadius: 8,
+  },
 });
 
 AppRegistry.registerComponent('Example', () => SliderExample);

@@ -162,6 +162,11 @@ var Slider = React.createClass({
     * Used to configure the animation parameters.  These are the same parameters in the Animated library.
     */
     animationConfig : PropTypes.object,
+
+    /**
+    * Used to change the slider orientation between horizontal and vertical
+    */
+    orientation : PropTypes.oneOf(['horizontal', 'vertical']),
   },
   getInitialState() {
     return {
@@ -183,7 +188,8 @@ var Slider = React.createClass({
       thumbTintColor: '#343434',
       thumbTouchSize: {width: 40, height: 40},
       debugTouchArea: false,
-      animationType: 'timing'
+      animationType: 'timing',
+      orientation: 'horizontal',
     };
   },
   componentWillMount() {
@@ -235,13 +241,20 @@ var Slider = React.createClass({
       trackStyle,
       thumbStyle,
       debugTouchArea,
+      orientation,
       ...other
     } = this.props;
     var {value, containerSize, trackSize, thumbSize, allMeasured} = this.state;
     var mainStyles = styles || defaultStyles;
-    var thumbLeft = value.interpolate({
+    var outputRangeEnd = 0;
+    if (orientation === 'horizontal') {
+      outputRangeEnd = containerSize.width - thumbSize.width;
+    } else {
+      outputRangeEnd = containerSize.height - thumbSize.height;
+    }
+    var thumbStart = value.interpolate({
         inputRange: [minimumValue, maximumValue],
-        outputRange: [0, containerSize.width - thumbSize.width],
+        outputRange: [0, outputRangeEnd],
         //extrapolate: 'clamp',
       });
     var valueVisibleStyle = {};
@@ -251,31 +264,66 @@ var Slider = React.createClass({
 
     var minimumTrackStyle = {
       position: 'absolute',
-      width: Animated.add(thumbLeft, thumbSize.width / 2),
-      marginTop: -trackSize.height,
       backgroundColor: minimumTrackTintColor,
       ...valueVisibleStyle
     };
 
+    if (orientation === 'horizontal') {
+      minimumTrackStyle.width = Animated.add(thumbStart, thumbSize.width / 2);
+      minimumTrackStyle.marginTop = -trackSize.height;
+    } else {
+      minimumTrackStyle.height = Animated.add(thumbStart, thumbSize.height / 2);
+      minimumTrackStyle.marginLeft = -trackSize.width;
+    }
+
+    var thumbPositionStyle = {
+      backgroundColor: thumbTintColor,
+      ...valueVisibleStyle,
+    };
+
+    if (orientation === 'horizontal') {
+      thumbPositionStyle.marginTop = -(trackSize.height + thumbSize.height) / 2;
+      thumbPositionStyle.left = thumbStart;
+    } else {
+      thumbPositionStyle.marginLeft = -(trackSize.width + thumbSize.width) / 2;
+      thumbPositionStyle.top = thumbStart;
+    }
+
     var touchOverflowStyle = this._getTouchOverflowStyle();
 
+    var contentContainerStyle = {};
+    if (orientation === 'horizontal') {
+      contentContainerStyle.height = 40;
+    } else {
+      contentContainerStyle.width = 40;
+      contentContainerStyle.flexDirection = 'row';
+    }
+
+    var trackDefaultStyle = {};
+    if (orientation === 'horizontal') {
+      trackDefaultStyle.height = TRACK_SIZE;
+    } else {
+      trackDefaultStyle.width = TRACK_SIZE;
+    }
+
     return (
-      <View {...other} style={[mainStyles.container, style]} onLayout={this._measureContainer}>
+      <View {...other} style={[contentContainerStyle, mainStyles.container, style]} onLayout={this._measureContainer}>
         <View
-          style={[{backgroundColor: maximumTrackTintColor,}, mainStyles.track, trackStyle]}
+          style={[{backgroundColor: maximumTrackTintColor,}, mainStyles.track, trackDefaultStyle, trackStyle]}
           onLayout={this._measureTrack} />
-        <Animated.View style={[mainStyles.track, trackStyle, minimumTrackStyle]} />
+        <Animated.View style={[mainStyles.track, trackDefaultStyle, trackStyle, minimumTrackStyle]} />
         <Animated.View
           onLayout={this._measureThumb}
           style={[
-            {backgroundColor: thumbTintColor, marginTop: -(trackSize.height + thumbSize.height) / 2},
-            mainStyles.thumb, thumbStyle, {left: thumbLeft, ...valueVisibleStyle}
+            thumbPositionStyle,
+            mainStyles.thumb,
+            thumbStyle,
           ]}
         />
         <View
           style={[defaultStyles.touchArea, touchOverflowStyle]}
           {...this._panResponder.panHandlers}>
-          {debugTouchArea === true && this._renderDebugThumbTouchRect(thumbLeft)}
+          {debugTouchArea === true && this._renderDebugThumbTouchRect(thumbStart)}
         </View>
       </View>
     );
@@ -307,7 +355,7 @@ var Slider = React.createClass({
   },
 
   _handlePanResponderGrant: function(/*e: Object, gestureState: Object*/) {
-    this._previousLeft = this._getThumbLeft(this._getCurrentValue());
+    this._previousStart = this._getThumbStart(this._getCurrentValue());
     this._fireChangeEvent('onSlidingStart');
   },
   _handlePanResponderMove: function(e: Object, gestureState: Object) {
@@ -368,16 +416,38 @@ var Slider = React.createClass({
     return (value - this.props.minimumValue) / (this.props.maximumValue - this.props.minimumValue);
   },
 
-  _getThumbLeft(value: number) {
+  _getThumbStart(value: number) {
     var ratio = this._getRatio(value);
-    return ratio * (this.state.containerSize.width - this.state.thumbSize.width);
+
+    var length = 0;
+
+    if (this.props.orientation === 'horizontal') {
+      length = this.state.containerSize.width - this.state.thumbSize.width;
+    } else {
+      length = this.state.containerSize.height - this.state.thumbSize.height;
+    }
+
+    return ratio * length;
   },
 
   _getValue(gestureState: Object) {
-    var length = this.state.containerSize.width - this.state.thumbSize.width;
-    var thumbLeft = this._previousLeft + gestureState.dx;
+    var length = 0;
 
-    var ratio = thumbLeft / length;
+    if (this.props.orientation === 'horizontal') {
+      length = this.state.containerSize.width - this.state.thumbSize.width;
+    } else {
+      length = this.state.containerSize.height - this.state.thumbSize.height;
+    }
+
+    var thumbStart = this._previousStart;
+
+    if (this.props.orientation === 'horizontal') {
+      thumbStart += gestureState.dx;
+    } else {
+      thumbStart += gestureState.dy;
+    }
+
+    var ratio = thumbStart / length;
 
     if (this.props.step) {
       return Math.max(this.props.minimumValue,
@@ -466,12 +536,22 @@ var Slider = React.createClass({
     var props = this.props;
     var touchOverflowSize = this._getTouchOverflowSize();
 
-    return new Rect(
-      touchOverflowSize.width / 2 + this._getThumbLeft(this._getCurrentValue()) + (state.thumbSize.width - props.thumbTouchSize.width) / 2,
-      touchOverflowSize.height / 2 + (state.containerSize.height - props.thumbTouchSize.height) / 2,
+    var rect = new Rect(
+      0,
+      0,
       props.thumbTouchSize.width,
       props.thumbTouchSize.height
     );
+
+    if (this.props.orientation === 'horizontal') {
+      rect.x = touchOverflowSize.width / 2 + this._getThumbStart(this._getCurrentValue()) + (state.thumbSize.width - props.thumbTouchSize.width) / 2;
+      rect.y = touchOverflowSize.height / 2 + (state.containerSize.height - props.thumbTouchSize.height) / 2;
+    } else {
+      rect.x = touchOverflowSize.width / 2 + (state.containerSize.width - props.thumbTouchSize.width) / 2;
+      rect.y = touchOverflowSize.height / 2 + this._getThumbStart(this._getCurrentValue()) + (state.thumbSize.height - props.thumbTouchSize.height) / 2;
+    }
+
+    return rect;
   },
 
   _renderDebugThumbTouchRect(thumbLeft) {
@@ -495,11 +575,9 @@ var Slider = React.createClass({
 
 var defaultStyles = StyleSheet.create({
   container: {
-    height: 40,
     justifyContent: 'center',
   },
   track: {
-    height: TRACK_SIZE,
     borderRadius: TRACK_SIZE / 2,
   },
   thumb: {
