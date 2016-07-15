@@ -501,6 +501,8 @@ var defaultStyles = StyleSheet.create({
   track: {
     height: TRACK_SIZE,
     borderRadius: TRACK_SIZE / 2,
+    marginLeft: THUMB_SIZE / 2,
+    marginRight: THUMB_SIZE / 2,
   },
   thumb: {
     position: 'absolute',
