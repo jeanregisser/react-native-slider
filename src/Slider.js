@@ -268,8 +268,15 @@ var Slider = React.createClass({
         <Animated.View
           onLayout={this._measureThumb}
           style={[
-            {backgroundColor: thumbTintColor, marginTop: -(trackSize.height + thumbSize.height) / 2},
-            mainStyles.thumb, thumbStyle, {left: thumbLeft, ...valueVisibleStyle}
+            {backgroundColor: thumbTintColor},
+            mainStyles.thumb, thumbStyle,
+            {
+              transform: [
+                { translateX: thumbLeft },
+                { translateY: -(trackSize.height + thumbSize.height) / 2 }
+              ],
+              ...valueVisibleStyle
+            }
           ]}
         />
         <View
