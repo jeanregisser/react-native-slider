@@ -67,6 +67,9 @@ var SliderExample = React.createClass({
         <SliderContainer caption='<Slider/> with default style'>
           <Slider />
         </SliderContainer>
+        <SliderContainer caption='<Slider/> with default style and graduation'>
+          <Slider graduation={0.1}/>
+        </SliderContainer>
         <SliderContainer caption='<Slider/> with min, max and custom tints '>
           <Slider
             minimumValue={-10}

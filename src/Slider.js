@@ -18,6 +18,8 @@ const shallowCompare = require('react-addons-shallow-compare'),
 
 var TRACK_SIZE = 4;
 var THUMB_SIZE = 20;
+var GRADUATION_HEIGHT = 10;
+var GRADUATION_WIDTH = 3;
 
 function Rect(x, y, width, height) {
   this.x = x;
@@ -84,6 +86,13 @@ var Slider = React.createClass({
     step: PropTypes.number,
 
     /**
+     * Graduation value of the slider to display a reguliar vertical tick.
+     * The value should be between 0 and (maximumValue - minimumValue).
+     * Default value is 0
+     */
+    graduation: PropTypes.number,
+
+    /**
      * The color used for the track to the left of the button. Overrides the
      * default blue gradient image.
      */
@@ -144,6 +153,11 @@ var Slider = React.createClass({
     thumbStyle: View.propTypes.style,
 
     /**
+     * The style applied to the graduation.
+     */
+    graduationStyle: View.propTypes.style,
+
+    /**
      * Set this to true to visually see the thumb touch rect in green.
      */
     debugTouchArea: PropTypes.bool,
@@ -168,6 +182,7 @@ var Slider = React.createClass({
       containerSize: {width: 0, height: 0},
       trackSize: {width: 0, height: 0},
       thumbSize: {width: 0, height: 0},
+      graduationSize: {width: 0, height: 0},
       allMeasured: false,
       value: new Animated.Value(this.props.value),
     };
@@ -178,6 +193,7 @@ var Slider = React.createClass({
       minimumValue: 0,
       maximumValue: 1,
       step: 0,
+      graduation: 0,
       minimumTrackTintColor: '#3f3f3f',
       maximumTrackTintColor: '#b3b3b3',
       thumbTintColor: '#343434',
@@ -221,10 +237,12 @@ var Slider = React.createClass({
       nextState
     ) || !styleEqual(this.props.style, nextProps.style)
       || !styleEqual(this.props.trackStyle, nextProps.trackStyle)
-      || !styleEqual(this.props.thumbStyle, nextProps.thumbStyle);
+      || !styleEqual(this.props.thumbStyle, nextProps.thumbStyle)
+      || !styleEqual(this.props.graduationStyle, nextProps.graduationStyle);
   },
   render() {
     var {
+      graduation,
       minimumValue,
       maximumValue,
       minimumTrackTintColor,
@@ -234,10 +252,11 @@ var Slider = React.createClass({
       style,
       trackStyle,
       thumbStyle,
+      graduationStyle,
       debugTouchArea,
       ...other
     } = this.props;
-    var {value, containerSize, trackSize, thumbSize, allMeasured} = this.state;
+    var {value, containerSize, trackSize, thumbSize, graduationSize, allMeasured} = this.state;
     var mainStyles = styles || defaultStyles;
     var thumbLeft = value.interpolate({
         inputRange: [minimumValue, maximumValue],
@@ -259,12 +278,24 @@ var Slider = React.createClass({
 
     var touchOverflowStyle = this._getTouchOverflowStyle();
 
+    var numberOfGraduations = graduation ? (maximumValue-minimumValue) / graduation + 1 : 0;
+
     return (
       <View {...other} style={[mainStyles.container, style]} onLayout={this._measureContainer}>
         <View
           style={[{backgroundColor: maximumTrackTintColor,}, mainStyles.track, trackStyle]}
           onLayout={this._measureTrack} />
         <Animated.View style={[mainStyles.track, trackStyle, minimumTrackStyle]} />
+        {[...Array(numberOfGraduations)].map((x, i) =>
+          <Animated.View
+            key={i}
+            onLayout={this._measureGraduation}
+            style={[
+              {backgroundColor: maximumTrackTintColor, marginTop: -(trackSize.height + graduationSize.height) / 2},
+              mainStyles.graduation, graduationStyle, {left: this._getGraduationOffset(i), ...valueVisibleStyle}
+            ]}
+          />
+        )}
         <Animated.View
           onLayout={this._measureThumb}
           style={[
@@ -297,10 +328,28 @@ var Slider = React.createClass({
       style,
       trackStyle,
       thumbStyle,
+      graduationStyle,
       ...otherProps,
     } = props;
 
     return otherProps;
+  },
+
+  _getGraduationOffset(index: number) {
+    var {
+      graduation,
+      minimumValue,
+      maximumValue,
+    } = this.props;
+    var {
+      containerSize,
+      graduationSize,
+      thumbSize,
+    } = this.state;
+
+    var graduationOffset = thumbSize.height / 2;
+
+    return graduationOffset += (minimumValue+graduation*index) * (containerSize.width-thumbSize.width) / maximumValue;
   },
 
   _handleStartShouldSetPanResponder: function(e: Object, /*gestureState: Object*/): boolean {
@@ -350,6 +399,10 @@ var Slider = React.createClass({
     this._handleMeasure('thumbSize', x);
   },
 
+  _measureGraduation(x: Object) {
+    this._handleMeasure('graduationSize', x);
+  },
+
   _handleMeasure(name: string, x: Object) {
     var {width, height} = x.nativeEvent.layout;
     var size = {width: width, height: height};
@@ -366,6 +419,7 @@ var Slider = React.createClass({
         containerSize: this._containerSize,
         trackSize: this._trackSize,
         thumbSize: this._thumbSize,
+        graduationSize: this._graduationSize,
         allMeasured: true,
       })
     }
@@ -508,12 +562,19 @@ var defaultStyles = StyleSheet.create({
   track: {
     height: TRACK_SIZE,
     borderRadius: TRACK_SIZE / 2,
+    marginLeft: THUMB_SIZE / 2,
+    marginRight: THUMB_SIZE / 2,
   },
   thumb: {
     position: 'absolute',
     width: THUMB_SIZE,
     height: THUMB_SIZE,
     borderRadius: THUMB_SIZE / 2,
+  },
+  graduation: {
+    position: 'absolute',
+    height: GRADUATION_HEIGHT,
+    width: GRADUATION_WIDTH,
   },
   touchArea: {
     position: 'absolute',
