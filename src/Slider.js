@@ -263,10 +263,14 @@ var Slider = React.createClass({
       <View {...other} style={[mainStyles.container, style]} onLayout={this._measureContainer}>
         <View
           style={[{backgroundColor: maximumTrackTintColor,}, mainStyles.track, trackStyle]}
+          renderToHardwareTextureAndroid={true}
           onLayout={this._measureTrack} />
-        <Animated.View style={[mainStyles.track, trackStyle, minimumTrackStyle]} />
+        <Animated.View
+          renderToHardwareTextureAndroid={true}
+          style={[mainStyles.track, trackStyle, minimumTrackStyle]} />
         <Animated.View
           onLayout={this._measureThumb}
+          renderToHardwareTextureAndroid={true}
           style={[
             {backgroundColor: thumbTintColor},
             mainStyles.thumb, thumbStyle,
@@ -280,6 +284,7 @@ var Slider = React.createClass({
           ]}
         />
         <View
+          renderToHardwareTextureAndroid={true}
           style={[defaultStyles.touchArea, touchOverflowStyle]}
           {...this._panResponder.panHandlers}>
           {debugTouchArea === true && this._renderDebugThumbTouchRect(thumbLeft)}
