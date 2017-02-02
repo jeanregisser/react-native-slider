@@ -239,9 +239,10 @@ var Slider = React.createClass({
     } = this.props;
     var {value, containerSize, trackSize, thumbSize, allMeasured} = this.state;
     var mainStyles = styles || defaultStyles;
+    var halfThumbWidth = thumbSize.width / 2;
     var thumbLeft = value.interpolate({
         inputRange: [minimumValue, maximumValue],
-        outputRange: [0, containerSize.width - thumbSize.width],
+        outputRange: [0 - halfThumbWidth, containerSize.width - thumbSize.width + halfThumbWidth],
         //extrapolate: 'clamp',
       });
     var valueVisibleStyle = {};
