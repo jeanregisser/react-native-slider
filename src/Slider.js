@@ -257,7 +257,6 @@ var Slider = React.createClass({
     }
 
     var minimumTrackStyle = {
-      position: 'absolute',
       width: Animated.add(thumbLeft, thumbSize.width / 2),
       marginTop: -trackSize.height,
       backgroundColor: minimumTrackTintColor,
@@ -275,12 +274,15 @@ var Slider = React.createClass({
         <Animated.View
           onLayout={this._measureThumb}
           style={[
-            {backgroundColor: thumbTintColor},
+            {
+              backgroundColor: thumbTintColor,
+              left: 0,
+              top: containerSize.height / 2 - thumbSize.height / 2
+            },
             mainStyles.thumb, thumbStyle,
             {
               transform: [
-                { translateX: thumbLeft },
-                { translateY: -(trackSize.height + thumbSize.height) / 2 }
+                { translateX: thumbLeft }
               ],
               ...valueVisibleStyle
             }
