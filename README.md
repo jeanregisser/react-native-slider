@@ -26,6 +26,7 @@ npm i --save react-native-slider
 | <0.25.0                 | <0.7.0                                    |
 | v0.25.x                 | v0.7.x                                    |
 | v0.26.0+                | v0.8.x                                    |
+| v0.43.0+                | v0.10.x                                   |
 
 ## Usage
 
