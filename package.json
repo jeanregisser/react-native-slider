@@ -1,6 +1,6 @@
 {
   "name": "react-native-slider",
-  "version": "0.9.1",
+  "version": "0.10.0",
   "description": "A pure JavaScript <Slider /> component for react-native",
   "main": "lib/Slider.js",
   "files": [
@@ -27,16 +27,15 @@
     "url": "git@github.com:jeanregisser/react-native-slider.git"
   },
   "dependencies": {
-    "react-addons-shallow-compare": "^15.0.2",
-    "style-equal": "^1.0.0"
+    "prop-types": "^15.5.6"
   },
   "devDependencies": {
     "babel-cli": "^6.6.5",
-    "babel-eslint": "^3.1.15",
-    "eslint": "^0.23.0",
-    "eslint-plugin-react": "^2.5.2",
-    "react": "15.2.1",
-    "react-native": "^0.31.0",
+    "babel-eslint": "^7.2.1",
+    "eslint": "^3.19.0",
+    "eslint-plugin-react": "^6.10.3",
+    "react": "16.0.0-alpha.6",
+    "react-native": "0.43.3",
     "rimraf": "^2.5.2"
   }
 }
