@@ -10,7 +10,8 @@ import {
   StyleSheet,
   PanResponder,
   View,
-  Easing
+  Easing,
+  Text
 } from "react-native";
 
 import PropTypes from 'prop-types';
@@ -138,6 +139,11 @@ export default class Slider extends PureComponent {
     trackStyle: View.propTypes.style,
 
     /**
+     * Horizontal offsetting applied to the track without affecting the thumb.
+     */
+    trackOffset: PropTypes.number,
+
+    /**
      * The style applied to the thumb.
      */
     thumbStyle: View.propTypes.style,
@@ -166,6 +172,16 @@ export default class Slider extends PureComponent {
      * Used to configure the animation parameters.  These are the same parameters in the Animated library.
      */
     animationConfig : PropTypes.object,
+
+    /**
+     * Optional text displayed below the thumb.
+     */
+    text: PropTypes.string,
+
+    /**
+     * The style applied to the optional text.
+     */
+    textStyle: Text.propTypes.style,
   };
 
   static defaultProps = {
@@ -227,6 +243,9 @@ export default class Slider extends PureComponent {
       trackStyle,
       thumbStyle,
       debugTouchArea,
+      trackOffset,
+      text,
+      textStyle,
       ...other
     } = this.props;
     var {value, containerSize, trackSize, thumbSize, allMeasured} = this.state;
@@ -243,17 +262,20 @@ export default class Slider extends PureComponent {
 
     var minimumTrackStyle = {
       position: 'absolute',
-      width: Animated.add(thumbLeft, thumbSize.width / 2),
+      left: trackOffset || 0,
+      width: Animated.add(thumbLeft, thumbSize.width / 2 - (trackOffset || 0)),
       backgroundColor: minimumTrackTintColor,
       ...valueVisibleStyle
     };
+
+    var maximumTrackStyle = trackOffset ? {marginHorizontal: trackOffset} : {};
 
     var touchOverflowStyle = this._getTouchOverflowStyle();
 
     return (
       <View {...other} style={[mainStyles.container, style]} onLayout={this._measureContainer}>
         <View
-          style={[{backgroundColor: maximumTrackTintColor,}, mainStyles.track, trackStyle]}
+          style={[{backgroundColor: maximumTrackTintColor,}, mainStyles.track, trackStyle, maximumTrackStyle]}
           renderToHardwareTextureAndroid={true}
           onLayout={this._measureTrack} />
         <Animated.View
@@ -275,6 +297,7 @@ export default class Slider extends PureComponent {
           ]}
         >
           {this._renderThumbImage()}
+          {text ? <Text style={textStyle}>{text}</Text> : null}
         </Animated.View>
         <View
           renderToHardwareTextureAndroid={true}
@@ -295,6 +318,7 @@ export default class Slider extends PureComponent {
       style,
       trackStyle,
       thumbStyle,
+      textStyle,
       ...otherProps,
     } = props;
 
