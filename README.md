@@ -69,6 +69,8 @@ const styles = StyleSheet.create({
 AppRegistry.registerComponent("SliderExample", () => SliderExample);
 ```
 
+Try this example [live on Expo Snack](https://snack.expo.io/HkbAqpbwb).
+
 ## Props
 
 Prop                  | Type     | Optional | Default                   | Description
