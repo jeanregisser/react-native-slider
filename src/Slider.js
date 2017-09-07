@@ -2,7 +2,7 @@
 
 import React, {
   PureComponent,
-} from "react";
+} from 'react';
 
 import {
   Animated,
@@ -12,7 +12,7 @@ import {
   View,
   Easing,
   ViewPropTypes
-} from "react-native";
+} from 'react-native';
 
 import PropTypes from 'prop-types';
 
@@ -167,6 +167,11 @@ export default class Slider extends PureComponent {
      * Used to configure the animation parameters.  These are the same parameters in the Animated library.
      */
     animationConfig : PropTypes.object,
+
+    /**
+     * Used to determine whether the Slider is vertical, as opposed to its default of horizontal.
+     */
+    vertical: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -188,6 +193,7 @@ export default class Slider extends PureComponent {
     thumbSize: {width: 0, height: 0},
     allMeasured: false,
     value: new Animated.Value(this.props.value),
+    vertical: this.props.vertical,
   };
 
   componentWillMount() {
@@ -369,7 +375,7 @@ export default class Slider extends PureComponent {
         trackSize: this._trackSize,
         thumbSize: this._thumbSize,
         allMeasured: true,
-      })
+      });
     }
   };
 
@@ -384,7 +390,8 @@ export default class Slider extends PureComponent {
 
   _getValue = (gestureState: Object) => {
     var length = this.state.containerSize.width - this.state.thumbSize.width;
-    var thumbLeft = this._previousLeft + gestureState.dx;
+    var scrubDirection = this.state.vertical ? gestureState.dy : gestureState.dx;
+    var thumbLeft = this._previousLeft + scrubDirection;
 
     var ratio = thumbLeft / length;
 
