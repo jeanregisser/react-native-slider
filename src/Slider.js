@@ -169,9 +169,9 @@ export default class Slider extends PureComponent {
     animationConfig : PropTypes.object,
 
     /**
-     * Used to determine whether the Slider is vertical, as opposed to its default of horizontal.
+     * Used to determine the swipe direction of the slider. This allows for the orientation of the component to be both horizontal and vertical.
      */
-    vertical: PropTypes.bool,
+    swipeDirection: PropTypes.oneOf(['horizontal', 'vertical']),
   };
 
   static defaultProps = {
@@ -184,7 +184,8 @@ export default class Slider extends PureComponent {
     thumbTintColor: '#343434',
     thumbTouchSize: {width: 40, height: 40},
     debugTouchArea: false,
-    animationType: 'timing'
+    animationType: 'timing',
+    swipeDirection: 'horizontal',
   };
 
   state = {
@@ -193,7 +194,6 @@ export default class Slider extends PureComponent {
     thumbSize: {width: 0, height: 0},
     allMeasured: false,
     value: new Animated.Value(this.props.value),
-    vertical: this.props.vertical,
   };
 
   componentWillMount() {
@@ -390,8 +390,8 @@ export default class Slider extends PureComponent {
 
   _getValue = (gestureState: Object) => {
     var length = this.state.containerSize.width - this.state.thumbSize.width;
-    var scrubDirection = this.state.vertical ? gestureState.dy : gestureState.dx;
-    var thumbLeft = this._previousLeft + scrubDirection;
+    var swipeMovement = this.props.swipeDirection === 'vertical' ? gestureState.dy : gestureState.dx;
+    var thumbLeft = this._previousLeft + swipeMovement;
 
     var ratio = thumbLeft / length;
 
