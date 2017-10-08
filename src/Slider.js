@@ -505,7 +505,7 @@ export default class Slider extends PureComponent {
 
     if (!thumbImage) return;
 
-    return <Image source={thumbImage} />;
+    return <Image style={{width:'100%', height:'100%', resizeMode:'stretch'}} source={thumbImage} />;
   };
 }
 
