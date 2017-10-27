@@ -91,6 +91,8 @@ style                 | [style](http://facebook.github.io/react-native/docs/view
 trackStyle            | [style](http://facebook.github.io/react-native/docs/view.html#style)    | Yes      |                           | The style applied to the track
 thumbStyle            | [style](http://facebook.github.io/react-native/docs/view.html#style)    | Yes      |                           | The style applied to the thumb
 thumbImage            | [source](http://facebook.github.io/react-native/docs/image.html#source)    | Yes      |                           | Sets an image for the thumb.
+thumbText             | string   | Yes      | undefined                  | Sets text for the thumb, if both image and text are present, image is displayed
+thumbTextStyle        | [style](http://facebook.github.io/react-native/docs/text.html#style)   | Yes      | undefined                  | The style applied to thumb text
 debugTouchArea        | bool     | Yes      | false                     | Set this to true to visually see the thumb touch rect in green.
 animateTransitions    | bool     | Yes      | false                     | Set to true if you want to use the default 'spring' animation
 animationType         | string   | Yes      | 'timing'                  | Set to 'spring' or 'timing' to use one of those two types of animations with the default [animation properties](https://facebook.github.io/react-native/docs/animations.html).
