@@ -11,7 +11,8 @@ import {
   PanResponder,
   View,
   Easing,
-  ViewPropTypes
+  ViewPropTypes,
+  Text
 } from "react-native";
 
 import PropTypes from 'prop-types';
@@ -149,6 +150,16 @@ export default class Slider extends PureComponent {
     thumbImage: Image.propTypes.source,
 
     /**
+     * Sets text for the thumb, if both image and text are present, image is displayed
+     */
+    thumbText: PropTypes.string,
+
+    /**
+     * The style applied to thumb text
+     */
+    thumbTextStyle: Text.propTypes.style,
+
+    /**
      * Set this to true to visually see the thumb touch rect in green.
      */
     debugTouchArea: PropTypes.bool,
@@ -275,7 +286,7 @@ export default class Slider extends PureComponent {
             }
           ]}
         >
-          {this._renderThumbImage()}
+          {this._renderThumbContents()}
         </Animated.View>
         <View
           renderToHardwareTextureAndroid={true}
@@ -500,12 +511,18 @@ export default class Slider extends PureComponent {
     );
   };
 
-  _renderThumbImage = () => {
-    var {thumbImage} = this.props;
+  _renderThumbContents = () => {
+    var {thumbImage, thumbText, thumbTextStyle} = this.props;
 
-    if (!thumbImage) return;
+    if (thumbImage) {
+      return <Image source={thumbImage} />;
+    }
 
-    return <Image source={thumbImage} />;
+    if (thumbText) {
+      return <Text style={thumbTextStyle}>{thumbText}</Text>
+    }
+
+    return null
   };
 }
 
@@ -523,6 +540,8 @@ var defaultStyles = StyleSheet.create({
     width: THUMB_SIZE,
     height: THUMB_SIZE,
     borderRadius: THUMB_SIZE / 2,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   touchArea: {
     position: 'absolute',
