@@ -1,8 +1,8 @@
-'use strict';
+
 
 import React, {
   PureComponent,
-} from "react";
+} from 'react';
 
 import {
   Animated,
@@ -13,7 +13,7 @@ import {
   Easing,
   ViewPropTypes,
   Text
-} from "react-native";
+} from 'react-native';
 
 import PropTypes from 'prop-types';
 
@@ -202,6 +202,8 @@ export default class Slider extends PureComponent {
   };
 
   componentWillMount() {
+    this._checkForInvalidValue(this.props.value);
+
     this._panResponder = PanResponder.create({
       onStartShouldSetPanResponder: this._handleStartShouldSetPanResponder,
       onMoveShouldSetPanResponder: this._handleMoveShouldSetPanResponder,
@@ -215,6 +217,8 @@ export default class Slider extends PureComponent {
 
   componentWillReceiveProps(nextProps) {
     var newValue = nextProps.value;
+
+    this._checkForInvalidValue(newValue);
 
     if (this.props.value !== newValue) {
       if (this.props.animateTransitions) {
@@ -385,7 +389,7 @@ export default class Slider extends PureComponent {
         trackSize: this._trackSize,
         thumbSize: this._thumbSize,
         allMeasured: true,
-      })
+      });
     }
   };
 
@@ -524,11 +528,21 @@ export default class Slider extends PureComponent {
     }
 
     if (thumbText) {
-      return <Text style={thumbTextStyle}>{thumbText}</Text>
+      return <Text style={thumbTextStyle}>{thumbText}</Text>;
     }
 
-    return null
+    return null;
   };
+
+  _checkForInvalidValue = value => {
+    const { minimumValue, maximumValue } = this.props;
+    
+    if (value > maximumValue || value < minimumValue) {
+      console.error(
+        `Invalid prop value ${value} provided, it should be between min: ${minimumValue} and max: ${maximumValue}`
+      );
+    }
+  }
 }
 
 var defaultStyles = StyleSheet.create({
