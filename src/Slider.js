@@ -167,6 +167,11 @@ export default class Slider extends PureComponent {
      * Used to configure the animation parameters.  These are the same parameters in the Animated library.
      */
     animationConfig : PropTypes.object,
+
+    /**
+     * Set to true to update the value whilst clicking the Slider
+     */
+    trackClickable : PropTypes.bool,
   };
 
   static defaultProps = {
@@ -179,7 +184,8 @@ export default class Slider extends PureComponent {
     thumbTintColor: '#343434',
     thumbTouchSize: {width: 40, height: 40},
     debugTouchArea: false,
-    animationType: 'timing'
+    animationType: 'timing',
+    trackClickable: false,
   };
 
   state = {
@@ -228,6 +234,7 @@ export default class Slider extends PureComponent {
       trackStyle,
       thumbStyle,
       debugTouchArea,
+      trackClickable,
       ...other
     } = this.props;
     var {value, containerSize, trackSize, thumbSize, allMeasured} = this.state;
@@ -296,6 +303,7 @@ export default class Slider extends PureComponent {
       style,
       trackStyle,
       thumbStyle,
+      trackClickable,
       ...otherProps,
     } = props;
 
@@ -304,8 +312,7 @@ export default class Slider extends PureComponent {
 
   _handleStartShouldSetPanResponder = (e: Object, /*gestureState: Object*/): boolean => {
     // Should we become active when the user presses down on the thumb?
-    // return this._thumbHitTest(e);
-    return true;
+    return this.props.trackClickable ? true : this._thumbHitTest(e);
   };
 
   _handleMoveShouldSetPanResponder(/*e: Object, gestureState: Object*/): boolean {
@@ -315,7 +322,7 @@ export default class Slider extends PureComponent {
 
   _handlePanResponderGrant = (e: Object, gestureState: Object) => {
     // this._previousLeft = this._getThumbLeft(this._getCurrentValue());
-    this._previousLeft = gestureState.x0 - (this.state.thumbSize.width/2);
+    this._previousLeft = this.props.trackClickable ? gestureState.x0 - (this.state.thumbSize.width/2) : this._getThumbLeft(this._getCurrentValue());
     this._fireChangeEvent('onSlidingStart');
   };
 
