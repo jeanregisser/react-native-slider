@@ -11,7 +11,8 @@ import {
   PanResponder,
   View,
   Easing,
-  ViewPropTypes
+  ViewPropTypes,
+  I18nManager
 } from "react-native";
 
 import PropTypes from 'prop-types';
@@ -378,7 +379,8 @@ export default class Slider extends PureComponent {
   };
 
   _getThumbLeft = (value: number) => {
-    var ratio = this._getRatio(value);
+    var nonRtlRatio = this._getRatio(value);
+    var ratio = I18nManager.isRTL ? 1 - nonRtlRatio : nonRtlRatio;
     return ratio * (this.state.containerSize.width - this.state.thumbSize.width);
   };
 
@@ -386,7 +388,8 @@ export default class Slider extends PureComponent {
     var length = this.state.containerSize.width - this.state.thumbSize.width;
     var thumbLeft = this._previousLeft + gestureState.dx;
 
-    var ratio = thumbLeft / length;
+    var nonRtlRatio = thumbLeft / length;
+    var ratio = I18nManager.isRTL ? 1 - nonRtlRatio : nonRtlRatio;
 
     if (this.props.step) {
       return Math.max(this.props.minimumValue,
