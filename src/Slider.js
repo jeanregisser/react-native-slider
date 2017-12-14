@@ -144,6 +144,11 @@ export default class Slider extends PureComponent {
     thumbStyle: ViewPropTypes.style,
 
     /**
+     * The style applied to the thumb image.
+     */
+    thumbImageStyle: ViewPropTypes.style,
+
+    /**
      * Sets an image for the thumb.
      */
     thumbImage: Image.propTypes.source,
@@ -501,11 +506,11 @@ export default class Slider extends PureComponent {
   };
 
   _renderThumbImage = () => {
-    var {thumbImage} = this.props;
+    var {thumbImage, thumbImageStyle} = this.props;
 
     if (!thumbImage) return;
 
-    return <Image source={thumbImage} />;
+    return <Image source={thumbImage} style={thumbImageStyle}/>;
   };
 }
 
