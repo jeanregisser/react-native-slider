@@ -149,6 +149,11 @@ export default class Slider extends PureComponent {
     thumbImage: Image.propTypes.source,
 
     /**
+     * Sets a text for the thumb.
+     */
+    thumbText: ViewPropTypes.source,
+
+    /**
      * Set this to true to visually see the thumb touch rect in green.
      */
     debugTouchArea: PropTypes.bool,
@@ -276,6 +281,7 @@ export default class Slider extends PureComponent {
           ]}
         >
           {this._renderThumbImage()}
+          {this._renderThumbText()}
         </Animated.View>
         <View
           renderToHardwareTextureAndroid={true}
@@ -498,6 +504,14 @@ export default class Slider extends PureComponent {
         pointerEvents='none'
       />
     );
+  };
+
+  _renderText = () => {
+    var {thumbText} = this.props;
+
+    if (!thumbText) return;
+
+    return <Text>{ thumbText }</Text>;
   };
 
   _renderThumbImage = () => {
