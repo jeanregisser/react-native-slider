@@ -521,7 +521,7 @@ export default class Slider extends PureComponent {
     );
   };
 
-  _renderText = () => {
+  _renderThumbText = () => {
     var {thumbText} = this.props;
 
     if (!thumbText) return;
