@@ -352,7 +352,7 @@ export default class Slider extends PureComponent {
       trackHighlightStyle = {
         position: 'absolute',
         left: 0,
-        width: Animated.add(thumbLeft, thumbSize.width / 2),
+        width: Animated.add(thumbValues[0], thumbSize.width / 2),
         marginTop: -trackSize.height,
         backgroundColor: minimumTrackTintColor || trackHighlightColor,
         ...valueVisibleStyle
