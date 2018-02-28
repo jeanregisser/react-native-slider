@@ -11,7 +11,8 @@ import {
   PanResponder,
   View,
   Easing,
-  ViewPropTypes
+  ViewPropTypes,
+  I18nManager
 } from "react-native";
 
 import PropTypes from 'prop-types';
@@ -234,7 +235,7 @@ export default class Slider extends PureComponent {
     var mainStyles = styles || defaultStyles;
     var thumbLeft = value.interpolate({
       inputRange: [minimumValue, maximumValue],
-      outputRange: [0, containerSize.width - thumbSize.width],
+      outputRange: I18nManager.isRTL ? [0, thumbSize.width - containerSize.width] : [0, containerSize.width - thumbSize.width],
       //extrapolate: 'clamp',
     });
     var valueVisibleStyle = {};
@@ -378,7 +379,7 @@ export default class Slider extends PureComponent {
   };
 
   _getThumbLeft = (value: number) => {
-    var ratio = this._getRatio(value);
+    var ratio = I18nManager.isRTL ? 1 - this._getRatio(value) : this._getRatio(value);
     return ratio * (this.state.containerSize.width - this.state.thumbSize.width);
   };
 
@@ -387,17 +388,18 @@ export default class Slider extends PureComponent {
     var thumbLeft = this._previousLeft + gestureState.dx;
 
     var ratio = thumbLeft / length;
+    var adjustedRatio = I18nManager.isRTL ? 1 - ratio : ratio;
 
     if (this.props.step) {
       return Math.max(this.props.minimumValue,
         Math.min(this.props.maximumValue,
-          this.props.minimumValue + Math.round(ratio * (this.props.maximumValue - this.props.minimumValue) / this.props.step) * this.props.step
+          this.props.minimumValue + Math.round(adjustedRatio * (this.props.maximumValue - this.props.minimumValue) / this.props.step) * this.props.step
         )
       );
     } else {
       return Math.max(this.props.minimumValue,
         Math.min(this.props.maximumValue,
-          ratio * (this.props.maximumValue - this.props.minimumValue) + this.props.minimumValue
+          adjustedRatio * (this.props.maximumValue - this.props.minimumValue) + this.props.minimumValue
         )
       );
     }
