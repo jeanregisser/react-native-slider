@@ -280,7 +280,7 @@ export default class Slider extends PureComponent {
       // Just update/animate current thumb values
       for (let i = 0; i < newValues.length; i++) {
         let val = newValues[i];
-        if (typeof val === 'number' && val !== newValues[i]) {
+        if (typeof val === 'number' && val !== oldValues[i]) {
           if (this.props.animateTransitions) {
             this._setCurrentValueAnimated(val, i);
           }
