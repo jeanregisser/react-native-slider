@@ -228,6 +228,10 @@ export default class Slider extends PureComponent {
       trackStyle,
       thumbStyle,
       debugTouchArea,
+      onValueChange,
+      thumbTouchSize,
+      animationType,
+      animateTransitions,
       ...other
     } = this.props;
     var {value, containerSize, trackSize, thumbSize, allMeasured} = this.state;
