@@ -1,5 +1,5 @@
 {
-  "name": "zdev-react-native-slider",
+  "name": "react-native-slider-zdev",
   "version": "0.12.0",
   "description": "A pure JavaScript <Slider /> component for react-native",
   "main": "lib/Slider.js",
