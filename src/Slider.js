@@ -329,7 +329,7 @@ export default class Slider extends PureComponent {
     }
 
     this._setCurrentValue(value);
-    this._fireChangeEvent('onValueChange');
+    this._fireChangeEvent(changeEvent);
   }
 
   _handlePanResponderRequestEnd(e: Object, gestureState: Object) {
