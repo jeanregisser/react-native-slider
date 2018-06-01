@@ -79,9 +79,9 @@ value                 | number   | Yes      | 0                         | Initia
 disabled              | bool     | Yes      | false                     | If true the user won't be able to move the slider
 minimumValue          | number   | Yes      | 0                         | Initial minimum value of the slider
 maximumValue          | number   | Yes      | 1                         | Initial maximum value of the slider
-minimumSlideValue     | number   | Yes      | 0                         | Minimum value the user can set the thumb to
+minimumSlideValue     | number   | Yes      | undefined                 | Minimum value the user can set the thumb to
 maximumSlideValue     | number   | Yes      | undefined                 | Maximum value the user can set the thumb to
-step                  | number   | Yes      | undefined                 | Step value of the slider. The value should be between 0 and maximumValue - minimumValue)
+step                  | number   | Yes      | 0                         | Step value of the slider. The value should be between 0 and maximumValue - minimumValue)
 minimumTrackTintColor | string   | Yes      | '#3f3f3f'                 | The color used for the track to the left of the button
 maximumTrackTintColor | string   | Yes      | '#b3b3b3'                 | The color used for the track to the right of the button
 thumbTintColor        | string   | Yes      | '#343434'                 | The color used for the thumb
