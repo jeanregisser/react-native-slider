@@ -1,0 +1,79 @@
+Arguments: 
+  /usr/local/Cellar/node/8.1.4/bin/node /Users/wkoutre/.yarn/bin/yarn.js build
+
+PATH: 
+  /Library/Frameworks/Python.framework/Versions/3.6/bin:/Library/Frameworks/Python.framework/Versions/3.6/bin:/Users/wkoutre/google-cloud-sdk/bin:/Users/wkoutre/.yarn/bin:/opt/local/bin:/opt/local/sbin:/opt/local/bin:/opt/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/wkoutre/coding/mongodb-osx-x86_64-3.4.1/bin:/usr/local/bin:/Users/wkoutre/Library/Python/3.6/bin
+
+Yarn version: 
+  1.5.1
+
+Node version: 
+  8.1.4
+
+Platform: 
+  darwin x64
+
+npm manifest: 
+  {
+    "name": "react-native-slider",
+    "version": "0.11.0",
+    "description": "A pure JavaScript <Slider /> component for react-native",
+    "main": "lib/Slider.js",
+    "files": [
+      "lib",
+      "src"
+    ],
+    "author": "Jean Regisser <jean.regisser@gmail.com> (https://github.com/jeanregisser)",
+    "keywords": [
+      "react-component",
+      "react-native",
+      "ios",
+      "android",
+      "slider"
+    ],
+    "license": "MIT",
+    "scripts": {
+      "clean": "rimraf lib",
+      "start": "node_modules/react-native/packager/packager.sh",
+      "build": "babel src --out-dir lib",
+      "prepublish": "npm run clean && npm run build"
+    },
+    "repository": {
+      "type": "git",
+      "url": "git@github.com:jeanregisser/react-native-slider.git"
+    },
+    "dependencies": {
+      "prop-types": "^15.5.6"
+    },
+    "devDependencies": {
+      "babel-cli": "^6.6.5",
+      "babel-eslint": "^7.2.1",
+      "eslint": "^3.19.0",
+      "eslint-plugin-react": "^6.10.3",
+      "react": "16.0.0-alpha.6",
+      "react-native": "0.43.3",
+      "rimraf": "^2.5.2"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
+
+Trace: 
+  Error: Command failed.
+  Exit code: 1
+  Command: sh
+  Arguments: -c babel src --out-dir lib
+  Directory: /Users/wkoutre/GitHub/forked/react-native-slider
+  Output:
+  
+      at ProcessTermError.MessageError (/Users/wkoutre/.yarn/lib/cli.js:186:110)
+      at new ProcessTermError (/Users/wkoutre/.yarn/lib/cli.js:226:113)
+      at ChildProcess.<anonymous> (/Users/wkoutre/.yarn/lib/cli.js:30281:17)
+      at emitTwo (events.js:125:13)
+      at ChildProcess.emit (events.js:213:7)
+      at maybeClose (internal/child_process.js:897:16)
+      at Process.ChildProcess._handle.onexit (internal/child_process.js:208:5)
