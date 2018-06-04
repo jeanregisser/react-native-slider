@@ -2,7 +2,7 @@
 
 import React, {
   PureComponent,
-} from "react";
+} from 'react';
 
 import {
   Animated,
@@ -12,7 +12,7 @@ import {
   View,
   Easing,
   ViewPropTypes
-} from "react-native";
+} from 'react-native';
 
 import PropTypes from 'prop-types';
 
@@ -167,6 +167,16 @@ export default class Slider extends PureComponent {
      * Used to configure the animation parameters.  These are the same parameters in the Animated library.
      */
     animationConfig : PropTypes.object,
+
+    /**
+     * Used to determine the orientation of the slider. This allows for the orientation of the component to be both horizontal and vertical.
+     */
+    orientation: PropTypes.oneOf(['horizontal', 'vertical']),
+
+    /**
+     * Set this to true to invert the swipe direction of the slider. Inversion is linked to the slider's orientation.
+     */
+    inverted: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -179,7 +189,9 @@ export default class Slider extends PureComponent {
     thumbTintColor: '#343434',
     thumbTouchSize: {width: 40, height: 40},
     debugTouchArea: false,
-    animationType: 'timing'
+    animationType: 'timing',
+    orientation: 'horizontal',
+    inverted: false,
   };
 
   state = {
@@ -373,7 +385,7 @@ export default class Slider extends PureComponent {
         trackSize: this._trackSize,
         thumbSize: this._thumbSize,
         allMeasured: true,
-      })
+      });
     }
   };
 
@@ -388,7 +400,9 @@ export default class Slider extends PureComponent {
 
   _getValue = (gestureState: Object) => {
     var length = this.state.containerSize.width - this.state.thumbSize.width;
-    var thumbLeft = this._previousLeft + gestureState.dx;
+    var swipeMovement = this.props.orientation === 'vertical' ? gestureState.dy : gestureState.dx;
+    var swipeDirection = this.props.inverted ? -swipeMovement : swipeMovement;
+    var thumbLeft = this._previousLeft + swipeDirection;
 
     var ratio = thumbLeft / length;
 
