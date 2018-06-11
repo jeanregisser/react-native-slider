@@ -1,8 +1,6 @@
-'use strict';
-
 import React, {
   PureComponent,
-} from "react";
+} from 'react';
 
 import {
   Animated,
@@ -11,8 +9,7 @@ import {
   PanResponder,
   View,
   Easing,
-  ViewPropTypes
-} from "react-native";
+} from 'react-native';
 
 import PropTypes from 'prop-types';
 
@@ -131,17 +128,17 @@ export default class Slider extends PureComponent {
     /**
      * The style applied to the slider container.
      */
-    style: ViewPropTypes.style,
+    style: View.propTypes.style,
 
     /**
      * The style applied to the track.
      */
-    trackStyle: ViewPropTypes.style,
+    trackStyle: View.propTypes.style,
 
     /**
      * The style applied to the thumb.
      */
-    thumbStyle: ViewPropTypes.style,
+    thumbStyle: View.propTypes.style,
 
     /**
      * Sets an image for the thumb.
@@ -373,7 +370,7 @@ export default class Slider extends PureComponent {
         trackSize: this._trackSize,
         thumbSize: this._thumbSize,
         allMeasured: true,
-      })
+      });
     }
   };
 
