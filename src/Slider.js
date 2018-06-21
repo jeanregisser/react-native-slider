@@ -263,7 +263,7 @@ export default class Slider extends PureComponent {
     if (!allMeasured) {
       valueVisibleStyle.opacity = 0;
     }
-    
+
     var minimumTrackStyle = {
       position: 'absolute',
       left: inverseMode ? thumbLeft : 0,
@@ -534,7 +534,6 @@ export default class Slider extends PureComponent {
 
   _renderThumbComponent = () => {
     var { thumbComponent } = this.props;
-    console.log(thumbComponent);
     if (!thumbComponent) return;
     return (<View style={{flex:1}}>{thumbComponent()}</View>);
   };
