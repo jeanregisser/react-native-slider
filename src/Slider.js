@@ -1,4 +1,4 @@
-'use strict';
+
 
 import React, {
   PureComponent,
@@ -157,7 +157,7 @@ export default class Slider extends PureComponent {
     /**
      * Sets an Compontent for the thumb.
      */
-    thumbComponent: Image.propTypes.node,
+    thumbComponent: PropTypes.node,
 
     /**
      * Set this to true to visually see the thumb touch rect in green.
