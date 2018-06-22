@@ -87,7 +87,7 @@ export default class Slider extends PureComponent {
      /**
      * Inverse stert slider. Default value is false.
      */
-    inverseMode: PropTypes.boolean,
+    // inverseMode: PropTypes.boolean,
 
     /**
      * The color used for the track to the left of the button. Overrides the
@@ -157,7 +157,7 @@ export default class Slider extends PureComponent {
     /**
      * Sets an Compontent for the thumb.
      */
-    thumbComponent: PropTypes.node,
+    // thumbComponent: PropTypes.element,
 
     /**
      * Set this to true to visually see the thumb touch rect in green.
