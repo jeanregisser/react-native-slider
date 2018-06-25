@@ -1,8 +1,8 @@
-'use strict';
+
 
 import React, {
   PureComponent,
-} from "react";
+} from 'react';
 
 import {
   Animated,
@@ -11,8 +11,9 @@ import {
   PanResponder,
   View,
   Easing,
-  ViewPropTypes
-} from "react-native";
+  ViewPropTypes,
+  Text
+} from 'react-native';
 
 import PropTypes from 'prop-types';
 
@@ -83,6 +84,11 @@ export default class Slider extends PureComponent {
      */
     step: PropTypes.number,
 
+     /**
+     * Inverse stert slider. Default value is false.
+     */
+    // inverseMode: PropTypes.boolean,
+
     /**
      * The color used for the track to the left of the button. Overrides the
      * default blue gradient image.
@@ -149,6 +155,11 @@ export default class Slider extends PureComponent {
     thumbImage: Image.propTypes.source,
 
     /**
+     * Sets an Compontent for the thumb.
+     */
+    // thumbComponent: PropTypes.element,
+
+    /**
      * Set this to true to visually see the thumb touch rect in green.
      */
     debugTouchArea: PropTypes.bool,
@@ -174,6 +185,7 @@ export default class Slider extends PureComponent {
     minimumValue: 0,
     maximumValue: 1,
     step: 0,
+    inverseMode:false,
     minimumTrackTintColor: '#3f3f3f',
     maximumTrackTintColor: '#b3b3b3',
     thumbTintColor: '#343434',
@@ -232,6 +244,7 @@ export default class Slider extends PureComponent {
       thumbTouchSize,
       animationType,
       animateTransitions,
+      inverseMode,
       ...other
     } = this.props;
     var {value, containerSize, trackSize, thumbSize, allMeasured} = this.state;
@@ -241,6 +254,11 @@ export default class Slider extends PureComponent {
       outputRange: [0, containerSize.width - thumbSize.width],
       //extrapolate: 'clamp',
     });
+    var thumbRight = value.interpolate({
+      inputRange: [ minimumValue,maximumValue],
+      outputRange: [ containerSize.width - thumbSize.width,0],
+      //extrapolate: 'clamp',
+    });
     var valueVisibleStyle = {};
     if (!allMeasured) {
       valueVisibleStyle.opacity = 0;
@@ -248,7 +266,8 @@ export default class Slider extends PureComponent {
 
     var minimumTrackStyle = {
       position: 'absolute',
-      width: Animated.add(thumbLeft, thumbSize.width / 2),
+      left: inverseMode ? thumbLeft : 0,
+      width: Animated.add(inverseMode ? thumbRight : thumbLeft, thumbSize.width / 2),
       backgroundColor: minimumTrackTintColor,
       ...valueVisibleStyle
     };
@@ -279,6 +298,7 @@ export default class Slider extends PureComponent {
             }
           ]}
         >
+          {this._renderThumbComponent()}
           {this._renderThumbImage()}
         </Animated.View>
         <View
@@ -373,7 +393,7 @@ export default class Slider extends PureComponent {
         trackSize: this._trackSize,
         thumbSize: this._thumbSize,
         allMeasured: true,
-      })
+      });
     }
   };
 
@@ -510,6 +530,12 @@ export default class Slider extends PureComponent {
     if (!thumbImage) return;
 
     return <Image source={thumbImage} />;
+  };
+
+  _renderThumbComponent = () => {
+    var { thumbComponent } = this.props;
+    if (!thumbComponent) return;
+    return (<View style={{flex:1}}>{thumbComponent()}</View>);
   };
 }
 
