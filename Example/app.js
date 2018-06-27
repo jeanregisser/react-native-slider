@@ -1,6 +1,7 @@
 'use strict';
 
-var React = require('react-native');
+var React = require('react');
+var ReactNative = require('react-native');
 var Slider = require('../src/Slider');
 var {
   AppRegistry,
@@ -9,9 +10,9 @@ var {
   ScrollView,
   View,
   SliderIOS,
-} = React;
+} = ReactNative;
 
-const DEFAULT_VALUE = 0.2;
+var DEFAULT_VALUE = 0.2;
 
 var SliderContainer = React.createClass({
   getInitialState() {
@@ -21,7 +22,6 @@ var SliderContainer = React.createClass({
   },
 
   render() {
-
     return (
       <View>
         <View style={styles.titleContainer}>
@@ -37,7 +37,7 @@ var SliderContainer = React.createClass({
   _renderChildren() {
     return React.Children.map(this.props.children, (child) => {
       if (child.type === Slider
-          || child.type === React.Slider) {
+          || child.type === ReactNative.Slider) {
         return React.cloneElement(child, {
           value: child.props.value || this.state.value,
           onValueChange: (val,val2) => this.setState({value: val, rightValue: child.props.multiTouch ? val2 : null }),
@@ -60,7 +60,7 @@ var SliderExample = React.createClass({
     return (
       <ScrollView contentContainerStyle={styles.container}>
         <SliderContainer caption='<React.Slider/>'>
-          <React.Slider />
+          <ReactNative.Slider />
         </SliderContainer>
         <SliderContainer caption='<Slider/> with default style'>
           <Slider />
@@ -69,67 +69,59 @@ var SliderExample = React.createClass({
           <Slider
             minimumValue={-10}
             maximumValue={42}
-            trackHighlightColor='#1fb28a'
-            trackColor='#d3d3d3'
+            minimumTrackTintColor='#1fb28a'
+            maximumTrackTintColor='#d3d3d3'
             thumbTintColor='#1a9274'
-          />
-        </SliderContainer>
-        <SliderContainer caption='<Slider/> with min, max and step '>
-          <Slider
-              minimumValue={20}
-              maximumValue={400}
-              value={80}
-              step={1}
           />
         </SliderContainer>
         <SliderContainer caption='<Slider/> with custom style'>
           <Slider
             trackStyle={iosStyles.track}
             thumbStyle={iosStyles.thumb}
-            trackHighlightColor='#1073ff'
-            trackColor='#b7b7b7'
+            minimumTrackTintColor='#1073ff'
+            maximumTrackTintColor='#b7b7b7'
           />
         </SliderContainer>
         <SliderContainer caption='<Slider/> with custom style #2'>
           <Slider
             trackStyle={customStyles2.track}
             thumbStyle={customStyles2.thumb}
-            trackHighlightColor='#30a935'
+            minimumTrackTintColor='#30a935'
           />
         </SliderContainer>
         <SliderContainer caption='<Slider/> with custom style #3'>
           <Slider
             trackStyle={customStyles3.track}
             thumbStyle={customStyles3.thumb}
-            trackHighlightColor='#eecba8'
+            minimumTrackTintColor='#eecba8'
           />
         </SliderContainer>
         <SliderContainer caption='<Slider/> with custom style #4'>
           <Slider
             trackStyle={customStyles4.track}
             thumbStyle={customStyles4.thumb}
-            trackHighlightColor='#d14ba6'
+            minimumTrackTintColor='#d14ba6'
           />
         </SliderContainer>
         <SliderContainer caption='<Slider/> with custom style #5'>
           <Slider
             trackStyle={customStyles5.track}
             thumbStyle={customStyles5.thumb}
-            trackHighlightColor='#ec4c46'
+            minimumTrackTintColor='#ec4c46'
           />
         </SliderContainer>
         <SliderContainer caption='<Slider/> with custom style #6'>
           <Slider
             trackStyle={customStyles6.track}
             thumbStyle={customStyles6.thumb}
-            trackHighlightColor='#e6a954'
+            minimumTrackTintColor='#e6a954'
           />
         </SliderContainer>
         <SliderContainer caption='<Slider/> with custom style #7'>
           <Slider
             trackStyle={customStyles7.track}
             thumbStyle={customStyles7.thumb}
-            trackHighlightColor='#2f2f2f'
+            minimumTrackTintColor='#2f2f2f'
           />
         </SliderContainer>
         <SliderContainer caption='<Slider/> with custom style #8 and thumbTouchSize'>
@@ -137,7 +129,7 @@ var SliderExample = React.createClass({
             style={customStyles8.container}
             trackStyle={customStyles8.track}
             thumbStyle={customStyles8.thumb}
-            trackHighlightColor='#31a4db'
+            minimumTrackTintColor='#31a4db'
             thumbTouchSize={{width: 50, height: 40}}
           />
         </SliderContainer>
@@ -146,11 +138,19 @@ var SliderExample = React.createClass({
               style={customStyles8.container}
               trackStyle={customStyles8.track}
               thumbStyle={customStyles8.thumb}
-              trackColor={'black'}
-              trackHighlightColor={'blue'}
+              minimumTrackTintColor='#e6a954'
+              maximumTrackTintColor='#b7b7b7'
               thumbTouchSize={{width: 50, height: 40}}
               multiTouch={true}
               rightValue={.85}
+          />
+        </SliderContainer>
+        <SliderContainer caption='<Slider/> with custom style #9 and thumbImage'>
+          <Slider
+            minimumTrackTintColor='#13a9d6'
+            thumbImage={require('./img/thumb.png')}
+            thumbStyle={customStyles9.thumb}
+            thumbTintColor='#0c6692'
           />
         </SliderContainer>
       </ScrollView>
@@ -299,7 +299,7 @@ var customStyles7 = StyleSheet.create({
 
 var customStyles8 = StyleSheet.create({
   container: {
-    height: 20,
+    height: 30,
   },
   track: {
     height: 2,
@@ -314,6 +314,17 @@ var customStyles8 = StyleSheet.create({
     shadowOffset: {width: 0, height: 0},
     shadowRadius: 2,
     shadowOpacity: 1,
+  }
+});
+
+var customStyles9 = StyleSheet.create({
+  thumb: {
+    width: 30,
+    height: 30,
+    shadowColor: 'black',
+    shadowOffset: {width: 0, height: 1},
+    shadowOpacity: 0.5,
+    shadowRadius: 1,
   }
 });
 
