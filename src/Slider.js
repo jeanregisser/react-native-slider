@@ -90,10 +90,20 @@ export default class Slider extends PureComponent {
     minimumTrackTintColor: PropTypes.string,
 
     /**
+     * Custom component used for the track to the left of the button.
+     */
+    customMinimumTrack: PropTypes.any,
+
+    /**
      * The color used for the track to the right of the button. Overrides the
      * default blue gradient image.
      */
     maximumTrackTintColor: PropTypes.string,
+    
+    /**
+     * Custom component used for the track to the right of the button.
+     */
+    customMaximumTrack: PropTypes.any,
 
     /**
      * The color used for the thumb.
@@ -144,9 +154,9 @@ export default class Slider extends PureComponent {
     thumbStyle: ViewPropTypes.style,
 
     /**
-     * Sets an image for the thumb.
+     * Sets an custom component for the thumb.
      */
-    thumbImage: Image.propTypes.source,
+    customThumb: PropTypes.any,
 
     /**
      * Set this to true to visually see the thumb touch rect in green.
@@ -220,18 +230,16 @@ export default class Slider extends PureComponent {
       minimumValue,
       maximumValue,
       minimumTrackTintColor,
+      customMinimumTrack,
       maximumTrackTintColor,
+      customMaximumTrack,
       thumbTintColor,
-      thumbImage,
+      customThumb,
       styles,
       style,
       trackStyle,
       thumbStyle,
       debugTouchArea,
-      onValueChange,
-      thumbTouchSize,
-      animationType,
-      animateTransitions,
       ...other
     } = this.props;
     var {value, containerSize, trackSize, thumbSize, allMeasured} = this.state;
@@ -260,16 +268,24 @@ export default class Slider extends PureComponent {
         <View
           style={[{backgroundColor: maximumTrackTintColor,}, mainStyles.track, trackStyle]}
           renderToHardwareTextureAndroid={true}
-          onLayout={this._measureTrack} />
+          onLayout={this._measureTrack}>
+          {customMaximumTrack}
+        </View>
         <Animated.View
           renderToHardwareTextureAndroid={true}
-          style={[mainStyles.track, trackStyle, minimumTrackStyle]} />
+          style={[mainStyles.track, trackStyle, minimumTrackStyle]}>
+          {customMinimumTrack}
+        </Animated.View>
         <Animated.View
           onLayout={this._measureThumb}
           renderToHardwareTextureAndroid={true}
           style={[
-            {backgroundColor: thumbTintColor},
-            mainStyles.thumb, thumbStyle,
+            {
+              backgroundColor: thumbTintColor
+            }, customThumb ? {
+              position: 'absolute',
+              backgroundColor: 'transparent',
+            } : mainStyles.thumb, thumbStyle,
             {
               transform: [
                 { translateX: thumbLeft },
@@ -279,7 +295,7 @@ export default class Slider extends PureComponent {
             }
           ]}
         >
-          {this._renderThumbImage()}
+          {customThumb}
         </Animated.View>
         <View
           renderToHardwareTextureAndroid={true}
@@ -502,14 +518,6 @@ export default class Slider extends PureComponent {
         pointerEvents='none'
       />
     );
-  };
-
-  _renderThumbImage = () => {
-    var {thumbImage} = this.props;
-
-    if (!thumbImage) return;
-
-    return <Image source={thumbImage} />;
   };
 }
 
