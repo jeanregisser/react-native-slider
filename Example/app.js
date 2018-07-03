@@ -11,6 +11,7 @@ var {
   View,
   SliderIOS,
 } = ReactNative;
+import { LinearGradient } from 'expo';
 
 var DEFAULT_VALUE = 0.2;
 
@@ -141,6 +142,51 @@ var SliderExample = React.createClass({
             thumbImage={require('./img/thumb.png')}
             thumbStyle={customStyles9.thumb}
             thumbTintColor='#0c6692'
+          />
+        </SliderContainer>
+        <SliderContainer caption='<Slider/> with custom components (LinearGradient)'>
+          <Slider
+            minimumValue={1}
+            maximumValue={100}
+            step={1}
+            customMinimumTrack={(
+              <LinearGradient
+                start={{x: .74, y: .26}}
+                end={{x: 0, y: .77}}
+                colors={['#ff8960', '#ff62a5']}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                }}
+              />
+            )}
+            customMinimumTrack={(
+              <LinearGradient
+                start={{x: .74, y: .26}}
+                end={{x: 0, y: .77}}
+                colors={['#efefef', '#c1c0c9']}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                }}
+              />
+            )}
+            customThumb={(
+              <LinearGradient
+                start={{x: .74, y: .26}}
+                end={{x: 0, y: .77}}
+                colors={['#ff8960', '#ff62a5']}
+                style={{
+                  width: 36,
+                  height: 36,
+                  margin: 2,
+                  borderRadius: 36 / 2,
+                  borderWidth: 4,
+                  borderColor: '#fff',
+                  elevation: 1
+                }}
+              />
+            )}
           />
         </SliderContainer>
       </ScrollView>
