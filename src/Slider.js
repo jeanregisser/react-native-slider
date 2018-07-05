@@ -324,12 +324,21 @@ export default class Slider extends PureComponent {
   _handlePanResponderEvent = (e: Object, gestureState: Object, changeEvent: string) => {
     var value = this._getValue(gestureState)
 
-    if (this.props.disabled || value < this.props.minimumSlideValue || value > this.props.maximumSlideValue) {
+    if (this.props.disabled) {
       return;
     }
 
-    this._setCurrentValue(value);
-    this._fireChangeEvent(changeEvent);
+    if(value < this.props.minimumSlideValue){
+      this._setCurrentValue(this.props.minimumSlideValue);
+      this._fireChangeEvent(changeEvent);
+    } else if (value > this.props.maximumSlideValue){
+      this._setCurrentValue(this.props.maximumSlideValue);
+      this._fireChangeEvent(changeEvent);
+    } else {
+      this._setCurrentValue(value);
+      this._fireChangeEvent(changeEvent);
+    }
+
   }
 
   _handlePanResponderRequestEnd(e: Object, gestureState: Object) {
