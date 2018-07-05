@@ -330,14 +330,13 @@ export default class Slider extends PureComponent {
 
     if(value < this.props.minimumSlideValue){
       this._setCurrentValue(this.props.minimumSlideValue);
-      this._fireChangeEvent(changeEvent);
     } else if (value > this.props.maximumSlideValue){
       this._setCurrentValue(this.props.maximumSlideValue);
-      this._fireChangeEvent(changeEvent);
     } else {
       this._setCurrentValue(value);
-      this._fireChangeEvent(changeEvent);
     }
+
+    this._fireChangeEvent(changeEvent);
 
   }
 
