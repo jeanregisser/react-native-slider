@@ -277,7 +277,7 @@ export default class Slider extends PureComponent {
     return (
       <View {...other} style={[mainStyles.container, style]} onLayout={this._measureContainer}>
         <View
-          style={[{backgroundColor: maximumTrackTintColor,}, mainStyles.track, trackStyle]}
+          style={[{backgroundColor: maximumTrackTintColor,}, mainStyles.track, inverseMode ? null : trackStyle]}
           renderToHardwareTextureAndroid={true}
           onLayout={this._measureTrack} />
         <Animated.View
