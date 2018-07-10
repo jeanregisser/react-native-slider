@@ -195,8 +195,8 @@ export default class Slider extends PureComponent {
       onStartShouldSetPanResponder: this._handleStartShouldSetPanResponder,
       onMoveShouldSetPanResponder: this._handleMoveShouldSetPanResponder,
       onPanResponderGrant: this._handlePanResponderGrant,
-      onPanResponderMove: this._handlePanResponderMove,
-      onPanResponderRelease: this._handlePanResponderEnd,
+      onPanResponderMove: (e, gestureState) => this._handlePanResponderEvent(e, gestureState, 'onValueChange'),
+      onPanResponderRelease: (e, gestureState) => this._handlePanResponderEvent(e, gestureState, 'onSlidingComplete'),
       onPanResponderTerminationRequest: this._handlePanResponderRequestEnd,
       onPanResponderTerminate: this._handlePanResponderEnd,
     });
@@ -344,28 +344,29 @@ export default class Slider extends PureComponent {
     this._fireChangeEvent('onSlidingStart');
   };
 
-  _handlePanResponderMove = (e: Object, gestureState: Object) => {
+  _handlePanResponderEvent = (e: Object, gestureState: Object, changeEvent: string) => {
+    var value = this._getValue(gestureState)
+
     if (this.props.disabled) {
       return;
     }
 
-    this._setCurrentValue(this._getValue(gestureState));
-    this._fireChangeEvent('onValueChange');
-  };
+    if(value < this.props.minimumSlideValue){
+      this._setCurrentValue(this.props.minimumSlideValue);
+    } else if (value > this.props.maximumSlideValue){
+      this._setCurrentValue(this.props.maximumSlideValue);
+    } else {
+      this._setCurrentValue(value);
+    }
+
+    this._fireChangeEvent(changeEvent);
+
+  }
 
   _handlePanResponderRequestEnd(e: Object, gestureState: Object) {
     // Should we allow another component to take over this pan?
     return false;
   }
-
-  _handlePanResponderEnd = (e: Object, gestureState: Object) => {
-    if (this.props.disabled) {
-      return;
-    }
-
-    this._setCurrentValue(this._getValue(gestureState));
-    this._fireChangeEvent('onSlidingComplete');
-  };
 
   _measureContainer = (x: Object) => {
     this._handleMeasure('containerSize', x);
