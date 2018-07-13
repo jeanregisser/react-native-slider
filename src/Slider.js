@@ -167,6 +167,11 @@ export default class Slider extends PureComponent {
      * Used to configure the animation parameters.  These are the same parameters in the Animated library.
      */
     animationConfig: PropTypes.object,
+
+    /**
+     * Set to true to update the value whilst clicking the Slider
+     */
+    trackClickable : PropTypes.bool,
   };
 
   static defaultProps = {
@@ -180,6 +185,7 @@ export default class Slider extends PureComponent {
     thumbTouchSize: { width: 40, height: 40 },
     debugTouchArea: false,
     animationType: 'timing',
+    trackClickable: false,
   };
 
   state = {
@@ -227,6 +233,7 @@ export default class Slider extends PureComponent {
       trackStyle,
       thumbStyle,
       debugTouchArea,
+      trackClickable,
       onValueChange,
       thumbTouchSize,
       animationType,
@@ -322,6 +329,7 @@ export default class Slider extends PureComponent {
       style,
       trackStyle,
       thumbStyle,
+      trackClickable,
       ...otherProps
     } = props;
 
@@ -332,15 +340,16 @@ export default class Slider extends PureComponent {
     e: Object /* gestureState: Object */,
   ): boolean =>
     // Should we become active when the user presses down on the thumb?
-    this._thumbHitTest(e);
+    return this.props.trackClickable ? true : this._thumbHitTest(e);
+  };
 
   _handleMoveShouldSetPanResponder(/* e: Object, gestureState: Object */): boolean {
     // Should we become active when the user moves a touch over the thumb?
     return false;
   }
 
-  _handlePanResponderGrant = (/* e: Object, gestureState: Object */) => {
-    this._previousLeft = this._getThumbLeft(this._getCurrentValue());
+  _handlePanResponderGrant = (e: Object, gestureState: Object) => {
+    this._previousLeft = this.props.trackClickable ? gestureState.x0 - (this.state.thumbSize.width/2) : this._getThumbLeft(this._getCurrentValue());
     this._fireChangeEvent('onSlidingStart');
   };
 
