@@ -169,7 +169,7 @@ export default class Slider extends PureComponent {
     animationConfig: PropTypes.object,
 
     /**
-      * Set to true to update the value whilst pressing the Slider
+      * Allow the value to be set at a specific position when the track is pressed
       */
     trackPressable : PropTypes.bool,
   };
