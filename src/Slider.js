@@ -294,7 +294,10 @@ export default class Slider extends PureComponent {
             mainStyles.thumb,
             thumbStyle,
             {
-              transform: [{ translateX: thumbLeft }, { translateY: 0 }],
+              transform: [
+                { translateX: thumbLeft }, { translateY: 0 },
+                ...(thumbStyle && thumbStyle.transform || []),
+              ],
               ...valueVisibleStyle,
             },
           ]}
