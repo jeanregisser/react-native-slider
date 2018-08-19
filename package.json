@@ -3,6 +3,7 @@
   "version": "0.11.0",
   "description": "A pure JavaScript <Slider /> component for react-native",
   "main": "lib/Slider.js",
+  "typings": "src/index",
   "files": [
     "lib",
     "src"
