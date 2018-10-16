@@ -80,6 +80,8 @@ disabled              | bool     | Yes      | false                     | If tru
 minimumValue          | number   | Yes      | 0                         | Initial minimum value of the slider
 maximumValue          | number   | Yes      | 1                         | Initial maximum value of the slider
 step                  | number   | Yes      | 0                         | Step value of the slider. The value should be between 0 and maximumValue - minimumValue)
+minimumTrackStyle     | object   | Yes      | {}                        | Custom style for the track to the left of the button
+maximumTrackStyle     | object   | Yes      | {}                        | Custom style for the track to the right of the button
 minimumTrackTintColor | string   | Yes      | '#3f3f3f'                 | The color used for the track to the left of the button
 maximumTrackTintColor | string   | Yes      | '#b3b3b3'                 | The color used for the track to the right of the button
 thumbTintColor        | string   | Yes      | '#343434'                 | The color used for the thumb
@@ -94,7 +96,7 @@ thumbImage            | [source](http://facebook.github.io/react-native/docs/ima
 debugTouchArea        | bool     | Yes      | false                     | Set this to true to visually see the thumb touch rect in green.
 animateTransitions    | bool     | Yes      | false                     | Set to true if you want to use the default 'spring' animation
 animationType         | string   | Yes      | 'timing'                  | Set to 'spring' or 'timing' to use one of those two types of animations with the default [animation properties](https://facebook.github.io/react-native/docs/animations.html).
-animationConfig       | object   | Yes      | undefined                 | Used to configure the animation parameters.  These are the same parameters in the [Animated library](https://facebook.github.io/react-native/docs/animations.html). 
+animationConfig       | object   | Yes      | undefined                 | Used to configure the animation parameters.  These are the same parameters in the [Animated library](https://facebook.github.io/react-native/docs/animations.html).
 
 
 ---
