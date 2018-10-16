@@ -83,6 +83,16 @@ export default class Slider extends PureComponent {
     step: PropTypes.number,
 
     /**
+     * The style used for the track to the left of the button.
+     */
+    minimumTrackStyle: PropTypes.object,
+
+    /**
+     * The style used for the track to the right of the button.
+     */
+    maximumTrackStyle: PropTypes.object,
+
+    /**
      * The color used for the track to the left of the button. Overrides the
      * default blue gradient image.
      */
@@ -174,6 +184,8 @@ export default class Slider extends PureComponent {
     minimumValue: 0,
     maximumValue: 1,
     step: 0,
+    minimumTrackStyle: {},
+    maximumTrackStyle: {},
     minimumTrackTintColor: '#3f3f3f',
     maximumTrackTintColor: '#b3b3b3',
     thumbTintColor: '#343434',
@@ -218,6 +230,8 @@ export default class Slider extends PureComponent {
     const {
       minimumValue,
       maximumValue,
+      minimumTrackStyle,
+      maximumTrackStyle,
       minimumTrackTintColor,
       maximumTrackTintColor,
       thumbTintColor,
@@ -258,7 +272,7 @@ export default class Slider extends PureComponent {
       valueVisibleStyle.opacity = 0;
     }
 
-    const minimumTrackStyle = {
+    const defaultMinimumTrackStyle = {
       position: 'absolute',
       width: Animated.add(minimumTrackWidth, thumbSize.width / 2),
       backgroundColor: minimumTrackTintColor,
@@ -278,13 +292,14 @@ export default class Slider extends PureComponent {
             { backgroundColor: maximumTrackTintColor },
             mainStyles.track,
             trackStyle,
+            maximumTrackStyle,
           ]}
           renderToHardwareTextureAndroid
           onLayout={this._measureTrack}
         />
         <Animated.View
           renderToHardwareTextureAndroid
-          style={[mainStyles.track, trackStyle, minimumTrackStyle]}
+          style={[mainStyles.track, trackStyle, defaultMinimumTrackStyle, minimumTrackStyle]}
         />
         <Animated.View
           onLayout={this._measureThumb}
