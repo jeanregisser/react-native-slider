@@ -1,25 +1,20 @@
-'use strict';
-
 var React = require('react');
 var ReactNative = require('react-native');
-var Slider = require('../src/Slider');
+var { default: Slider } = require('../src/Slider');
 var {
   AppRegistry,
   StyleSheet,
   Text,
   ScrollView,
-  View,
-  SliderIOS,
+  View
 } = ReactNative;
 
 var DEFAULT_VALUE = 0.2;
 
-var SliderContainer = React.createClass({
-  getInitialState() {
-    return {
-      value: DEFAULT_VALUE,
-    };
-  },
+class SliderContainer extends React.Component {
+  state = {
+    value: DEFAULT_VALUE
+  };
 
   render() {
     var value = this.state.value;
@@ -33,30 +28,25 @@ var SliderContainer = React.createClass({
         {this._renderChildren()}
       </View>
     );
-  },
+  }
 
   _renderChildren() {
     return React.Children.map(this.props.children, (child) => {
       if (child.type === Slider
-          || child.type === ReactNative.Slider) {
-        var value = this.state.value;
+          || child.type === ReactNative.Slider
+      ) {
         return React.cloneElement(child, {
-          value: value,
-          onValueChange: (val) => this.setState({value: val}),
+          value: this.state.value,
+          onValueChange: (value) => this.setState({ value })
         });
       } else {
         return child;
       }
     });
-  },
-});
+  }
+};
 
-var SliderExample = React.createClass({
-  getInitialState() {
-    return {
-      //value: 0.2,
-    };
-  },
+class SliderExample extends React.Component {
 
   render() {
     return (
@@ -66,6 +56,12 @@ var SliderExample = React.createClass({
         </SliderContainer>
         <SliderContainer caption='<Slider/> with default style'>
           <Slider />
+        </SliderContainer>
+        <SliderContainer caption='<Slider/> with gradient background'>
+          <Slider
+            minimumTrackTintColor='transparent'
+            maximumTrackTintColor={['#ff0000','#ffff00','#00ff00','#00ffff','#0000ff','#ff00ff','#ff0000']}
+          />
         </SliderContainer>
         <SliderContainer caption='<Slider/> with min, max and custom tints '>
           <Slider
@@ -145,20 +141,20 @@ var SliderExample = React.createClass({
         </SliderContainer>
       </ScrollView>
     );
-  },
-});
+  }
+};
 
 var styles = StyleSheet.create({
   container: {
     margin: 20,
     paddingBottom: 20,
     justifyContent: 'flex-start',
-    alignItems: 'stretch',
+    alignItems: 'stretch'
   },
   titleContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   caption: {
     //flex: 1,
@@ -166,14 +162,14 @@ var styles = StyleSheet.create({
   value: {
     flex: 1,
     textAlign: 'right',
-    marginLeft: 10,
+    marginLeft: 10
   }
 });
 
 var iosStyles = StyleSheet.create({
   track: {
     height: 2,
-    borderRadius: 1,
+    borderRadius: 1
   },
   thumb: {
     width: 30,
@@ -183,14 +179,14 @@ var iosStyles = StyleSheet.create({
     shadowColor: 'black',
     shadowOffset: {width: 0, height: 2},
     shadowRadius: 2,
-    shadowOpacity: 0.35,
+    shadowOpacity: 0.35
   }
 });
 
 var customStyles2 = StyleSheet.create({
   track: {
     height: 4,
-    borderRadius: 2,
+    borderRadius: 2
   },
   thumb: {
     width: 30,
@@ -198,7 +194,7 @@ var customStyles2 = StyleSheet.create({
     borderRadius: 30 / 2,
     backgroundColor: 'white',
     borderColor: '#30a935',
-    borderWidth: 2,
+    borderWidth: 2
   }
 });
 
@@ -206,13 +202,13 @@ var customStyles3 = StyleSheet.create({
   track: {
     height: 10,
     borderRadius: 5,
-    backgroundColor: '#d0d0d0',
+    backgroundColor: '#d0d0d0'
   },
   thumb: {
     width: 10,
     height: 30,
     borderRadius: 5,
-    backgroundColor: '#eb6e1b',
+    backgroundColor: '#eb6e1b'
   }
 });
 
@@ -224,7 +220,7 @@ var customStyles4 = StyleSheet.create({
     shadowColor: 'black',
     shadowOffset: {width: 0, height: 1},
     shadowRadius: 1,
-    shadowOpacity: 0.15,
+    shadowOpacity: 0.15
   },
   thumb: {
     width: 20,
@@ -236,7 +232,7 @@ var customStyles4 = StyleSheet.create({
     shadowColor: 'black',
     shadowOffset: {width: 0, height: 2},
     shadowRadius: 2,
-    shadowOpacity: 0.35,
+    shadowOpacity: 0.35
   }
 });
 
@@ -244,13 +240,13 @@ var customStyles5 = StyleSheet.create({
   track: {
     height: 18,
     borderRadius: 1,
-    backgroundColor: '#d5d8e8',
+    backgroundColor: '#d5d8e8'
   },
   thumb: {
     width: 20,
     height: 30,
     borderRadius: 1,
-    backgroundColor: '#838486',
+    backgroundColor: '#838486'
   }
 });
 
@@ -260,7 +256,7 @@ var customStyles6 = StyleSheet.create({
     borderRadius: 2,
     backgroundColor: 'white',
     borderColor: '#9a9a9a',
-    borderWidth: 1,
+    borderWidth: 1
   },
   thumb: {
     width: 20,
@@ -268,14 +264,14 @@ var customStyles6 = StyleSheet.create({
     borderRadius: 2,
     backgroundColor: '#eaeaea',
     borderColor: '#9a9a9a',
-    borderWidth: 1,
+    borderWidth: 1
   }
 });
 
 var customStyles7 = StyleSheet.create({
   track: {
     height: 1,
-    backgroundColor: '#303030',
+    backgroundColor: '#303030'
   },
   thumb: {
     width: 30,
@@ -283,17 +279,17 @@ var customStyles7 = StyleSheet.create({
     backgroundColor: 'rgba(150, 150, 150, 0.3)',
     borderColor: 'rgba(150, 150, 150, 0.6)',
     borderWidth: 14,
-    borderRadius: 15,
+    borderRadius: 15
   }
 });
 
 var customStyles8 = StyleSheet.create({
   container: {
-    height: 30,
+    height: 30
   },
   track: {
     height: 2,
-    backgroundColor: '#303030',
+    backgroundColor: '#303030'
   },
   thumb: {
     width: 10,
@@ -303,7 +299,7 @@ var customStyles8 = StyleSheet.create({
     shadowColor: '#31a4db',
     shadowOffset: {width: 0, height: 0},
     shadowRadius: 2,
-    shadowOpacity: 1,
+    shadowOpacity: 1
   }
 });
 
@@ -314,7 +310,7 @@ var customStyles9 = StyleSheet.create({
     shadowColor: 'black',
     shadowOffset: {width: 0, height: 1},
     shadowOpacity: 0.5,
-    shadowRadius: 1,
+    shadowRadius: 1
   }
 });
 

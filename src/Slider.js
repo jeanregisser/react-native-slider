@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import LinearGradient from 'react-native-linear-gradient';
 
 import {
   Animated,
@@ -8,7 +9,7 @@ import {
   View,
   Easing,
   ViewPropTypes,
-  I18nManager,
+  I18nManager
 } from 'react-native';
 
 import PropTypes from 'prop-types';
@@ -35,13 +36,13 @@ Rect.prototype.containsPoint = function(x, y) {
 const DEFAULT_ANIMATION_CONFIGS = {
   spring: {
     friction: 7,
-    tension: 100,
+    tension: 100
   },
   timing: {
     duration: 150,
     easing: Easing.inOut(Easing.ease),
-    delay: 0,
-  },
+    delay: 0
+  }
   // decay : { // This has a serious bug
   //   velocity     : 1,
   //   deceleration : 0.997
@@ -92,7 +93,10 @@ export default class Slider extends PureComponent {
      * The color used for the track to the right of the button. Overrides the
      * default blue gradient image.
      */
-    maximumTrackTintColor: PropTypes.string,
+    maximumTrackTintColor: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.arrayOf(PropTypes.string)
+    ]),
 
     /**
      * The color used for the thumb.
@@ -108,7 +112,7 @@ export default class Slider extends PureComponent {
      */
     thumbTouchSize: PropTypes.shape({
       width: PropTypes.number,
-      height: PropTypes.number,
+      height: PropTypes.number
     }),
 
     /**
@@ -166,7 +170,7 @@ export default class Slider extends PureComponent {
     /**
      * Used to configure the animation parameters.  These are the same parameters in the Animated library.
      */
-    animationConfig: PropTypes.object,
+    animationConfig: PropTypes.object
   };
 
   static defaultProps = {
@@ -179,7 +183,7 @@ export default class Slider extends PureComponent {
     thumbTintColor: '#343434',
     thumbTouchSize: { width: 40, height: 40 },
     debugTouchArea: false,
-    animationType: 'timing',
+    animationType: 'timing'
   };
 
   state = {
@@ -187,7 +191,7 @@ export default class Slider extends PureComponent {
     trackSize: { width: 0, height: 0 },
     thumbSize: { width: 0, height: 0 },
     allMeasured: false,
-    value: new Animated.Value(this.props.value),
+    value: new Animated.Value(this.props.value)
   };
 
   componentWillMount() {
@@ -198,7 +202,7 @@ export default class Slider extends PureComponent {
       onPanResponderMove: this._handlePanResponderMove,
       onPanResponderRelease: this._handlePanResponderEnd,
       onPanResponderTerminationRequest: this._handlePanResponderRequestEnd,
-      onPanResponderTerminate: this._handlePanResponderEnd,
+      onPanResponderTerminate: this._handlePanResponderEnd
     });
   }
 
@@ -238,14 +242,14 @@ export default class Slider extends PureComponent {
       containerSize,
       trackSize,
       thumbSize,
-      allMeasured,
+      allMeasured
     } = this.state;
     const mainStyles = styles || defaultStyles;
     const thumbLeft = value.interpolate({
       inputRange: [minimumValue, maximumValue],
       outputRange: I18nManager.isRTL
         ? [0, -(containerSize.width - thumbSize.width)]
-        : [0, containerSize.width - thumbSize.width],
+        : [0, containerSize.width - thumbSize.width]
       // extrapolate: 'clamp',
     });
     const minimumTrackWidth = value.interpolate({
@@ -273,15 +277,24 @@ export default class Slider extends PureComponent {
         style={[mainStyles.container, style]}
         onLayout={this._measureContainer}
       >
-        <View
-          style={[
-            { backgroundColor: maximumTrackTintColor },
-            mainStyles.track,
-            trackStyle,
-          ]}
-          renderToHardwareTextureAndroid
-          onLayout={this._measureTrack}
-        />
+        <LinearGradient
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
+          colors={Array.isArray(maximumTrackTintColor)
+            ? maximumTrackTintColor
+            : [maximumTrackTintColor, maximumTrackTintColor]
+          }
+        >
+          <View
+            style={[
+              mainStyles.track,
+              trackStyle
+            ]}
+            renderToHardwareTextureAndroid
+            onLayout={this._measureTrack}
+          />
+        </LinearGradient>
+
         <Animated.View
           renderToHardwareTextureAndroid
           style={[mainStyles.track, trackStyle, minimumTrackStyle]}
@@ -295,8 +308,8 @@ export default class Slider extends PureComponent {
             thumbStyle,
             {
               transform: [{ translateX: thumbLeft }, { translateY: 0 }],
-              ...valueVisibleStyle,
-            },
+              ...valueVisibleStyle
+            }
           ]}
         >
           {this._renderThumbImage()}
@@ -399,7 +412,7 @@ export default class Slider extends PureComponent {
         containerSize: this._containerSize,
         trackSize: this._trackSize,
         thumbSize: this._thumbSize,
-        allMeasured: true,
+        allMeasured: true
       });
     }
   };
@@ -461,7 +474,7 @@ export default class Slider extends PureComponent {
       DEFAULT_ANIMATION_CONFIGS[animationType],
       this.props.animationConfig,
       {
-        toValue: value,
+        toValue: value
       },
     );
 
@@ -569,17 +582,17 @@ export default class Slider extends PureComponent {
 var defaultStyles = StyleSheet.create({
   container: {
     height: 40,
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   track: {
     height: TRACK_SIZE,
-    borderRadius: TRACK_SIZE / 2,
+    borderRadius: TRACK_SIZE / 2
   },
   thumb: {
     position: 'absolute',
     width: THUMB_SIZE,
     height: THUMB_SIZE,
-    borderRadius: THUMB_SIZE / 2,
+    borderRadius: THUMB_SIZE / 2
   },
   touchArea: {
     position: 'absolute',
@@ -587,11 +600,11 @@ var defaultStyles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    bottom: 0,
+    bottom: 0
   },
   debugThumbTouchArea: {
     position: 'absolute',
     backgroundColor: 'green',
-    opacity: 0.5,
-  },
+    opacity: 0.5
+  }
 });
