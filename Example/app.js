@@ -2,7 +2,7 @@
 
 var React = require('react');
 var ReactNative = require('react-native');
-var Slider = require('../src/Slider');
+var { default: Slider } = require('../src/Slider');
 var {
   AppRegistry,
   StyleSheet,
@@ -17,18 +17,24 @@ var DEFAULT_VALUE = 0.2;
 var SliderContainer = React.createClass({
   getInitialState() {
     return {
-      value: DEFAULT_VALUE,
+      value: this.props.value != null || Array.isArray(this.props.value)
+        ? this.props.value
+        : DEFAULT_VALUE
     };
   },
 
   render() {
-    var value = this.state.value;
+    let value = this.state.value;
+
+    if (!Array.isArray(value)) {
+      value = [value];
+    }
 
     return (
       <View>
         <View style={styles.titleContainer}>
           <Text style={styles.caption} numberOfLines={1}>{this.props.caption}</Text>
-          <Text style={styles.value} numberOfLines={1}>{value}</Text>
+          <Text style={styles.value} numberOfLines={1}>{value.map(v => v.toPrecision(2)).join(',')}</Text>
         </View>
         {this._renderChildren()}
       </View>
@@ -38,11 +44,11 @@ var SliderContainer = React.createClass({
   _renderChildren() {
     return React.Children.map(this.props.children, (child) => {
       if (child.type === Slider
-          || child.type === ReactNative.Slider) {
-        var value = this.state.value;
+          || child.type === ReactNative.Slider
+      ) {
         return React.cloneElement(child, {
-          value: value,
-          onValueChange: (val) => this.setState({value: val}),
+          value: this.state.value,
+          onValueChange: (value) => this.setState({ value }),
         });
       } else {
         return child;
@@ -66,6 +72,32 @@ var SliderExample = React.createClass({
         </SliderContainer>
         <SliderContainer caption='<Slider/> with default style'>
           <Slider />
+        </SliderContainer>
+        <SliderContainer
+          caption='<Slider/> with default style and two thumbs'
+          value={[0.2, 0.5]}
+        >
+          <Slider />
+        </SliderContainer>
+        <SliderContainer
+          caption='<Slider/> with custom style #5 and two thumbs'
+          value={[0.2, 0.5]}
+        >
+          <Slider
+            trackStyle={customStyles5.track}
+            thumbStyle={customStyles5.thumb}
+            minimumTrackTintColor='#0088bb'
+          />
+        </SliderContainer>
+        <SliderContainer
+          caption='<Slider/> with custom style #5 and multiple thumbs'
+          value={[0.25, 0.5, 0.75]}
+        >
+          <Slider
+            trackStyle={customStyles5.track}
+            thumbStyle={customStyles5.thumb}
+            minimumTrackTintColor='#0088bb'
+          />
         </SliderContainer>
         <SliderContainer caption='<Slider/> with min, max and custom tints '>
           <Slider
