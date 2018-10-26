@@ -284,13 +284,18 @@ export default class Slider extends PureComponent {
             ? maximumTrackTintColor
             : [maximumTrackTintColor, maximumTrackTintColor]
           }
+          style={[
+            mainStyles.track,
+            trackStyle
+          ]}
         >
           <View
+            renderToHardwareTextureAndroid
             style={[
               mainStyles.track,
-              trackStyle
+              trackStyle,
+              { zIndex: -1 }
             ]}
-            renderToHardwareTextureAndroid
             onLayout={this._measureTrack}
           />
         </LinearGradient>
@@ -586,13 +591,15 @@ var defaultStyles = StyleSheet.create({
   },
   track: {
     height: TRACK_SIZE,
-    borderRadius: TRACK_SIZE / 2
+    borderRadius: TRACK_SIZE / 2,
+    zIndex: 0
   },
   thumb: {
     position: 'absolute',
     width: THUMB_SIZE,
     height: THUMB_SIZE,
-    borderRadius: THUMB_SIZE / 2
+    borderRadius: THUMB_SIZE / 2,
+    zIndex: 1
   },
   touchArea: {
     position: 'absolute',
@@ -600,7 +607,8 @@ var defaultStyles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    bottom: 0
+    bottom: 0,
+    zIndex: 10
   },
   debugThumbTouchArea: {
     position: 'absolute',
