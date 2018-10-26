@@ -52,7 +52,7 @@ declare module 'react-native-slider' {
      * The color used for the track to the right of the button. Overrides the
      * default blue gradient image.
      */
-    maximumTrackTintColor?: string
+    maximumTrackTintColor?: string | string[]
 
     /**
      * The color used for the thumb.
