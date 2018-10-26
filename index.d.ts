@@ -11,14 +11,15 @@ declare module 'react-native-slider' {
 
   interface SliderProps {
     /**
-     * Initial value of the slider. The value should be between minimumValue
+     * Initial value of the slider, or array of initial values for all thumbs.
+     * The value should be between minimumValue
      * and maximumValue, which default to 0 and 1 respectively.
      * Default value is 0.
      *
      * *This is not a controlled component*, e.g. if you don't update
      * the value, the component won't be reset to its inital value.
      */
-    value?: number
+    value?: number | number[]
 
     /**
      * If true the user won't be able to move the slider.
@@ -98,12 +99,12 @@ declare module 'react-native-slider' {
     /**
      * The style applied to the thumb.
      */
-    thumbStyle?: StyleProp<ViewStyle>
+    thumbStyle?: StyleProp<ViewStyle> | StyleProp<ViewStyle>[]
 
     /**
      * Sets an image for the thumb.
      */
-    thumbImage?: ImageSourcePropType
+    thumbImage?: ImageSourcePropType | StyleProp<ViewStyle>[]
 
     /**
      * Set this to true to visually see the thumb touch rect in green.
