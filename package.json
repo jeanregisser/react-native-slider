@@ -18,7 +18,7 @@
   "license": "MIT",
   "scripts": {
     "clean": "rimraf lib",
-    "start": "node_modules/react-native/packager/packager.sh",
+    "start": "node_modules/react-native/scripts/packager.sh",
     "build": "babel src --out-dir lib",
     "prepublish": "npm run clean && npm run build"
   },
@@ -27,15 +27,16 @@
     "url": "git@github.com:jeanregisser/react-native-slider.git"
   },
   "dependencies": {
-    "prop-types": "^15.5.6"
+    "prop-types": "^15.6.2",
+    "react-native-linear-gradient": "^2.4.0"
   },
   "devDependencies": {
     "babel-cli": "^6.6.5",
     "babel-eslint": "^7.2.1",
     "eslint": "^3.19.0",
     "eslint-plugin-react": "^6.10.3",
-    "react": "16.0.0-alpha.6",
-    "react-native": "0.43.3",
+    "react": "16.0.0",
+    "react-native": "0.51.0",
     "rimraf": "^2.5.2"
   }
 }
