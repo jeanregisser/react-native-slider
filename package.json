@@ -1,13 +1,13 @@
 {
-  "name": "react-native-slider",
+  "name": "react-native-slider-custom",
   "version": "0.11.0",
-  "description": "A pure JavaScript <Slider /> component for react-native",
+  "description": "A pure JavaScript <Slider /> component for react-native [Custom]",
   "main": "src/Slider.js",
   "files": [
     "lib",
     "src"
   ],
-  "author": "Jean Regisser <jean.regisser@gmail.com> (https://github.com/jeanregisser)",
+  "author": "Emmanuel Mota <emmanuellmota@gmail.com> forked from jeanregisser/react-native-slider",
   "keywords": [
     "react-component",
     "react-native",

@@ -35,3 +35,5 @@ local.properties
 node_modules/
 npm-debug.log
 lib
+
+package-lock.json
