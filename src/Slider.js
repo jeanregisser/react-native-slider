@@ -437,7 +437,7 @@ export default class Slider extends PureComponent {
       {},
       DEFAULT_ANIMATION_CONFIGS[animationType],
       this.props.animationConfig,
-      {toValue : value}
+      {toValue : value, useNativeDriver: true}
     );
 
     Animated[animationType](this.state.value, animationConfig).start();
