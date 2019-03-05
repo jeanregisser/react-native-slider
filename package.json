@@ -1,5 +1,5 @@
 {
-  "name": "react-native-slider",
+  "name": "@coorpacademy/react-native-slider",
   "version": "0.11.0",
   "description": "A pure JavaScript <Slider /> component for react-native",
   "main": "lib/Slider.js",

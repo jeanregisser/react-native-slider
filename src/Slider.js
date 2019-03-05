@@ -231,6 +231,7 @@ export default class Slider extends PureComponent {
       thumbTouchSize,
       animationType,
       animateTransitions,
+      testID,
       ...other
     } = this.props;
     const {
@@ -279,6 +280,7 @@ export default class Slider extends PureComponent {
             mainStyles.track,
             trackStyle,
           ]}
+          testID={`${testID}-track`}
           renderToHardwareTextureAndroid
           onLayout={this._measureTrack}
         />
@@ -288,6 +290,7 @@ export default class Slider extends PureComponent {
         />
         <Animated.View
           onLayout={this._measureThumb}
+          testID={`${testID}-thumb`}
           renderToHardwareTextureAndroid
           style={[
             { backgroundColor: thumbTintColor },
@@ -551,6 +554,7 @@ export default class Slider extends PureComponent {
 
     return (
       <Animated.View
+        testID={`${testID}-thumb-debug`}
         style={[defaultStyles.debugThumbTouchArea, positionStyle]}
         pointerEvents="none"
       />
@@ -562,7 +566,7 @@ export default class Slider extends PureComponent {
 
     if (!thumbImage) return;
 
-    return <Image source={thumbImage} />;
+    return <Image source={thumbImage} testID={`${testID}-thumb-image`}/>;
   };
 }
 
