@@ -402,23 +402,27 @@ export default class Slider extends PureComponent {
     return ratio * (this.state.containerSize.width - this.state.thumbSize.width);
   };
 
-  _getValue = (gestureState: Object) => {
+ _getValue = (gestureState: Object) => {
+    const { vertical, step, minimumValue, maximumValue } = this.props;
     var length = this.state.containerSize.width - this.state.thumbSize.width;
-    var thumbLeft = this._previousLeft + gestureState.dx;
+    var thumbLeft = vertical
+      ? this._previousLeft + gestureState.dy
+      : this._previousLeft + gestureState.dx;
 
     var ratio = thumbLeft / length;
 
-    if (this.props.step) {
-      return Math.max(this.props.minimumValue,
-        Math.min(this.props.maximumValue,
-          this.props.minimumValue + Math.round(ratio * (this.props.maximumValue - this.props.minimumValue) / this.props.step) * this.props.step
+    if (step) {
+      return Math.max(
+        minimumValue,
+        Math.min(
+          maximumValue,
+          minimumValue + Math.round((ratio * (maximumValue - minimumValue)) / step) * step
         )
       );
     } else {
-      return Math.max(this.props.minimumValue,
-        Math.min(this.props.maximumValue,
-          ratio * (this.props.maximumValue - this.props.minimumValue) + this.props.minimumValue
-        )
+      return Math.max(
+        minimumValue,
+        Math.min(maximumValue, ratio * (maximumValue - minimumValue) + minimumValue)
       );
     }
   };
