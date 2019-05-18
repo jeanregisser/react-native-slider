@@ -1,4 +1,4 @@
-import React, { PureComponent } from "react";
+import React, {PureComponent} from "react";
 
 import {
     Animated,
@@ -8,7 +8,7 @@ import {
     View,
     Easing,
     ViewPropTypes,
-    I18nManager
+    I18nManager,
 } from "react-native";
 
 import PropTypes from "prop-types";
@@ -35,20 +35,20 @@ Rect.prototype.containsPoint = function(x, y) {
 const DEFAULT_ANIMATION_CONFIGS = {
     spring: {
         friction: 7,
-        tension: 100
+        tension: 100,
     },
     timing: {
         duration: 150,
         easing: Easing.inOut(Easing.ease),
-        delay: 0
-    }
+        delay: 0,
+    },
     // decay : { // This has a serious bug
     //   velocity     : 1,
     //   deceleration : 0.997
     // }
 };
 
-export default class Slider extends PureComponent {
+export class Slider extends PureComponent {
     static propTypes = {
         /**
          * Initial value of the slider. The value should be between minimumValue
@@ -108,7 +108,7 @@ export default class Slider extends PureComponent {
          */
         thumbTouchSize: PropTypes.shape({
             width: PropTypes.number,
-            height: PropTypes.number
+            height: PropTypes.number,
         }),
 
         /**
@@ -166,7 +166,7 @@ export default class Slider extends PureComponent {
         /**
          * Used to configure the animation parameters.  These are the same parameters in the Animated library.
          */
-        animationConfig: PropTypes.object
+        animationConfig: PropTypes.object,
     };
 
     static defaultProps = {
@@ -177,17 +177,17 @@ export default class Slider extends PureComponent {
         minimumTrackTintColor: "#3f3f3f",
         maximumTrackTintColor: "#b3b3b3",
         thumbTintColor: "#343434",
-        thumbTouchSize: { width: 40, height: 40 },
+        thumbTouchSize: {width: 40, height: 40},
         debugTouchArea: false,
-        animationType: "timing"
+        animationType: "timing",
     };
 
     state = {
-        containerSize: { width: 0, height: 0 },
-        trackSize: { width: 0, height: 0 },
-        thumbSize: { width: 0, height: 0 },
+        containerSize: {width: 0, height: 0},
+        trackSize: {width: 0, height: 0},
+        thumbSize: {width: 0, height: 0},
         allMeasured: false,
-        value: new Animated.Value(this.props.value)
+        value: new Animated.Value(this.props.value),
     };
 
     constructor(props) {
@@ -201,7 +201,7 @@ export default class Slider extends PureComponent {
             onPanResponderRelease: this._handlePanResponderEnd,
             onPanResponderTerminationRequest: this
                 ._handlePanResponderRequestEnd,
-            onPanResponderTerminate: this._handlePanResponderEnd
+            onPanResponderTerminate: this._handlePanResponderEnd,
         });
     }
 
@@ -242,19 +242,19 @@ export default class Slider extends PureComponent {
             containerSize,
             trackSize,
             thumbSize,
-            allMeasured
+            allMeasured,
         } = this.state;
         const mainStyles = styles || defaultStyles;
         const thumbLeft = value.interpolate({
             inputRange: [minimumValue, maximumValue],
             outputRange: I18nManager.isRTL
                 ? [0, -(containerSize.width - thumbSize.width)]
-                : [0, containerSize.width - thumbSize.width]
+                : [0, containerSize.width - thumbSize.width],
             // extrapolate: 'clamp',
         });
         const minimumTrackWidth = value.interpolate({
             inputRange: [minimumValue, maximumValue],
-            outputRange: [0, containerSize.width - thumbSize.width]
+            outputRange: [0, containerSize.width - thumbSize.width],
             // extrapolate: 'clamp',
         });
         const valueVisibleStyle = {};
@@ -266,7 +266,7 @@ export default class Slider extends PureComponent {
             position: "absolute",
             width: Animated.add(minimumTrackWidth, thumbSize.width / 2),
             backgroundColor: minimumTrackTintColor,
-            ...valueVisibleStyle
+            ...valueVisibleStyle,
         };
 
         const touchOverflowStyle = this._getTouchOverflowStyle();
@@ -279,9 +279,9 @@ export default class Slider extends PureComponent {
             >
                 <View
                     style={[
-                        { backgroundColor: maximumTrackTintColor },
+                        {backgroundColor: maximumTrackTintColor},
                         mainStyles.track,
-                        trackStyle
+                        trackStyle,
                     ]}
                     renderToHardwareTextureAndroid
                     onLayout={this._measureTrack}
@@ -294,16 +294,16 @@ export default class Slider extends PureComponent {
                     onLayout={this._measureThumb}
                     renderToHardwareTextureAndroid
                     style={[
-                        { backgroundColor: thumbTintColor },
+                        {backgroundColor: thumbTintColor},
                         mainStyles.thumb,
                         thumbStyle,
                         {
                             transform: [
-                                { translateX: thumbLeft },
-                                { translateY: 0 }
+                                {translateX: thumbLeft},
+                                {translateY: 0},
                             ],
-                            ...valueVisibleStyle
-                        }
+                            ...valueVisibleStyle,
+                        },
                     ]}
                 >
                     {this._renderThumbImage()}
@@ -387,8 +387,8 @@ export default class Slider extends PureComponent {
     };
 
     _handleMeasure = (name: string, x: Object) => {
-        const { width, height } = x.nativeEvent.layout;
-        const size = { width, height };
+        const {width, height} = x.nativeEvent.layout;
+        const size = {width, height};
 
         const storeName = `_${name}`;
         const currentSize = this[storeName];
@@ -406,7 +406,7 @@ export default class Slider extends PureComponent {
                 containerSize: this._containerSize,
                 trackSize: this._trackSize,
                 thumbSize: this._thumbSize,
-                allMeasured: true
+                allMeasured: true,
             });
         }
     };
@@ -471,7 +471,7 @@ export default class Slider extends PureComponent {
             DEFAULT_ANIMATION_CONFIGS[animationType],
             this.props.animationConfig,
             {
-                toValue: value
+                toValue: value,
             }
         );
 
@@ -504,7 +504,7 @@ export default class Slider extends PureComponent {
     };
 
     _getTouchOverflowStyle = () => {
-        const { width, height } = this._getTouchOverflowSize();
+        const {width, height} = this._getTouchOverflowSize();
 
         const touchOverflowStyle = {};
         if (width !== undefined && height !== undefined) {
@@ -556,7 +556,7 @@ export default class Slider extends PureComponent {
             left: thumbLeft,
             top: thumbTouchRect.y,
             width: thumbTouchRect.width,
-            height: thumbTouchRect.height
+            height: thumbTouchRect.height,
         };
 
         return (
@@ -568,7 +568,7 @@ export default class Slider extends PureComponent {
     };
 
     _renderThumbImage = () => {
-        const { thumbImage } = this.props;
+        const {thumbImage} = this.props;
 
         if (!thumbImage) return;
 
@@ -579,17 +579,17 @@ export default class Slider extends PureComponent {
 var defaultStyles = StyleSheet.create({
     container: {
         height: 40,
-        justifyContent: "center"
+        justifyContent: "center",
     },
     track: {
         height: TRACK_SIZE,
-        borderRadius: TRACK_SIZE / 2
+        borderRadius: TRACK_SIZE / 2,
     },
     thumb: {
         position: "absolute",
         width: THUMB_SIZE,
         height: THUMB_SIZE,
-        borderRadius: THUMB_SIZE / 2
+        borderRadius: THUMB_SIZE / 2,
     },
     touchArea: {
         position: "absolute",
@@ -597,11 +597,11 @@ var defaultStyles = StyleSheet.create({
         top: 0,
         left: 0,
         right: 0,
-        bottom: 0
+        bottom: 0,
     },
     debugThumbTouchArea: {
         position: "absolute",
         backgroundColor: "green",
-        opacity: 0.5
-    }
+        opacity: 0.5,
+    },
 });

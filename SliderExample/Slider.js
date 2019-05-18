@@ -7,7 +7,6 @@ import {
     PanResponder,
     View,
     Easing,
-    ViewPropTypes,
     I18nManager,
 } from "react-native";
 
@@ -46,23 +45,24 @@ const DEFAULT_ANIMATION_CONFIGS = {
 
 export class Slider extends PureComponent {
     static defaultProps = {
-        value: 0,
-        minimumValue: 0,
-        maximumValue: 1,
-        step: 0,
-        minimumTrackTintColor: "#3f3f3f",
+        animationType: "timing",
+        debugTouchArea: false,
         maximumTrackTintColor: "#b3b3b3",
+        maximumValue: 1,
+        minimumTrackTintColor: "#3f3f3f",
+        minimumValue: 0,
+        step: 0,
         thumbTintColor: "#343434",
         thumbTouchSize: {width: 40, height: 40},
-        debugTouchArea: false,
-        animationType: "timing",
+        trackClickable: true,
+        value: 0,
     };
 
     state = {
-        containerSize: {width: 0, height: 0},
-        trackSize: {width: 0, height: 0},
-        thumbSize: {width: 0, height: 0},
         allMeasured: false,
+        containerSize: {width: 0, height: 0},
+        thumbSize: {width: 0, height: 0},
+        trackSize: {width: 0, height: 0},
         value: new Animated.Value(this.props.value),
     };
 
@@ -200,15 +200,18 @@ export class Slider extends PureComponent {
         e: Object /* gestureState: Object */
     ): boolean =>
         // Should we become active when the user presses down on the thumb?
-        this._thumbHitTest(e);
+        this.props.trackClickable ? true : this._thumbHitTest(e);
 
     _handleMoveShouldSetPanResponder(/* e: Object, gestureState: Object */): boolean {
         // Should we become active when the user moves a touch over the thumb?
         return false;
     }
 
-    _handlePanResponderGrant = (/* e: Object, gestureState: Object */) => {
-        this._previousLeft = this._getThumbLeft(this._getCurrentValue());
+    _handlePanResponderGrant = (e: Object, gestureState: Object) => {
+        this._previousLeft = this.props.trackClickable
+            ? gestureState.x0 -
+              (this.state.thumbSize.width + this.state.thumbSize.width / 2)
+            : this._getThumbLeft(this._getCurrentValue());
         this._fireChangeEvent("onSlidingStart");
     };
 
