@@ -91,6 +91,11 @@ declare module 'react-native-slider' {
     style?: StyleProp<ViewStyle>
 
     /**
+     * Whether or not the track should respond to clicks/taps to jump to that location.
+     */
+    trackClickable?: boolean,
+
+    /**
      * The style applied to the track.
      */
     trackStyle?: StyleProp<ViewStyle>
