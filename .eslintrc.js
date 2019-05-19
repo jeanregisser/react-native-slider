@@ -14,6 +14,7 @@ module.exports = {
     extends: [
         "airbnb",
         "plugin:flowtype/recommended",
+        "plugin:react-native/all",
         "prettier",
         "prettier/flowtype",
         "prettier/react",
@@ -26,7 +27,13 @@ module.exports = {
         ecmaVersion: 2018,
         sourceType: "module",
     },
-    plugins: ["flowtype", "prettier", "react", "react-native-a11y"],
+    plugins: [
+        "flowtype",
+        "prettier",
+        "react",
+        "react-native",
+        "react-native-a11y",
+    ],
     rules: {
         // builtins
         "class-methods-use-this": OFF,

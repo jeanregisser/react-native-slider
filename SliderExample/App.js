@@ -1,24 +1,36 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
-import React, {Component, useState} from "react";
-import {
-    Platform,
-    SafeAreaView,
-    ScrollView,
-    StyleSheet,
-    Text,
-    View,
-} from "react-native";
+/* @flow */
+import React, {useState} from "react";
+import {SafeAreaView, ScrollView, Text, View} from "react-native";
 import {Slider} from "../src/Slider";
+
+// constants
+const thumbImage = require("./img/thumb.png");
+
+// styles
+import {
+    componentThumbStyles,
+    customStyles,
+    customStyles2,
+    customStyles3,
+    customStyles4,
+    customStyles5,
+    customStyles6,
+    customStyles7,
+    customStyles8,
+    customStyles9,
+    iosStyles,
+    styles,
+} from "./styles";
 
 const DEFAULT_VALUE = 0.2;
 
-const SliderContainer = props => {
+const CustomThumb = () => (
+    <View style={componentThumbStyles.container}>
+        <Text>Any</Text>
+    </View>
+);
+
+const SliderContainer = (props: {caption: string, children: React.node}) => {
     const {caption} = props;
     const [value, setValue] = useState(DEFAULT_VALUE);
 
@@ -29,279 +41,123 @@ const SliderContainer = props => {
                     value,
                     onValueChange: val => setValue(val),
                 });
-            } else {
-                return child;
             }
+            return child;
         });
     };
 
     return (
         <View>
             <View style={styles.titleContainer}>
-                <Text style={styles.caption} numberOfLines={1}>
-                    {caption}
-                </Text>
-                <Text style={styles.value} numberOfLines={1}>
-                    {value}
-                </Text>
+                <Text>{caption}</Text>
+                <Text>{value}</Text>
             </View>
             {renderChildren()}
         </View>
     );
 };
 
-export default (App = () => (
+const App = () => (
     <SafeAreaView>
         <ScrollView contentContainerStyle={styles.container}>
             <SliderContainer caption="<Slider/> with default style">
                 <Slider />
             </SliderContainer>
-            <SliderContainer caption="<Slider/> with min, max and custom tints ">
+            <SliderContainer caption="<Slider/> with custom thumb component">
                 <Slider
-                    minimumValue={-10}
+                    animateTransition
+                    renderThumbComponent={CustomThumb}
+                    trackStyle={customStyles.track}
+                />
+            </SliderContainer>
+            <SliderContainer caption="<Slider/> with min, max and custom tints">
+                <Slider
+                    animateTransition
+                    maximumTrackTintColor="#d3d3d3"
                     maximumValue={42}
                     minimumTrackTintColor="#1fb28a"
-                    maximumTrackTintColor="#d3d3d3"
+                    minimumValue={-10}
                     thumbTintColor="#1a9274"
                 />
             </SliderContainer>
             <SliderContainer caption="<Slider/> with custom style">
                 <Slider
-                    trackStyle={iosStyles.track}
-                    thumbStyle={iosStyles.thumb}
-                    minimumTrackTintColor="#1073ff"
+                    animateTransition
                     maximumTrackTintColor="#b7b7b7"
+                    minimumTrackTintColor="#1073ff"
+                    thumbStyle={iosStyles.thumb}
+                    trackStyle={iosStyles.track}
                 />
             </SliderContainer>
             <SliderContainer caption="<Slider/> with custom style #2">
                 <Slider
-                    trackStyle={customStyles2.track}
-                    thumbStyle={customStyles2.thumb}
+                    animateTransition
                     minimumTrackTintColor="#30a935"
+                    thumbStyle={customStyles2.thumb}
+                    trackStyle={customStyles2.track}
                 />
             </SliderContainer>
             <SliderContainer caption="<Slider/> with custom style #3">
                 <Slider
-                    trackStyle={customStyles3.track}
-                    thumbStyle={customStyles3.thumb}
+                    animateTransition
                     minimumTrackTintColor="#eecba8"
+                    thumbStyle={customStyles3.thumb}
+                    trackStyle={customStyles3.track}
                 />
             </SliderContainer>
             <SliderContainer caption="<Slider/> with custom style #4">
                 <Slider
-                    trackStyle={customStyles4.track}
-                    thumbStyle={customStyles4.thumb}
+                    animateTransition
                     minimumTrackTintColor="#d14ba6"
+                    thumbStyle={customStyles4.thumb}
+                    trackStyle={customStyles4.track}
                 />
             </SliderContainer>
             <SliderContainer caption="<Slider/> with custom style #5">
                 <Slider
-                    trackStyle={customStyles5.track}
-                    thumbStyle={customStyles5.thumb}
+                    animateTransition
                     minimumTrackTintColor="#ec4c46"
+                    thumbStyle={customStyles5.thumb}
+                    trackStyle={customStyles5.track}
                 />
             </SliderContainer>
             <SliderContainer caption="<Slider/> with custom style #6">
                 <Slider
-                    trackStyle={customStyles6.track}
-                    thumbStyle={customStyles6.thumb}
+                    animateTransition
                     minimumTrackTintColor="#e6a954"
+                    thumbStyle={customStyles6.thumb}
+                    trackStyle={customStyles6.track}
                 />
             </SliderContainer>
             <SliderContainer caption="<Slider/> with custom style #7">
                 <Slider
-                    trackStyle={customStyles7.track}
-                    thumbStyle={customStyles7.thumb}
+                    animateTransition
                     minimumTrackTintColor="#2f2f2f"
+                    thumbStyle={customStyles7.thumb}
+                    trackStyle={customStyles7.track}
                 />
             </SliderContainer>
             <SliderContainer caption="<Slider/> with custom style #8 and thumbTouchSize">
                 <Slider
-                    style={customStyles8.container}
-                    trackStyle={customStyles8.track}
-                    thumbStyle={customStyles8.thumb}
+                    animateTransition
+                    conatinerStyle={customStyles8.container}
                     minimumTrackTintColor="#31a4db"
+                    thumbStyle={customStyles8.thumb}
                     thumbTouchSize={{width: 50, height: 40}}
+                    trackStyle={customStyles8.track}
                 />
             </SliderContainer>
             <SliderContainer caption="<Slider/> with custom style #9 and thumbImage">
                 <Slider
+                    animateTransition
                     minimumTrackTintColor="#13a9d6"
-                    thumbImage={require("./img/thumb.png")}
+                    thumbImage={thumbImage}
                     thumbStyle={customStyles9.thumb}
                     thumbTintColor="#0c6692"
                 />
             </SliderContainer>
         </ScrollView>
     </SafeAreaView>
-));
+);
 
-const styles = StyleSheet.create({
-    container: {
-        margin: 20,
-        paddingBottom: 20,
-        justifyContent: "flex-start",
-        alignItems: "stretch",
-    },
-    titleContainer: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-    },
-    caption: {
-        flex: 1,
-    },
-    value: {
-        flex: 1,
-        textAlign: "right",
-        marginLeft: 10,
-    },
-});
-
-const iosStyles = StyleSheet.create({
-    track: {
-        height: 2,
-        borderRadius: 1,
-    },
-    thumb: {
-        width: 30,
-        height: 30,
-        borderRadius: 30 / 2,
-        backgroundColor: "white",
-        shadowColor: "black",
-        shadowOffset: {width: 0, height: 2},
-        shadowRadius: 2,
-        shadowOpacity: 0.35,
-    },
-});
-
-const customStyles2 = StyleSheet.create({
-    track: {
-        height: 4,
-        borderRadius: 2,
-    },
-    thumb: {
-        width: 30,
-        height: 30,
-        borderRadius: 30 / 2,
-        backgroundColor: "white",
-        borderColor: "#30a935",
-        borderWidth: 2,
-    },
-});
-
-const customStyles3 = StyleSheet.create({
-    track: {
-        height: 10,
-        borderRadius: 5,
-        backgroundColor: "#d0d0d0",
-    },
-    thumb: {
-        width: 10,
-        height: 30,
-        borderRadius: 5,
-        backgroundColor: "#eb6e1b",
-    },
-});
-
-const customStyles4 = StyleSheet.create({
-    track: {
-        height: 10,
-        borderRadius: 4,
-        backgroundColor: "white",
-        shadowColor: "black",
-        shadowOffset: {width: 0, height: 1},
-        shadowRadius: 1,
-        shadowOpacity: 0.15,
-    },
-    thumb: {
-        width: 20,
-        height: 20,
-        backgroundColor: "#f8a1d6",
-        borderColor: "#a4126e",
-        borderWidth: 5,
-        borderRadius: 10,
-        shadowColor: "black",
-        shadowOffset: {width: 0, height: 2},
-        shadowRadius: 2,
-        shadowOpacity: 0.35,
-    },
-});
-
-const customStyles5 = StyleSheet.create({
-    track: {
-        height: 18,
-        borderRadius: 1,
-        backgroundColor: "#d5d8e8",
-    },
-    thumb: {
-        width: 20,
-        height: 30,
-        borderRadius: 1,
-        backgroundColor: "#838486",
-    },
-});
-
-const customStyles6 = StyleSheet.create({
-    track: {
-        height: 14,
-        borderRadius: 2,
-        backgroundColor: "white",
-        borderColor: "#9a9a9a",
-        borderWidth: 1,
-    },
-    thumb: {
-        width: 20,
-        height: 20,
-        borderRadius: 2,
-        backgroundColor: "#eaeaea",
-        borderColor: "#9a9a9a",
-        borderWidth: 1,
-    },
-});
-
-const customStyles7 = StyleSheet.create({
-    track: {
-        height: 1,
-        backgroundColor: "#303030",
-    },
-    thumb: {
-        width: 30,
-        height: 30,
-        backgroundColor: "rgba(150, 150, 150, 0.3)",
-        borderColor: "rgba(150, 150, 150, 0.6)",
-        borderWidth: 14,
-        borderRadius: 15,
-    },
-});
-
-const customStyles8 = StyleSheet.create({
-    container: {
-        height: 30,
-    },
-    track: {
-        height: 2,
-        backgroundColor: "#303030",
-    },
-    thumb: {
-        width: 10,
-        height: 10,
-        backgroundColor: "#31a4db",
-        borderRadius: 10 / 2,
-        shadowColor: "#31a4db",
-        shadowOffset: {width: 0, height: 0},
-        shadowRadius: 2,
-        shadowOpacity: 1,
-    },
-});
-
-const customStyles9 = StyleSheet.create({
-    thumb: {
-        width: 30,
-        height: 30,
-        shadowColor: "black",
-        shadowOffset: {width: 0, height: 1},
-        shadowOpacity: 0.5,
-        shadowRadius: 1,
-    },
-});
+export default App;
