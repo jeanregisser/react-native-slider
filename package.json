@@ -1,6 +1,6 @@
 {
-  "name": "react-native-slider",
-  "version": "0.12.0",
+  "name": "@miblanchard/react-native-slider",
+  "version": "1.0.0",
   "description": "A pure JavaScript <Slider /> component for react-native",
   "main": "lib/Slider.js",
   "typings": "src/index",
@@ -23,15 +23,17 @@
   "scripts": {
     "build": "",
     "clean": "rimraf lib",
-    "start": "node_modules/react-native/packager/packager.sh",
-    "prepublish": "npm run clean && npm run build"
+    "lint": "eslint . --fix --cache --cache-location ./node_modules/.cache/eslint",
+    "prepublish": "npm run clean && npm run build",
+    "start": "node_modules/react-native/packager/packager.sh"
   },
   "repository": {
     "type": "git",
     "url": "git@github.com:miblanchard/react-native-slider.git"
   },
-  "dependencies": {
-    "prop-types": "^15.7.2"
+  "peerDependencies": {
+    "react": ">=16.8.0",
+    "react-native": ">=0.59.0"
   },
   "devDependencies": {
     "@babel/core": "^7.4.4",
@@ -47,13 +49,14 @@
     "eslint-plugin-prettier": "3.1.0",
     "eslint-plugin-react": "7.13.0",
     "eslint-plugin-react-native": "3.7.0",
+    "eslint-plugin-react-native-a11y": "1.2.0",
     "eslint-plugin-unicorn": "8.0.2",
     "flow-bin": "^0.98.1",
     "flow-typed": "2.5.2",
     "metro-react-native-babel-preset": "^0.54.1",
     "prettier": "^1.17.1",
-    "react": "16.8.3",
-    "react-native": "0.59.8",
+    "react": ">=16.8.0",
+    "react-native": ">=0.59.0",
     "rimraf": "^2.6.3"
   }
 }

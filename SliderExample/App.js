@@ -10,12 +10,11 @@ import {
     Platform,
     SafeAreaView,
     ScrollView,
-    Slider as ReactNativeSlider,
     StyleSheet,
     Text,
     View,
 } from "react-native";
-import {Slider} from "./Slider";
+import {Slider} from "../src/Slider";
 
 const DEFAULT_VALUE = 0.2;
 
@@ -25,10 +24,7 @@ const SliderContainer = props => {
 
     const renderChildren = () => {
         return React.Children.map(props.children, child => {
-            if (
-                (!!child && child.type === Slider) ||
-                (!!child && child.type === ReactNativeSlider)
-            ) {
+            if (!!child && child.type === Slider) {
                 return React.cloneElement(child, {
                     value,
                     onValueChange: val => setValue(val),
@@ -57,9 +53,6 @@ const SliderContainer = props => {
 export default (App = () => (
     <SafeAreaView>
         <ScrollView contentContainerStyle={styles.container}>
-            <SliderContainer caption="<React.Slider/>">
-                <ReactNativeSlider />
-            </SliderContainer>
             <SliderContainer caption="<Slider/> with default style">
                 <Slider />
             </SliderContainer>

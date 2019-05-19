@@ -33,6 +33,7 @@ module.exports = {
         "comma-dangle": [ERROR, "always-multiline"],
         "default-case": OFF,
         eqeqeq: [ERROR, "always", {null: "ignore"}],
+        indent: ["error", 4],
         "no-case-declarations": OFF,
         "no-extra-boolean-cast": OFF,
         "no-underscore-dangle": OFF,
@@ -67,15 +68,6 @@ module.exports = {
         ],
         "flowtype/semi": OFF,
         "flowtype/sort-keys": ERROR,
-        "no-restricted-imports": [
-            ERROR,
-            {
-                name: "react-native",
-                importNames: ["Image", "ImageBackground"],
-                message:
-                    "please use @nfl/rn-components Image/ImageBackground component instead",
-            },
-        ],
 
         // eslint-plugin-import
         "import/first": OFF,
@@ -171,12 +163,12 @@ module.exports = {
         ],
 
         // eslint-plugin-react-native-a11y
-        "react-native-a11y/accessibility-label": WARN,
-        "react-native-a11y/has-accessibility-props": WARN,
-        "react-native-a11y/has-valid-accessibility-component-type": WARN,
-        "react-native-a11y/has-valid-accessibility-traits": WARN,
-        "react-native-a11y/has-valid-important-for-accessibility": WARN,
-        "react-native-a11y/no-nested-touchables": WARN,
+        "react-native-a11y/accessibility-label": ERROR,
+        "react-native-a11y/has-accessibility-props": ERROR,
+        "react-native-a11y/has-valid-accessibility-component-type": ERROR,
+        "react-native-a11y/has-valid-accessibility-traits": ERROR,
+        "react-native-a11y/has-valid-important-for-accessibility": ERROR,
+        "react-native-a11y/no-nested-touchables": ERROR,
 
         // eslint-plugin-prettier
         "prettier/prettier": [
@@ -192,9 +184,6 @@ module.exports = {
                 jsxBracketSameLine: false,
             },
         ],
-
-        // eslint-plugin-unicorn
-        "unicorn/no-abusive-eslint-disable": ERROR,
 
         // LEGACY
         yoda: [ERROR, "never"],

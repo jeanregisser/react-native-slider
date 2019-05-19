@@ -16,7 +16,13 @@ It is a drop-in replacement for [Slider](http://facebook.github.io/react-native/
 ## Install
 
 ```shell
-npm i --save react-native-slider
+npm i --save @miblanchard/react-native-slider
+```
+
+or
+
+```shell
+yarn add @miblanchard/react-native-slider
 ```
 
 **Note:** I try to maintain backward compatibility of this component with previous versions of React Native, but due to the nature of the platform, and the existence of breaking changes between releases, it is possible that you need to use a specific version of this component to support the exact version of React Native you are using. See the following table:
@@ -28,12 +34,13 @@ npm i --save react-native-slider
 | v0.26.0+                | v0.8.x                                    |
 | v0.43.0+                | v0.10.x                                   |
 | v0.44.0+                | v0.11.x                                   |
+| v0.59.0+                | v1.0.x                                    |
 
 ## Usage
 
 ```jsx
 import React from "react";
-import Slider from "react-native-slider";
+import Slider from "@miblanchard/react-native-slider";
 import { AppRegistry, StyleSheet, View, Text } from "react-native";
 
 class SliderExample extends React.Component {
