@@ -57,7 +57,9 @@ export class Slider extends PureComponent<SliderProps, SliderState> {
         });
         this.state = {
             allMeasured: false,
+            aboveThumbComponentSize: {width: 0, height: 0},
             containerSize: {width: 0, height: 0},
+            panning: false,
             thumbSize: {width: 0, height: 0},
             value: new Animated.Value(this.props.value),
         };
@@ -73,7 +75,7 @@ export class Slider extends PureComponent<SliderProps, SliderState> {
         step: 0,
         thumbTintColor: "#343434",
         thumbTouchSize: {width: 40, height: 40},
-        trackClickable: true,
+        trackClickable: false,
         value: 0,
     };
 
@@ -94,7 +96,7 @@ export class Slider extends PureComponent<SliderProps, SliderState> {
         e: PressEvent /* gestureState: GestureState */
     ): boolean =>
         // Should we become active when the user presses down on the thumb?
-        this.props.trackClickable ? true : this._thumbHitTest(e);
+        this.props.trackClickable || this._thumbHitTest(e);
 
     _handleMoveShouldSetPanResponder(/* e: PressEvent, gestureState: GestureState */): boolean {
         // Should we become active when the user moves a touch over the thumb?
@@ -113,6 +115,7 @@ export class Slider extends PureComponent<SliderProps, SliderState> {
         if (this.props.disabled) return;
         this._setAnimatedValue(this._getValue(gestureState));
         this._fireChangeEvent("onValueChange");
+        this.setState({panning: true});
     };
 
     _handlePanResponderRequestEnd = (/* e: PressEvent, gestureState: GestureState */) => {
@@ -124,6 +127,11 @@ export class Slider extends PureComponent<SliderProps, SliderState> {
         if (this.props.disabled) return;
         this._setAnimatedValue(this._getValue(gestureState));
         this._fireChangeEvent("onSlidingComplete");
+        this.setState({panning: false});
+    };
+
+    _measureAboveThumbComponent = (e: ViewLayoutEvent) => {
+        this._handleMeasure("aboveThumbComponentSize", e);
     };
 
     _measureContainer = (e: ViewLayoutEvent) => {
@@ -144,6 +152,7 @@ export class Slider extends PureComponent<SliderProps, SliderState> {
 
         const storeName = `_${name}`;
         const currentSize = this[storeName];
+        console.log(name, size, currentSize);
         if (
             currentSize &&
             width === currentSize.width &&
@@ -152,12 +161,27 @@ export class Slider extends PureComponent<SliderProps, SliderState> {
             return;
         }
         this[storeName] = size;
-
-        if (this._containerSize && this._thumbSize) {
+        const state = {
+            aboveThumbComponentSize: this._aboveThumbComponentSize,
+            containerSize: this._containerSize,
+            thumbSize: this._thumbSize,
+            allMeasured: true,
+        };
+        if (
+            !this._aboveThumbComponentSize &&
+            this._containerSize &&
+            this._thumbSize
+        ) {
+            this.setState(state);
+        }
+        if (
+            this._aboveThumbComponentSize &&
+            this._containerSize &&
+            this._thumbSize
+        ) {
             this.setState({
-                containerSize: this._containerSize,
-                thumbSize: this._thumbSize,
-                allMeasured: true,
+                ...state,
+                aboveThumbComponentSize: this._aboveThumbComponentSize,
             });
         }
     };
@@ -328,6 +352,7 @@ export class Slider extends PureComponent<SliderProps, SliderState> {
             minimumTrackTintColor,
             minimumValue,
             onValueChange,
+            renderAboveThumbComponent,
             renderThumbComponent,
             thumbImage,
             thumbStyle,
@@ -336,7 +361,14 @@ export class Slider extends PureComponent<SliderProps, SliderState> {
             trackStyle,
             ...other
         } = this.props;
-        const {allMeasured, containerSize, thumbSize, value} = this.state;
+        const {
+            allMeasured,
+            aboveThumbComponentSize,
+            containerSize,
+            panning,
+            thumbSize,
+            value,
+        } = this.state;
         const thumbLeft = value.interpolate({
             inputRange: [minimumValue, maximumValue],
             outputRange: I18nManager.isRTL
@@ -376,6 +408,33 @@ export class Slider extends PureComponent<SliderProps, SliderState> {
                     ]}
                     onLayout={this._measureTrack}
                 />
+                {panning && (
+                    <Animated.View
+                        renderToHardwareTextureAndroid
+                        style={[
+                            defaultStyles.renderThumbComponent,
+                            {
+                                transform: [
+                                    {
+                                        translateX: aboveThumbComponentSize
+                                            ? thumbSize.width / 2 +
+                                              thumbLeft.__getValue() -
+                                              aboveThumbComponentSize.width / 2
+                                            : 0,
+                                    },
+                                    {
+                                        translateY: -thumbSize.height * 2,
+                                    },
+                                ],
+                                ...valueVisibleStyle,
+                            },
+                        ]}
+                        onLayout={this._measureAboveThumbComponent}
+                    >
+                        {!!renderAboveThumbComponent &&
+                            renderAboveThumbComponent()}
+                    </Animated.View>
+                )}
                 <Animated.View
                     renderToHardwareTextureAndroid
                     style={[defaultStyles.track, trackStyle, minimumTrackStyle]}

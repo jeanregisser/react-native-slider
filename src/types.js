@@ -31,6 +31,7 @@ export type SliderProps = {
     onSlidingComplete: (value: number) => void,
     onSlidingStart: (value: number) => void,
     onValueChange: (value: number) => void,
+    renderAboveThumbComponent: () => React.Node,
     renderThumbComponent: () => React.Node,
     step: number,
     thumbImage: string | number,
@@ -44,7 +45,9 @@ export type SliderProps = {
 
 export type SliderState = {
     allMeasured: boolean,
+    aboveThumbComponentSize: Dimensions,
     containerSize: Dimensions,
+    panning: boolean,
     thumbSize: Dimensions,
     value: Animated.Value,
 };

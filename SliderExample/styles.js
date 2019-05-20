@@ -10,7 +10,8 @@ const COLORS = {
 export const styles = StyleSheet.create({
     container: {
         alignItems: "stretch",
-        justifyContent: "flex-start",
+        flex: 1,
+        justifyContent: "space-around",
         margin: 16,
         paddingBottom: 32,
     },
@@ -43,7 +44,7 @@ export const componentThumbStyles = StyleSheet.create({
         backgroundColor: "red",
         height: 50,
         justifyContent: "center",
-        width: 100,
+        width: 30,
     },
 });
 

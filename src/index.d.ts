@@ -23,6 +23,7 @@ declare module 'react-native-slider' {
     onSlidingComplete?: (value: number) => void
     onSlidingStart?: (value: number) => void
     onValueChange: (value: number) => void
+    renderAboveThumbComponent: () => React.Node,
     renderThumbComponent: () => React.Node
     step?: number
     thumbImage?: ImageSourcePropType
