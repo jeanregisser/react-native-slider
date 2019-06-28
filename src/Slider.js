@@ -22,14 +22,15 @@ function Rect(x: number, y: number, width: number, height: number) {
     this.width = width;
     this.height = height;
     return {
-        containsPoint: (x, y) =>
-            x >= this.x &&
-            y >= this.y &&
-            x <= this.x + this.width &&
-            y <= this.y + this.height,
-        trackDistanceToPoint: x => {
-            if (x < this.x) return this.x - x;
-            if (x > this.x + this.width) return x - (this.x + this.width);
+        containsPoint: (nativeX, nativeY) =>
+            nativeX >= this.x &&
+            nativeY >= this.y &&
+            nativeX <= this.x + this.width &&
+            nativeY <= this.y + this.height,
+        trackDistanceToPoint: nativeX => {
+            if (nativeX < this.x) return this.x - nativeX;
+            if (nativeX > this.x + this.width)
+                return nativeX - (this.x + this.width);
             return 0;
         },
     };
@@ -66,7 +67,7 @@ function updateValues(
 
     return values.map((value, i) => {
         if (value instanceof Animated.Value) {
-            value.setValue(
+            return value.setValue(
                 newValues[i] instanceof Animated.Value
                     ? newValues[i].__getValue()
                     : newValues[i]
@@ -74,21 +75,18 @@ function updateValues(
         }
 
         if (newValues[i] instanceof Animated.Value) {
-            value = newValues[i];
-        } else {
-            value = new Animated.Value(newValues[i]);
+            return newValues[i];
         }
-
-        return value;
+        return new Animated.Value(newValues[i]);
     });
 }
 
 function indexOfLowest(values: Array<number>): number {
-    let indexOfLowest = 0;
+    let lowestIndex = 0;
     values.forEach((value, index, array) => {
-        if (value < array[indexOfLowest]) indexOfLowest = index;
+        if (value < array[lowestIndex]) lowestIndex = index;
     });
-    return indexOfLowest;
+    return lowestIndex;
 }
 
 export class Slider extends PureComponent<SliderProps, SliderState> {
@@ -149,7 +147,7 @@ export class Slider extends PureComponent<SliderProps, SliderState> {
         });
     }
 
-    _getRawValues(values) {
+    _getRawValues(values: Animated.Value) {
         return values.map(value => value.__getValue());
     }
 
@@ -258,7 +256,7 @@ export class Slider extends PureComponent<SliderProps, SliderState> {
         const rawValues = this._getRawValues(values);
         const buffer = !!step ? step : 0.1;
         if (values.length === 2) {
-            if (this._activeThumbIndex == 1) {
+            if (this._activeThumbIndex === 1) {
                 minValue = rawValues[0] + buffer;
             } else {
                 maxValue = rawValues[1] - buffer;
@@ -290,10 +288,12 @@ export class Slider extends PureComponent<SliderProps, SliderState> {
         this.state.values[thumbIndex].__getValue();
 
     _setCurrentValue = (value: number, thumbIndex: number = 0) => {
-        const newValues = [...this.state.values];
-        newValues[thumbIndex].setValue(value);
-        this.setState({
-            values: newValues,
+        this.setState((prevState: SliderState) => {
+            const newValues = [...prevState.values];
+            newValues[thumbIndex].setValue(value);
+            return {
+                values: newValues,
+            };
         });
     };
 
@@ -376,7 +376,8 @@ export class Slider extends PureComponent<SliderProps, SliderState> {
         });
         if (!!hitThumb) {
             return true;
-        } else if (trackClickable) {
+        }
+        if (trackClickable) {
             // set the active thumb index
             if (values.length === 1) {
                 this._activeThumbIndex = 0;
@@ -410,7 +411,7 @@ export class Slider extends PureComponent<SliderProps, SliderState> {
         );
     };
 
-    _renderDebugThumbTouchRect = (thumbLeft: number, index: number)  => {
+    _renderDebugThumbTouchRect = (thumbLeft: number, index: number) => {
         const thumbTouchRect = this._getThumbTouchRect();
         const positionStyle = {
             left: thumbLeft,
@@ -472,7 +473,7 @@ export class Slider extends PureComponent<SliderProps, SliderState> {
                     : [0, containerSize.width - thumbSize.width],
             })
         );
-        
+
         const valueVisibleStyle = {};
         if (!allMeasured) {
             valueVisibleStyle.opacity = 0;
@@ -562,7 +563,9 @@ export class Slider extends PureComponent<SliderProps, SliderState> {
                     {...this._panResponder.panHandlers}
                 >
                     {!!debugTouchArea &&
-                        interpolatedThumbValues.map((value, i) => this._renderDebugThumbTouchRect(value, i))}
+                        interpolatedThumbValues.map((value, i) =>
+                            this._renderDebugThumbTouchRect(value, i)
+                        )}
                 </View>
             </View>
         );
