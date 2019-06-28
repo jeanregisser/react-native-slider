@@ -30,9 +30,9 @@ const CustomThumb = () => (
     </View>
 );
 
-const SliderContainer = (props: {caption: string, children: React.node}) => {
-    const {caption} = props;
-    const [value, setValue] = useState(DEFAULT_VALUE);
+const SliderContainer = (props: {caption: string, sliderValue?: number | Array<number>, children: React.node}) => {
+    const {caption, sliderValue} = props;
+    const [value, setValue] = useState(!!sliderValue ? sliderValue : DEFAULT_VALUE);
 
     const renderChildren = () => {
         return React.Children.map(props.children, child => {
@@ -50,7 +50,7 @@ const SliderContainer = (props: {caption: string, children: React.node}) => {
         <View>
             <View style={styles.titleContainer}>
                 <Text>{caption}</Text>
-                <Text>{value}</Text>
+                <Text>{Array.isArray(value) ? value.join(' - ') : value}</Text>
             </View>
             {renderChildren()}
         </View>
@@ -70,6 +70,18 @@ const App = () => (
                     trackStyle={customStyles.track}
                 />
             </SliderContainer>
+            <SliderContainer caption="<Slider/> 2 thumbs, min, max, and custom tint" sliderValue={[6,18]}>
+                <Slider
+                    animateTransition
+                    maximumTrackTintColor="#d3d3d3"
+                    maximumValue={20}
+                    minimumTrackTintColor="#1fb28a"
+                    minimumValue={4}
+                    thumbTintColor="#1a9274"
+                    step={2}
+                />
+            </SliderContainer>
+            
             <SliderContainer caption="<Slider/> with min, max and custom tints">
                 <Slider
                     animateTransition
