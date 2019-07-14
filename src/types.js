@@ -21,7 +21,7 @@ export type SliderProps = {
         timing?: TimingAnimationConfig,
     },
     animationType: "spring" | "timing",
-    contianerStyle: ViewStyleProp,
+    containerStyle: ViewStyleProp,
     debugTouchArea: boolean,
     disabled: boolean,
     maximumTrackTintColor: string,
