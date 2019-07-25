@@ -164,9 +164,10 @@ export class Slider extends PureComponent<SliderProps, SliderState> {
 
     _handlePanResponderGrant = (e: PressEvent, gestureState: GestureState) => {
         const {thumbSize} = this.state;
+        const {nativeEvent} = e;
         this._previousLeft = this.props.trackClickable
-            ? gestureState.x0 - thumbSize.width
-            : this._getThumbLeft(this._getAnimatedValue());
+            ? nativeEvent.locationX - thumbSize.width
+            : this._getThumbLeft(this._getCurrentValue(this._activeThumbIndex));
         this._fireChangeEvent("onSlidingStart");
     };
 
