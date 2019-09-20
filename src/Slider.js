@@ -297,7 +297,6 @@ export default class Slider extends PureComponent {
                 ...this.props.thumbImageContainerStyle,
                 position: 'absolute',
                 zIndex: 5,
-                backgroundColor: 'green',
                 transform: [{ translateX: thumbLeft }, { translateY: 0 }],
                 ...valueVisibleStyle,
               },
