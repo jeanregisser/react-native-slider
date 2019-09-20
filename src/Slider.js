@@ -299,7 +299,7 @@ export default class Slider extends PureComponent {
             },
           ]}
         >
-          {this._renderThumbImage()}
+          {!!other && !!other.thumbText && <Text style={other.thumbTextStyle}>{other.thumbText}</Text>}
         </Animated.View>
         <View
           renderToHardwareTextureAndroid
@@ -583,7 +583,7 @@ var defaultStyles = StyleSheet.create({
   },
   touchArea: {
     position: 'absolute',
-    backgroundColor: 'green',
+    backgroundColor: 'transparent',
     top: 0,
     left: 0,
     right: 0,
