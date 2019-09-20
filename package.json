@@ -32,6 +32,7 @@
   "devDependencies": {
     "babel-cli": "^6.6.5",
     "babel-eslint": "^7.2.1",
+    "@babel/plugin-proposal-class-properties": "^7.5.5",
     "eslint": "^3.19.0",
     "eslint-plugin-react": "^6.10.3",
     "react": "16.0.0-alpha.6",
