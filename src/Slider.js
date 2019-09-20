@@ -287,6 +287,19 @@ export default class Slider extends PureComponent {
           renderToHardwareTextureAndroid
           style={[mainStyles.track, trackStyle, minimumTrackStyle]}
         />
+        {
+          !!thumbImage &&
+          <Animated.View
+            style={[
+              {
+                position: 'absolute',
+                zIndex: 5,
+                transform: [{ translateX: thumbLeft }, { translateY: 0 }],
+                ...valueVisibleStyle,
+              },
+            ]}
+          >{this._renderThumbImage()}</Animated.View>
+        }
         <Animated.View
           onLayout={this._measureThumb}
           renderToHardwareTextureAndroid
@@ -559,11 +572,11 @@ export default class Slider extends PureComponent {
   };
 
   _renderThumbImage = () => {
-    const { thumbImage } = this.props;
+    const { thumbImage, thumbImageStyle } = this.props;
 
-    if (!thumbImage) return;
+    if (!thumbImage || !thumbImageStyle) return;
 
-    return <Image source={thumbImage} />;
+    return <Image style={thumbImageStyle} source={thumbImage} />;
   };
 }
 
@@ -578,6 +591,7 @@ var defaultStyles = StyleSheet.create({
   },
   thumb: {
     position: 'absolute',
+    zIndex: 10,
     width: THUMB_SIZE,
     height: THUMB_SIZE,
     borderRadius: THUMB_SIZE / 2,
