@@ -583,12 +583,12 @@ var defaultStyles = StyleSheet.create({
   },
   touchArea: {
     position: 'absolute',
-    backgroundColor: 'transparent',
+    backgroundColor: 'green',
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
-    zIndex: 999,
+    zIndex: 9999,
   },
   debugThumbTouchArea: {
     position: 'absolute',
