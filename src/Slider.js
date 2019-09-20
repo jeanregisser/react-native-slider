@@ -288,12 +288,15 @@ export default class Slider extends PureComponent {
           style={[mainStyles.track, trackStyle, minimumTrackStyle]}
         />
         {
-          !!thumbImage &&
+          !!thumbImage && !!thumbImageContainerStyle &&
           <Animated.View
+            renderToHardwareTextureAndroid
             style={[
               {
+                ...this.props.thumbImageContainerStyle,
                 position: 'absolute',
                 zIndex: 5,
+                backgroundColor: 'green',
                 transform: [{ translateX: thumbLeft }, { translateY: 0 }],
                 ...valueVisibleStyle,
               },
