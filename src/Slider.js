@@ -9,6 +9,7 @@ import {
   Easing,
   ViewPropTypes,
   I18nManager,
+  Text
 } from 'react-native';
 
 import PropTypes from 'prop-types';
