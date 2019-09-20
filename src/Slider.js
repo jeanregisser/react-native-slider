@@ -223,6 +223,7 @@ export default class Slider extends PureComponent {
       maximumTrackTintColor,
       thumbTintColor,
       thumbImage,
+      thumbImageContainerStyle,
       styles,
       style,
       trackStyle,
