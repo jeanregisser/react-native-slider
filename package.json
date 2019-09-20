@@ -30,7 +30,7 @@
     "prop-types": "^15.5.6"
   },
   "devDependencies": {
-    "babel-cli": "^6.6.5",
+    "babel-cli": "^7.0.0",
     "babel-eslint": "^7.2.1",
     "@babel/plugin-proposal-class-properties": "^7.5.5",
     "eslint": "^3.19.0",
