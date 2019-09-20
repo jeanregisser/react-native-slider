@@ -30,10 +30,12 @@
     "prop-types": "^15.5.6"
   },
   "devDependencies": {
+    "@babel/cli": "^7.6.0",
     "@babel/core": "^7.5.0",
+    "metro-react-native-babel-preset": "^0.56.0",
+    "@babel/plugin-proposal-class-properties": "^7.5.5",
     "@babel/runtime": "^7.5.0",
     "babel-eslint": "^7.2.1",
-    "@babel/plugin-proposal-class-properties": "^7.5.5",
     "eslint": "^3.19.0",
     "eslint-plugin-react": "^6.10.3",
     "react": "16.0.0-alpha.6",
