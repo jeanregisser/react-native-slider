@@ -243,16 +243,23 @@ export default class Slider extends PureComponent {
       allMeasured,
     } = this.state;
     const mainStyles = styles || defaultStyles;
+
+    let minRange = 0;
+    // Min width
+    if(other.restrictSlider === true) {
+      minRange = 2*minimumValue;
+    }
+
     const thumbLeft = value.interpolate({
       inputRange: [minimumValue, maximumValue],
       outputRange: I18nManager.isRTL
-        ? [0, -(containerSize.width - thumbSize.width)]
-        : [0, containerSize.width - thumbSize.width],
+        ? [minRange, -(containerSize.width - thumbSize.width)]
+        : [minRange, containerSize.width - thumbSize.width],
       // extrapolate: 'clamp',
     });
     const minimumTrackWidth = value.interpolate({
       inputRange: [minimumValue, maximumValue],
-      outputRange: [0, containerSize.width - thumbSize.width],
+      outputRange: [minRange, containerSize.width - thumbSize.width],
       // extrapolate: 'clamp',
     });
     const valueVisibleStyle = {};
