@@ -247,7 +247,8 @@ export default class Slider extends PureComponent {
     let minRange = 0;
     // Min width
     if(other.restrictSlider === true && other.restrictedMin != undefined) {
-      minRange = ((containerSize.width-thumbSize.width)/(maximumValue-minimumValue))*other.restrictedMin;
+      //minRange = ((containerSize.width-thumbSize.width)/(maximumValue-minimumValue))*other.restrictedMin;
+      minRange = 3*other.restrictedMin
     }
 
     const thumbLeft = value.interpolate({
