@@ -247,19 +247,18 @@ export default class Slider extends PureComponent {
     let minRange = 0;
     // Min width
     if(other.restrictSlider === true && other.restrictedMin != undefined) {
-      //minRange = ((containerSize.width-thumbSize.width)/(maximumValue-minimumValue))*other.restrictedMin;
-      minRange = 3*other.restrictedMin
+      minRange = ((containerSize.width-thumbSize.width)/(maximumValue-minimumValue))*other.restrictedMin;
     }
 
     const thumbLeft = value.interpolate({
-      inputRange: [minimumValue, maximumValue],
+      inputRange: [(minRange || minimumValue), maximumValue],
       outputRange: I18nManager.isRTL
         ? [minRange, -(containerSize.width - thumbSize.width)]
         : [minRange, containerSize.width - thumbSize.width],
       // extrapolate: 'clamp',
     });
     const minimumTrackWidth = value.interpolate({
-      inputRange: [minimumValue, maximumValue],
+      inputRange: [(minRange || minimumValue), maximumValue],
       outputRange: [minRange, containerSize.width - thumbSize.width],
       // extrapolate: 'clamp',
     });
@@ -298,7 +297,7 @@ export default class Slider extends PureComponent {
         >
           {
             !!other.trackText &&
-            <Text style={other.trackTextStyle}>{other.trackText}</Text>
+            <Text style={other.trackTextStyle}>{minRange}</Text>
           }
         </Animated.View>
         {
