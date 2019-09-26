@@ -244,24 +244,27 @@ export default class Slider extends PureComponent {
     } = this.state;
     const mainStyles = styles || defaultStyles;
 
-    let minRange = 0;
+    let thumbLeft, minimumTrackWidth = 0
     // Min width
-    if(other.restrictSlider === true) {
-      minRange = Math.round((containerSize.width-thumbSize.width)/maximumValue)*minimumValue;
+    if(other.restrictSlider === true && other.minRange != undefined && value <= other.minRange) {
+      const minR = Math.round((containerSize.width-thumbSize.width)/maximumValue)*other.minRange;
+      thumbLeft = minR;
+      minimumTrackWidth = minR;
+    } else {
+      thumbLeft = value.interpolate({
+        inputRange: [minimumValue, maximumValue],
+        outputRange: I18nManager.isRTL
+          ? [0, -(containerSize.width - thumbSize.width)]
+          : [0, containerSize.width - thumbSize.width],
+        // extrapolate: 'clamp',
+      });
+      minimumTrackWidth = value.interpolate({
+        inputRange: [minimumValue, maximumValue],
+        outputRange: [0, containerSize.width - thumbSize.width],
+        // extrapolate: 'clamp',
+      });
     }
 
-    const thumbLeft = value.interpolate({
-      inputRange: [minimumValue, maximumValue],
-      outputRange: I18nManager.isRTL
-        ? [minRange, -(containerSize.width - thumbSize.width)]
-        : [minRange, containerSize.width - thumbSize.width],
-      // extrapolate: 'clamp',
-    });
-    const minimumTrackWidth = value.interpolate({
-      inputRange: [minimumValue, maximumValue],
-      outputRange: [minRange, containerSize.width - thumbSize.width],
-      // extrapolate: 'clamp',
-    });
     const valueVisibleStyle = {};
     if (!allMeasured) {
       valueVisibleStyle.opacity = 0;
