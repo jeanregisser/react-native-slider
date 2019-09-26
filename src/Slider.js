@@ -247,8 +247,7 @@ export default class Slider extends PureComponent {
     let minRange = 0;
     // Min width
     if(other.restrictSlider === true) {
-      //minRange = Math.round(((containerSize.width-thumbSize.width)/maximumValue)*other.minimumValue);
-      minRange = 60;
+      minRange = Math.round((containerSize.width-thumbSize.width)/maximumValue)*minimumValue;
     }
 
     const thumbLeft = value.interpolate({
@@ -298,7 +297,7 @@ export default class Slider extends PureComponent {
         >
           {
             !!other.trackText &&
-            <Text style={other.trackTextStyle}>{other.trackText}</Text>
+            <Text style={other.trackTextStyle}>{minRange}</Text>
           }
         </Animated.View>
         {
