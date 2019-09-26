@@ -297,7 +297,7 @@ export default class Slider extends PureComponent {
         >
           {
             !!other.trackText &&
-            <Text style={other.trackTextStyle}>{minRange}</Text>
+            <Text style={other.trackTextStyle}>{`${minRange} ${containerSize.width - thumbSize.width}`}</Text>
           }
         </Animated.View>
         {
