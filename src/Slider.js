@@ -436,15 +436,21 @@ export default class Slider extends PureComponent {
     }
   };
 
-  _getRatio = (value: number) =>
-    (value - this.props.minimumValue) /
+  _getRatio = (value: number) => {
+    return (value - this.props.minimumValue) /
     (this.props.maximumValue - this.props.minimumValue);
+  }
+    
 
   _getThumbLeft = (value: number) => {
     const nonRtlRatio = this._getRatio(value);
     const ratio = I18nManager.isRTL ? 1 - nonRtlRatio : nonRtlRatio;
+    let startPoint = 0;
+    if(this.props.restrictRange === true) {
+      startPoint = (this.state.containerSize.width - this.state.thumbSize.width) / this.props.maximumValue * this.props.minimumValue;
+    }
     return (
-      ratio * (this.state.containerSize.width - this.state.thumbSize.width)
+      startPoint + ratio * (this.state.containerSize.width - this.state.thumbSize.width)
     );
   };
 
@@ -550,10 +556,11 @@ export default class Slider extends PureComponent {
   _thumbHitTest = (e: Object) => {
     const nativeEvent = e.nativeEvent;
     const thumbTouchRect = this._getThumbTouchRect();
-    return thumbTouchRect.containsPoint(
+    const result = thumbTouchRect.containsPoint(
       nativeEvent.locationX,
       nativeEvent.locationY,
     );
+    return result;
   };
 
   _getThumbTouchRect = () => {
