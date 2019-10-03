@@ -142,7 +142,7 @@ export default class Slider extends PureComponent {
     /**
      * The style applied to the thumb.
      */
-    thumbStyle: ViewPropTypes.style,
+    thumbStyle: Text.propTypes.style,
 
     /**
      * Sets an image for the thumb.
