@@ -9,6 +9,7 @@ import {
   Easing,
   ViewPropTypes,
   I18nManager,
+  Text,
 } from 'react-native';
 
 import PropTypes from 'prop-types';
@@ -149,6 +150,16 @@ export default class Slider extends PureComponent {
     thumbImage: Image.propTypes.source,
 
     /**
+     * Sets a text for the thumb
+     */
+    thumbText: PropTypes.text,
+
+    /**
+     * Sets a style for the thumb text
+     */
+    thumbTextStyle: PropTypes.style,
+
+    /**
      * Set this to true to visually see the thumb touch rect in green.
      */
     debugTouchArea: PropTypes.bool,
@@ -180,6 +191,7 @@ export default class Slider extends PureComponent {
     thumbTouchSize: { width: 40, height: 40 },
     debugTouchArea: false,
     animationType: 'timing',
+    thumbTextStyle: {},
   };
 
   state = {
@@ -290,7 +302,7 @@ export default class Slider extends PureComponent {
           onLayout={this._measureThumb}
           renderToHardwareTextureAndroid
           style={[
-            { backgroundColor: thumbTintColor },
+            { backgroundColor: thumbTintColor, justifyContent: 'center' },
             mainStyles.thumb,
             thumbStyle,
             {
@@ -300,6 +312,7 @@ export default class Slider extends PureComponent {
           ]}
         >
           {this._renderThumbImage()}
+          {this._renderThumbText()}
         </Animated.View>
         <View
           renderToHardwareTextureAndroid
@@ -557,6 +570,15 @@ export default class Slider extends PureComponent {
     );
   };
 
+  _renderThumbText = () => {
+    const { thumbText, thumbTextStyle } = this.props;
+
+    if (!thumbText) return;
+    return (
+      <Text style={[defaultStyles.thumbText, thumbTextStyle]}>{thumbText}</Text>
+    );
+  };
+
   _renderThumbImage = () => {
     const { thumbImage } = this.props;
 
@@ -593,5 +615,9 @@ var defaultStyles = StyleSheet.create({
     position: 'absolute',
     backgroundColor: 'green',
     opacity: 0.5,
+  },
+  thumbText: {
+    color: 'white',
+    fontSize: 10,
   },
 });
