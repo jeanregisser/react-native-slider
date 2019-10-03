@@ -152,12 +152,12 @@ export default class Slider extends PureComponent {
     /**
      * Sets a text for the thumb
      */
-    thumbText: PropTypes.text,
+    thumbText: PropTypes.string,
 
     /**
      * Sets a style for the thumb text
      */
-    thumbTextStyle: PropTypes.style,
+    thumbTextStyle: ViewPropTypes.style,
 
     /**
      * Set this to true to visually see the thumb touch rect in green.
