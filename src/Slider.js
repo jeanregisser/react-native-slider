@@ -175,9 +175,11 @@ export class Slider extends PureComponent<SliderProps, SliderState> {
         if (this.props.disabled) return;
         this._setCurrentValue(
             this._getValue(gestureState),
-            this._activeThumbIndex
+            this._activeThumbIndex,
+            () => {
+                this._fireChangeEvent("onValueChange");
+            }
         );
-        this._fireChangeEvent("onValueChange");
     };
 
     _handlePanResponderRequestEnd = (/* e: PressEvent, gestureState: GestureState */) => {
@@ -189,10 +191,14 @@ export class Slider extends PureComponent<SliderProps, SliderState> {
         if (this.props.disabled) return;
         this._setCurrentValue(
             this._getValue(gestureState),
-            this._activeThumbIndex
+            this._activeThumbIndex,
+            () => {
+                if (this.props.trackClickable) {
+                    this._fireChangeEvent("onValueChange");
+                }
+                this._fireChangeEvent("onSlidingComplete");
+            }
         );
-        if (this.props.trackClickable) this._fireChangeEvent("onValueChange");
-        this._fireChangeEvent("onSlidingComplete");
         this._activeThumbIndex = null;
     };
 
@@ -288,14 +294,18 @@ export class Slider extends PureComponent<SliderProps, SliderState> {
     _getCurrentValue = (thumbIndex: number = 0) =>
         this.state.values[thumbIndex].__getValue();
 
-    _setCurrentValue = (value: number, thumbIndex: number = 0) => {
+    _setCurrentValue = (
+        value: number,
+        thumbIndex: number = 0,
+        callback?: () => void
+    ) => {
         this.setState((prevState: SliderState) => {
             const newValues = [...prevState.values];
             newValues[thumbIndex].setValue(value);
             return {
                 values: newValues,
             };
-        });
+        }, callback);
     };
 
     _setCurrentValueAnimated = (value: number, thumbIndex: number = 0) => {
