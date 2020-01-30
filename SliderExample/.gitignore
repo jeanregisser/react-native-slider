@@ -56,4 +56,4 @@ buck-out/
 *.jsbundle
 
 # npm
-lib/
+/lib

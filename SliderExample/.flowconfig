@@ -19,9 +19,6 @@
 ; Ignore metro
 .*/node_modules/metro/.*
 
-; lib
-lib/
-
 [include]
 
 [libs]
