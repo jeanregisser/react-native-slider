@@ -3,6 +3,11 @@ declare module '@miblanchard/react-native-slider' {
 
   import { ImageSourcePropType, StyleProp, ViewStyle } from 'react-native';
 
+  /**
+   * Callback for slider change events. The second number value will be only if provided an array with two values in `value` prop
+   */
+  type SliderOnChangeCallback = (value: [number, number]) => void;
+
   interface ISliderProps {
     /**
      *  Set to true if you want to use the default 'spring' animation.
@@ -47,15 +52,15 @@ declare module '@miblanchard/react-native-slider' {
     /**
      * Callback called when the user finishes changing the value (e.g. when the slider is released)
      */
-    onSlidingComplete?: (value: [number]) => void;
+    onSlidingComplete?: SliderOnChangeCallback;
     /**
      * Callback called when the user starts changing the value (e.g. when the slider is pressed)
      */
-    onSlidingStart?: (value: [number]) => void;
+    onSlidingStart?: SliderOnChangeCallback;
     /**
      * Callback continuously called while the user is dragging the slider
      */
-    onValueChange?: (value: [number]) => void;
+    onValueChange?: SliderOnChangeCallback;
     /**
      * Function which returns a custom Component of your liking to be rendered within the thumb.
      */
