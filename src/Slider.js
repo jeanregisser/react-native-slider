@@ -9,6 +9,7 @@ import {
   Easing,
   ViewPropTypes,
   I18nManager,
+  Text,
 } from 'react-native';
 
 import PropTypes from 'prop-types';
@@ -309,6 +310,7 @@ export default class Slider extends PureComponent {
           {debugTouchArea === true &&
             this._renderDebugThumbTouchRect(minimumTrackWidth)}
         </View>
+        <Text style={{letterSpacing: thumbLeft || 0}} >0 1 2 3 4 5 6 7 8 9 10</Text>
       </View>
     );
   }
