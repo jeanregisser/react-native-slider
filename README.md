@@ -40,7 +40,7 @@ yarn add @miblanchard/react-native-slider
 
 ```jsx
 import React from "react";
-import Slider from "@miblanchard/react-native-slider";
+import { Slider } from "@miblanchard/react-native-slider";
 import { AppRegistry, StyleSheet, View, Text } from "react-native";
 
 class SliderExample extends React.Component {
