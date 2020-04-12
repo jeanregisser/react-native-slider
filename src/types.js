@@ -31,6 +31,7 @@ export type SliderProps = {
     onSlidingComplete: (value: number | Array<number>) => void,
     onSlidingStart: (value: number | Array<number>) => void,
     onValueChange: (value: number | Array<number>) => void,
+    renderAboveThumbComponent: (index: number) => React.Node,
     renderThumbComponent: () => React.Node,
     step: number,
     thumbImage: string | number | Array<string | number>,

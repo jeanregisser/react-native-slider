@@ -210,6 +210,10 @@ export class Slider extends PureComponent<SliderProps, SliderState> {
         this._handleMeasure("trackSize", e);
     };
 
+    _measureAboveThumb = (e: ViewLayoutEvent) => {
+        this._handleMeasure("aboveThumbSize", e);
+    };
+
     _measureThumb = (e: ViewLayoutEvent) => {
         this._handleMeasure("thumbSize", e);
     };
@@ -456,6 +460,14 @@ export class Slider extends PureComponent<SliderProps, SliderState> {
         );
     };
 
+    _getAboveThumbShift = () => {
+        if (!this._aboveThumbSize || !this._thumbSize) {
+            return 0;
+        }
+
+        return (this._aboveThumbSize.width - this._thumbSize.width) / 2;
+    };
+
     render() {
         const {
             animateTransitions,
@@ -466,7 +478,7 @@ export class Slider extends PureComponent<SliderProps, SliderState> {
             maximumValue,
             minimumTrackTintColor,
             minimumValue,
-            onValueChange,
+            renderAboveThumbComponent,
             renderThumbComponent,
             thumbImage,
             thumbStyle,
@@ -521,64 +533,95 @@ export class Slider extends PureComponent<SliderProps, SliderState> {
         const touchOverflowStyle = this._getTouchOverflowStyle();
 
         return (
-            <View
-                {...other}
-                style={[defaultStyles.container, containerStyle]}
-                onLayout={this._measureContainer}
-            >
+            <>
+                {renderAboveThumbComponent && (
+                    <View style={{flexDirection: "row"}}>
+                        {interpolatedThumbValues.map((value, i) => (
+                            <Animated.View
+                                renderToHardwareTextureAndroid
+                                key={`slider-above-thumb-${i}`}
+                                style={[
+                                    defaultStyles.renderThumbComponent,
+                                    {
+                                        bottom: 0,
+                                        left: -this._getAboveThumbShift(),
+                                        transform: [
+                                            {translateX: value},
+                                            {translateY: 0},
+                                        ],
+                                        ...valueVisibleStyle,
+                                    },
+                                ]}
+                                onLayout={this._measureAboveThumb}
+                            >
+                                {renderAboveThumbComponent(i)}
+                            </Animated.View>
+                        ))}
+                    </View>
+                )}
                 <View
-                    renderToHardwareTextureAndroid
-                    style={[
-                        defaultStyles.track,
-                        {backgroundColor: maximumTrackTintColor},
-                        trackStyle,
-                    ]}
-                    onLayout={this._measureTrack}
-                />
-                <Animated.View
-                    renderToHardwareTextureAndroid
-                    style={[defaultStyles.track, trackStyle, minimumTrackStyle]}
-                />
-                {interpolatedThumbValues.map((value, i) => (
+                    {...other}
+                    style={[defaultStyles.container, containerStyle]}
+                    onLayout={this._measureContainer}
+                >
+                    <View
+                        renderToHardwareTextureAndroid
+                        style={[
+                            defaultStyles.track,
+                            {backgroundColor: maximumTrackTintColor},
+                            trackStyle,
+                        ]}
+                        onLayout={this._measureTrack}
+                    />
                     <Animated.View
                         renderToHardwareTextureAndroid
-                        key={`slider-thumb-${i}`}
                         style={[
-                            !!renderThumbComponent
-                                ? defaultStyles.renderThumbComponent
-                                : defaultStyles.thumb,
-                            !!renderThumbComponent
-                                ? {}
-                                : {
-                                      backgroundColor: thumbTintColor,
-                                      ...thumbStyle,
-                                  },
-                            {
-                                transform: [
-                                    {translateX: value},
-                                    {translateY: 0},
-                                ],
-                                ...valueVisibleStyle,
-                            },
+                            defaultStyles.track,
+                            trackStyle,
+                            minimumTrackStyle,
                         ]}
-                        onLayout={this._measureThumb}
+                    />
+                    {interpolatedThumbValues.map((value, i) => (
+                        <Animated.View
+                            renderToHardwareTextureAndroid
+                            key={`slider-thumb-${i}`}
+                            style={[
+                                !!renderThumbComponent
+                                    ? defaultStyles.renderThumbComponent
+                                    : defaultStyles.thumb,
+                                !!renderThumbComponent
+                                    ? {}
+                                    : {
+                                          backgroundColor: thumbTintColor,
+                                          ...thumbStyle,
+                                      },
+                                {
+                                    transform: [
+                                        {translateX: value},
+                                        {translateY: 0},
+                                    ],
+                                    ...valueVisibleStyle,
+                                },
+                            ]}
+                            onLayout={this._measureThumb}
+                        >
+                            {!!renderThumbComponent
+                                ? renderThumbComponent()
+                                : this._renderThumbImage(i)}
+                        </Animated.View>
+                    ))}
+                    <View
+                        renderToHardwareTextureAndroid
+                        style={[defaultStyles.touchArea, touchOverflowStyle]}
+                        {...this._panResponder.panHandlers}
                     >
-                        {!!renderThumbComponent
-                            ? renderThumbComponent()
-                            : this._renderThumbImage(i)}
-                    </Animated.View>
-                ))}
-                <View
-                    renderToHardwareTextureAndroid
-                    style={[defaultStyles.touchArea, touchOverflowStyle]}
-                    {...this._panResponder.panHandlers}
-                >
-                    {!!debugTouchArea &&
-                        interpolatedThumbValues.map((value, i) =>
-                            this._renderDebugThumbTouchRect(value, i)
-                        )}
+                        {!!debugTouchArea &&
+                            interpolatedThumbValues.map((value, i) =>
+                                this._renderDebugThumbTouchRect(value, i)
+                            )}
+                    </View>
                 </View>
-            </View>
+            </>
         );
     }
 }

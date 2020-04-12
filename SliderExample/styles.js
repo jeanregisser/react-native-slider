@@ -14,6 +14,9 @@ export const styles = StyleSheet.create({
         margin: 16,
         paddingBottom: 32,
     },
+    sliderContainer: {
+        paddingVertical: 16,
+    },
     titleContainer: {
         alignItems: "center",
         justifyContent: "center",
@@ -182,5 +185,15 @@ export const customStyles9 = StyleSheet.create({
         shadowOpacity: 0.5,
         shadowRadius: 1,
         width: 30,
+    },
+});
+
+export const aboveThumbStyles = StyleSheet.create({
+    image: {
+        alignItems: "center",
+        height: 54,
+        justifyContent: "center",
+        resizeMode: "contain",
+        width: 72,
     },
 });

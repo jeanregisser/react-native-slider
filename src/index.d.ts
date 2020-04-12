@@ -62,8 +62,12 @@ declare module '@miblanchard/react-native-slider' {
      */
     onValueChange?: SliderOnChangeCallback;
     /**
-     * Function which returns a custom Component of your liking to be rendered within the thumb.
-     */
+    * Function which returns a custom Component of your liking to be rendered above the thumb and accepts an index of a thumb starting from 0.
+    */
+    renderAboveThumbComponent?: (index: number) => ReactNode;
+    /**
+    * Function which returns a custom Component of your liking to be rendered within the thumb.
+    */
     renderThumbComponent?: () => ReactNode;
     /**
      * Step value of the slider. The value should be between 0 and maximumValue - minimumValue)

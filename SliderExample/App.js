@@ -1,6 +1,6 @@
 /* @flow */
 import React, {useState} from "react";
-import {SafeAreaView, ScrollView, Text, View} from "react-native";
+import {Image, SafeAreaView, ScrollView, Text, View} from "react-native";
 import {Slider} from "../src/Slider";
 
 // constants
@@ -8,6 +8,7 @@ const thumbImage = require("./img/thumb.png");
 
 // styles
 import {
+    aboveThumbStyles,
     componentThumbStyles,
     customStyles,
     customStyles2,
@@ -24,11 +25,23 @@ import {
 
 const DEFAULT_VALUE = 0.2;
 
+const RANDOM_IMAGE_URL =
+    "https://images.unsplash.com/photo-1586184059194-4b048581e50b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=72&q=80";
+
 const CustomThumb = () => (
     <View style={componentThumbStyles.container}>
         <Text>Any</Text>
     </View>
 );
+
+const renderAboveThumbComponent = () => {
+    return (
+        <Image
+            source={{url: RANDOM_IMAGE_URL}}
+            style={aboveThumbStyles.image}
+        />
+    );
+};
 
 const SliderContainer = (props: {
     caption: string,
@@ -53,7 +66,7 @@ const SliderContainer = (props: {
     };
 
     return (
-        <View>
+        <View style={styles.sliderContainer}>
             <View style={styles.titleContainer}>
                 <Text>{caption}</Text>
                 <Text>{Array.isArray(value) ? value.join(" - ") : value}</Text>
@@ -74,6 +87,12 @@ const App = () => (
                     animateTransition
                     renderThumbComponent={CustomThumb}
                     trackStyle={customStyles.track}
+                />
+            </SliderContainer>
+            <SliderContainer caption="<Slider/> with custom above thumb component">
+                <Slider
+                    animateTransition
+                    renderAboveThumbComponent={renderAboveThumbComponent}
                 />
             </SliderContainer>
             <SliderContainer
