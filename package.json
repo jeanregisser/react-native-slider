@@ -1,6 +1,6 @@
 {
     "name": "@miblanchard/react-native-slider",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "description": "A pure JavaScript <Slider /> component for react-native",
     "main": "lib/Slider.js",
     "typings": "src/index",
