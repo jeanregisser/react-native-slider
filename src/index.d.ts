@@ -105,5 +105,5 @@ declare module '@miblanchard/react-native-slider' {
     value?: number | number[];
   }
 
-  export const Slider: ComponentClass<ISliderProps>;
+  export class Slider extends PureComponent<ISliderProps> {}
 }
