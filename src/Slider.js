@@ -570,7 +570,7 @@ export default class Slider extends PureComponent {
     if (IconComponent) {
       return <IconComponent />
     } else if (!thumbImage) {
-      return
+      return;
     };
 
     return <Image source={thumbImage} />;
