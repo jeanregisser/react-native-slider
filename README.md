@@ -1,4 +1,4 @@
-# react-native-slider
+# @miblanchard/react-native-slider
 
 [![npm version](https://img.shields.io/npm/v/@miblanchard/react-native-slider.svg?style=flat-square)](https://npmjs.org/package/@miblanchard/react-native-slider "View this project on npm")
 [![npm downloads](http://img.shields.io/npm/dm/@miblanchard/react-native-slider.svg?style=flat-square)](https://npmjs.org/package/@miblanchard/react-native-slider "View this project on npm")
