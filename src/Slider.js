@@ -167,6 +167,12 @@ export default class Slider extends PureComponent {
      * Used to configure the animation parameters.  These are the same parameters in the Animated library.
      */
     animationConfig: PropTypes.object,
+
+    /**
+     * Used to replace Image component.
+     */
+    iconComponent: PropTypes.object,
+
   };
 
   static defaultProps = {
@@ -231,6 +237,7 @@ export default class Slider extends PureComponent {
       thumbTouchSize,
       animationType,
       animateTransitions,
+      iconComponent,
       ...other
     } = this.props;
     const {
@@ -558,9 +565,13 @@ export default class Slider extends PureComponent {
   };
 
   _renderThumbImage = () => {
-    const { thumbImage } = this.props;
+    const { thumbImage, iconComponent: IconComponent } = this.props;
 
-    if (!thumbImage) return;
+    if (IconComponent) {
+      return <IconComponent />
+    } else if (!thumbImage) {
+      return
+    };
 
     return <Image source={thumbImage} />;
   };
