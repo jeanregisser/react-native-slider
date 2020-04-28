@@ -210,10 +210,6 @@ export class Slider extends PureComponent<SliderProps, SliderState> {
         this._handleMeasure("trackSize", e);
     };
 
-    _measureAboveThumb = (e: ViewLayoutEvent) => {
-        this._handleMeasure("aboveThumbSize", e);
-    };
-
     _measureThumb = (e: ViewLayoutEvent) => {
         this._handleMeasure("thumbSize", e);
     };
@@ -460,14 +456,6 @@ export class Slider extends PureComponent<SliderProps, SliderState> {
         );
     };
 
-    _getAboveThumbShift = () => {
-        if (!this._aboveThumbSize || !this._thumbSize) {
-            return 0;
-        }
-
-        return (this._aboveThumbSize.width - this._thumbSize.width) / 2;
-    };
-
     render() {
         const {
             animateTransitions,
@@ -544,7 +532,6 @@ export class Slider extends PureComponent<SliderProps, SliderState> {
                                     defaultStyles.renderThumbComponent,
                                     {
                                         bottom: 0,
-                                        left: -this._getAboveThumbShift(),
                                         transform: [
                                             {translateX: value},
                                             {translateY: 0},
@@ -552,7 +539,6 @@ export class Slider extends PureComponent<SliderProps, SliderState> {
                                         ...valueVisibleStyle,
                                     },
                                 ]}
-                                onLayout={this._measureAboveThumb}
                             >
                                 {renderAboveThumbComponent(i)}
                             </Animated.View>
