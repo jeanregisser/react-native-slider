@@ -188,12 +188,16 @@ export const customStyles9 = StyleSheet.create({
     },
 });
 
+const thumbnailWidth = 84;
 export const aboveThumbStyles = StyleSheet.create({
-    image: {
+    container: {
         alignItems: "center",
-        height: 54,
+        backgroundColor: "grey",
+        borderColor: "purple",
+        borderWidth: 1,
+        height: 50,
         justifyContent: "center",
-        resizeMode: "contain",
-        width: 72,
+        left: -thumbnailWidth / 2,
+        width: thumbnailWidth,
     },
 });

@@ -526,7 +526,6 @@ export class Slider extends PureComponent<SliderProps, SliderState> {
                     <View style={{flexDirection: "row"}}>
                         {interpolatedThumbValues.map((value, i) => (
                             <Animated.View
-                                renderToHardwareTextureAndroid
                                 key={`slider-above-thumb-${i}`}
                                 style={[
                                     defaultStyles.renderThumbComponent,
@@ -569,7 +568,6 @@ export class Slider extends PureComponent<SliderProps, SliderState> {
                     />
                     {interpolatedThumbValues.map((value, i) => (
                         <Animated.View
-                            renderToHardwareTextureAndroid
                             key={`slider-thumb-${i}`}
                             style={[
                                 !!renderThumbComponent
@@ -597,7 +595,6 @@ export class Slider extends PureComponent<SliderProps, SliderState> {
                         </Animated.View>
                     ))}
                     <View
-                        renderToHardwareTextureAndroid
                         style={[defaultStyles.touchArea, touchOverflowStyle]}
                         {...this._panResponder.panHandlers}
                     >

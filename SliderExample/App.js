@@ -25,9 +25,6 @@ import {
 
 const DEFAULT_VALUE = 0.2;
 
-const RANDOM_IMAGE_URL =
-    "https://images.unsplash.com/photo-1586184059194-4b048581e50b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=72&q=80";
-
 const CustomThumb = () => (
     <View style={componentThumbStyles.container}>
         <Text>Any</Text>
@@ -35,12 +32,7 @@ const CustomThumb = () => (
 );
 
 const renderAboveThumbComponent = () => {
-    return (
-        <Image
-            source={{url: RANDOM_IMAGE_URL}}
-            style={aboveThumbStyles.image}
-        />
-    );
+    return <View style={aboveThumbStyles.container} />;
 };
 
 const SliderContainer = (props: {
