@@ -201,3 +201,12 @@ export const aboveThumbStyles = StyleSheet.create({
         width: thumbnailWidth,
     },
 });
+
+const borderWidth = 4;
+export const trackMarkStyles = StyleSheet.create({
+    container: {
+        borderColor: "red",
+        borderWidth,
+        left: -borderWidth / 2,
+    },
+});

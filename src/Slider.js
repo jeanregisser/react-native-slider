@@ -47,8 +47,11 @@ const DEFAULT_ANIMATION_CONFIGS = {
         delay: 0,
     },
 };
-function normalizePropValue(props: SliderProps): Array<number> {
-    const {maximumValue, minimumValue, value} = props;
+function normalizeValue(
+    props: SliderProps,
+    value: number | Array<number>
+): Array<number> {
+    const {maximumValue, minimumValue} = props;
     const getBetweenValue = (inputValue: number) =>
         Math.max(Math.min(inputValue, maximumValue), minimumValue);
     if (!Array.isArray(value)) {
@@ -107,13 +110,17 @@ export class Slider extends PureComponent<SliderProps, SliderState> {
             allMeasured: false,
             containerSize: {width: 0, height: 0},
             thumbSize: {width: 0, height: 0},
-            values: updateValues(normalizePropValue(this.props)),
+            trackMarksValues: updateValues(
+                normalizeValue(this.props, this.props.trackMarks)
+            ),
+            values: updateValues(normalizeValue(this.props, this.props.value)),
         };
     }
 
     static defaultProps = {
         animationType: "timing",
         debugTouchArea: false,
+        trackMarks: [],
         maximumTrackTintColor: "#b3b3b3",
         maximumValue: 1,
         minimumTrackTintColor: "#3f3f3f",
@@ -126,18 +133,23 @@ export class Slider extends PureComponent<SliderProps, SliderState> {
     };
 
     static getDerivedStateFromProps(props: SliderProps, state: SliderState) {
-        const newValues = normalizePropValue(props);
-        if (newValues.length !== state.values.length) {
-            return {values: updateValues(state.values, newValues)};
+        const newTrackMarkValues = normalizeValue(props, props.trackMarks);
+        const statePatch = {};
+        if (newTrackMarkValues.length !== state.trackMarksValues.length) {
+            statePatch.trackMarksValues = updateValues(
+                state.trackMarksValues,
+                newTrackMarkValues
+            );
         }
-        return null;
+        return statePatch;
     }
 
-    componentDidUpdate(prevProps: SliderProps) {
-        const oldValues = normalizePropValue(prevProps);
-        const newValues = normalizePropValue(this.props);
+    componentDidUpdate() {
+        const newValues = normalizeValue(this.props, this.props.value);
         newValues.forEach((value, i) => {
-            if (value !== oldValues[i]) {
+            if (!this.state.values[i]) {
+                this._setCurrentValue(value, i);
+            } else if (value !== this.state.values[i].__getValue()) {
                 if (this.props.animateTransitions) {
                     this._setCurrentValueAnimated(value, i);
                 } else {
@@ -299,13 +311,21 @@ export class Slider extends PureComponent<SliderProps, SliderState> {
         thumbIndex: number = 0,
         callback?: () => void
     ) => {
-        this.setState((prevState: SliderState) => {
-            const newValues = [...prevState.values];
-            newValues[thumbIndex].setValue(value);
-            return {
-                values: newValues,
-            };
-        }, callback);
+        const animatedValue = this.state.values[thumbIndex];
+        if (animatedValue) {
+            animatedValue.setValue(value);
+            if (callback) {
+                callback();
+            }
+        } else {
+            this.setState((prevState: SliderState) => {
+                const newValues = [...prevState.values];
+                newValues[thumbIndex] = Animated.Value(value);
+                return {
+                    values: newValues,
+                };
+            }, callback);
+        }
     };
 
     _setCurrentValueAnimated = (value: number, thumbIndex: number = 0) => {
@@ -316,6 +336,7 @@ export class Slider extends PureComponent<SliderProps, SliderState> {
             this.props.animationConfig,
             {
                 toValue: value,
+                useNativeDriver: false,
             }
         );
 
@@ -467,6 +488,7 @@ export class Slider extends PureComponent<SliderProps, SliderState> {
             minimumTrackTintColor,
             minimumValue,
             renderAboveThumbComponent,
+            renderTrackMark,
             renderThumbComponent,
             thumbImage,
             thumbStyle,
@@ -475,8 +497,23 @@ export class Slider extends PureComponent<SliderProps, SliderState> {
             trackStyle,
             ...other
         } = this.props;
-        const {allMeasured, containerSize, thumbSize, values} = this.state;
+        const {
+            allMeasured,
+            containerSize,
+            thumbSize,
+            trackMarksValues,
+            values,
+        } = this.state;
         const interpolatedThumbValues = values.map(v =>
+            v.interpolate({
+                inputRange: [minimumValue, maximumValue],
+                outputRange: I18nManager.isRTL
+                    ? [0, -(containerSize.width - thumbSize.width)]
+                    : [0, containerSize.width - thumbSize.width],
+            })
+        );
+
+        const interpolatedTrackMarksValues = trackMarksValues.map(v =>
             v.interpolate({
                 inputRange: [minimumValue, maximumValue],
                 outputRange: I18nManager.isRTL
@@ -566,6 +603,24 @@ export class Slider extends PureComponent<SliderProps, SliderState> {
                             minimumTrackStyle,
                         ]}
                     />
+                    {renderTrackMark &&
+                        interpolatedTrackMarksValues.map((value, i) => (
+                            <Animated.View
+                                key={`track-mark-${i}`}
+                                style={[
+                                    defaultStyles.renderThumbComponent,
+                                    {
+                                        transform: [
+                                            {translateX: value},
+                                            {translateY: 0},
+                                        ],
+                                        ...valueVisibleStyle,
+                                    },
+                                ]}
+                            >
+                                {renderTrackMark()}
+                            </Animated.View>
+                        ))}
                     {interpolatedThumbValues.map((value, i) => (
                         <Animated.View
                             key={`slider-thumb-${i}`}

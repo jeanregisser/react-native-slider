@@ -1,11 +1,7 @@
 /* @flow */
-import React, {useState} from "react";
-import {Image, SafeAreaView, ScrollView, Text, View} from "react-native";
+import * as React from "react";
+import {SafeAreaView, ScrollView, Text, View} from "react-native";
 import {Slider} from "../src/Slider";
-
-// constants
-const thumbImage = require("./img/thumb.png");
-
 // styles
 import {
     aboveThumbStyles,
@@ -21,7 +17,10 @@ import {
     customStyles9,
     iosStyles,
     styles,
+    trackMarkStyles,
 } from "./styles";
+
+const thumbImage = require("./img/thumb.png");
 
 const DEFAULT_VALUE = 0.2;
 
@@ -35,22 +34,31 @@ const renderAboveThumbComponent = () => {
     return <View style={aboveThumbStyles.container} />;
 };
 
+const renderTrackMarkComponent = () => {
+    return <View style={trackMarkStyles.container} />;
+};
+
 const SliderContainer = (props: {
     caption: string,
-    children: React.node,
-    sliderValue?: number | Array<number>,
+    children: React.Node,
+    sliderValue?: Array<number>,
+    trackMarks?: Array<number>,
 }) => {
-    const {caption, sliderValue} = props;
-    const [value, setValue] = useState(
+    const {caption, sliderValue, trackMarks} = props;
+    const [value, setValue] = React.useState(
         !!sliderValue ? sliderValue : DEFAULT_VALUE
     );
+
+    const trackMarkValues =
+        trackMarks && trackMarks.filter(mark => mark > Math.max(value));
 
     const renderChildren = () => {
         return React.Children.map(props.children, child => {
             if (!!child && child.type === Slider) {
                 return React.cloneElement(child, {
+                    trackMarks: trackMarkValues,
                     value,
-                    onValueChange: val => setValue(val),
+                    onValueChange: setValue,
                 });
             }
             return child;
@@ -73,6 +81,18 @@ const App = () => (
         <ScrollView contentContainerStyle={styles.container}>
             <SliderContainer caption="<Slider/> with default style">
                 <Slider />
+            </SliderContainer>
+            <SliderContainer
+                caption="<Slider/> with track marks"
+                sliderValue={[1]}
+                trackMarks={[3, 7, 11]}
+            >
+                <Slider
+                    maximumValue={17}
+                    minimumValue={0}
+                    renderTrackMark={renderTrackMarkComponent}
+                    step={1}
+                />
             </SliderContainer>
             <SliderContainer caption="<Slider/> with custom thumb component">
                 <Slider

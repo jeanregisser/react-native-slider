@@ -70,6 +70,10 @@ declare module '@miblanchard/react-native-slider' {
     */
     renderThumbComponent?: () => ReactNode;
     /**
+    * Function which returns a custom Component of your liking to be rendered on top of the slider truck at the values provided by `trackMarks` property.
+    */
+    renderTrackMark?: (index: number) => ReactNode;
+    /**
      * Step value of the slider. The value should be between 0 and maximumValue - minimumValue)
      */
     step?: number;
@@ -96,8 +100,12 @@ declare module '@miblanchard/react-native-slider' {
      */
     trackClickable?: boolean;
     /**
-     * The style applied to the track line
-     */
+    * The value should be an array of numbers between minimumValue and maximumValue. In order to render a mark on top of the slider track at provided numbers `renderTrackMark` property should also be provided
+    */
+    trackMarks?: Array<number>;
+    /**
+    * The style applied to the track line
+    */
     trackStyle?: StyleProp<ViewStyle>;
     /**
      * Initial value of the slider. The value should be a number or array of numbers between minimumValue and maximumValue, which default to `0` and `1` respectively. Default value is `0`. This is not a controlled component, e.g. if you don't update the value, the component won't be reset to its inital value.
