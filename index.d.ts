@@ -24,7 +24,7 @@ declare module 'react-native-slider' {
      * If true the user won't be able to move the slider.
      * Default value is false.
      */
-    disabled: boolean
+    disabled?: boolean
 
     /**
      * Initial minimum value of the slider. Default value is 0.
