@@ -1,11 +1,9 @@
 declare module 'react-native-slider' {
-  import { ComponentClass, PureComponent } from 'react'
+  import { ComponentClass } from 'react'
 
   import {
     ImageSourcePropType,
-    SpringAnimationConfig,
-    StyleProp,
-    TimingAnimationConfig,
+    Animated,
     ViewStyle,
   } from 'react-native'
 
@@ -18,13 +16,13 @@ declare module 'react-native-slider' {
      * *This is not a controlled component*, e.g. if you don't update
      * the value, the component won't be reset to its inital value.
      */
-    value?: number
+    value: number
 
     /**
      * If true the user won't be able to move the slider.
      * Default value is false.
      */
-    disabled: boolean
+    disabled?: boolean
 
     /**
      * Initial minimum value of the slider. Default value is 0.
@@ -88,17 +86,17 @@ declare module 'react-native-slider' {
     /**
      * The style applied to the slider container.
      */
-    style?: StyleProp<ViewStyle>
+    style?: ViewStyle
 
     /**
      * The style applied to the track.
      */
-    trackStyle?: StyleProp<ViewStyle>
+    trackStyle?: ViewStyle;
 
     /**
      * The style applied to the thumb.
      */
-    thumbStyle?: StyleProp<ViewStyle>
+    thumbStyle?: ViewStyle;
 
     /**
      * Sets an image for the thumb.
@@ -123,7 +121,7 @@ declare module 'react-native-slider' {
     /**
      * Used to configure the animation parameters.  These are the same parameters in the Animated library.
      */
-    animationConfig?: SpringAnimationConfig | TimingAnimationConfig
+    animationConfig?: Animated.SpringAnimationConfig | Animated.TimingAnimationConfig
   }
 
   const Slider: ComponentClass<SliderProps>

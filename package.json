@@ -2,10 +2,12 @@
   "name": "react-native-slider",
   "version": "0.11.0",
   "description": "A pure JavaScript <Slider /> component for react-native",
-  "main": "lib/Slider.js",
+  "main": "src/Slider.js",
+  "types": "index.d.ts",
   "files": [
     "lib",
-    "src"
+    "src",
+    "index.d.ts"
   ],
   "author": "Jean Regisser <jean.regisser@gmail.com> (https://github.com/jeanregisser)",
   "keywords": [
