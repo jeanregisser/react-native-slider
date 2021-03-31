@@ -313,20 +313,20 @@ export default class Slider extends PureComponent {
     );
   }
 
-  _getPropsForComponentUpdate(props) {
-    const {
-      value,
-      onValueChange,
-      onSlidingStart,
-      onSlidingComplete,
-      style,
-      trackStyle,
-      thumbStyle,
-      ...otherProps
-    } = props;
+//   _getPropsForComponentUpdate(props) {
+//     const {
+//       value,
+//       onValueChange,
+//       onSlidingStart,
+//       onSlidingComplete,
+//       style,
+//       trackStyle,
+//       thumbStyle,
+//       ...otherProps
+//     } = props;
 
-    return otherProps;
-  }
+//     return otherProps;
+//   }
 
   _handleStartShouldSetPanResponder = (
     e: Object /* gestureState: Object */,
@@ -348,7 +348,7 @@ export default class Slider extends PureComponent {
     if (this.props.disabled) {
       return;
     }
-
+    this.props.onLayout && gestureState && this.props.onLayout(gestureState);
     this._setCurrentValue(this._getValue(gestureState));
     this._fireChangeEvent('onValueChange');
   };
