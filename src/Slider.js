@@ -56,7 +56,7 @@ export default class Slider extends PureComponent {
      * Default value is 0.
      *
      * *This is not a controlled component*, e.g. if you don't update
-     * the value, the component won't be reset to its inital value.
+     * the value, the component won't be reset to its initial value.
      */
     value: PropTypes.number,
 
@@ -139,6 +139,11 @@ export default class Slider extends PureComponent {
     trackStyle: ViewPropTypes.style,
 
     /**
+     * The component that renders inside track.
+     */
+    trackComponent: ViewPropTypes.object,
+
+    /**
      * The style applied to the thumb.
      */
     thumbStyle: ViewPropTypes.style,
@@ -190,7 +195,7 @@ export default class Slider extends PureComponent {
     value: new Animated.Value(this.props.value),
   };
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this._panResponder = PanResponder.create({
       onStartShouldSetPanResponder: this._handleStartShouldSetPanResponder,
       onMoveShouldSetPanResponder: this._handleMoveShouldSetPanResponder,
@@ -202,7 +207,7 @@ export default class Slider extends PureComponent {
     });
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const newValue = nextProps.value;
 
     if (this.props.value !== newValue) {
@@ -231,6 +236,7 @@ export default class Slider extends PureComponent {
       thumbTouchSize,
       animationType,
       animateTransitions,
+      trackComponent,
       ...other
     } = this.props;
     const {
@@ -260,6 +266,7 @@ export default class Slider extends PureComponent {
 
     const minimumTrackStyle = {
       position: 'absolute',
+      overflow: 'hidden',
       width: Animated.add(minimumTrackWidth, thumbSize.width / 2),
       backgroundColor: minimumTrackTintColor,
       ...valueVisibleStyle,
@@ -285,7 +292,9 @@ export default class Slider extends PureComponent {
         <Animated.View
           renderToHardwareTextureAndroid
           style={[mainStyles.track, trackStyle, minimumTrackStyle]}
-        />
+        >
+          {trackComponent}
+        </Animated.View>
         <Animated.View
           onLayout={this._measureThumb}
           renderToHardwareTextureAndroid

@@ -1,5 +1,5 @@
 declare module 'react-native-slider' {
-  import { ComponentClass, PureComponent } from 'react'
+  import { ComponentClass, FC } from 'react'
 
   import {
     ImageSourcePropType,
@@ -94,6 +94,11 @@ declare module 'react-native-slider' {
      * The style applied to the track.
      */
     trackStyle?: StyleProp<ViewStyle>
+
+    /**
+     * The component that renders inside track.
+     */
+    customTrackComponent?: FC
 
     /**
      * The style applied to the thumb.

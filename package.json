@@ -1,13 +1,13 @@
 {
-  "name": "react-native-slider",
-  "version": "0.11.0",
+  "name": "@ekreative/react-native-slider",
+  "version": "1.0.2",
   "description": "A pure JavaScript <Slider /> component for react-native",
   "main": "lib/Slider.js",
   "files": [
     "lib",
     "src"
   ],
-  "author": "Jean Regisser <jean.regisser@gmail.com> (https://github.com/jeanregisser)",
+  "author": "Oleksandr Hubar",
   "keywords": [
     "react-component",
     "react-native",
@@ -24,7 +24,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:jeanregisser/react-native-slider.git"
+    "url": "git@github.com:ekreative/react-native-slider.git"
   },
   "dependencies": {
     "prop-types": "^15.5.6"
