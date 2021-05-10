@@ -1,6 +1,6 @@
 {
   "name": "react-native-slider",
-  "version": "0.11.0",
+  "version": "1.0.0",
   "description": "A pure JavaScript <Slider /> component for react-native",
   "main": "lib/Slider.js",
   "files": [
@@ -30,12 +30,16 @@
     "prop-types": "^15.5.6"
   },
   "devDependencies": {
-    "babel-cli": "^6.6.5",
+    "@babel/cli": "^7.0.0",
+    "@babel/core": "^7.0.0",
     "babel-eslint": "^7.2.1",
-    "eslint": "^3.19.0",
-    "eslint-plugin-react": "^6.10.3",
-    "react": "16.0.0-alpha.6",
-    "react-native": "0.43.3",
-    "rimraf": "^2.5.2"
+    "eslint": "^7.25.0",
+    "eslint-plugin-react": "^7.23.2",
+    "react": "17.0.1",
+    "react-native": "0.64.0",
+    "rimraf": "^2.5.2",
+    "metro-react-native-babel-preset": "^0.64.0",
+    "babel-plugin-module-resolver": "^4.1.0",
+    "@babel/runtime": "^7.12.5"
   }
 }
