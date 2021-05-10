@@ -171,7 +171,7 @@ export default class Slider extends PureComponent {
     /**
      * Used to replace Image component.
      */
-    iconComponent: PropTypes.object,
+    iconComponent?: PropTypes.object,
   };
 
   static defaultProps = {
