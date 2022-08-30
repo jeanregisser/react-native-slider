@@ -7,16 +7,6 @@
     "lib",
     "src"
   ],
-  "funding": [
-    {
-      "type": "individual",
-      "url": "https://Alipay/flyskywhy@gmail.com "
-    },
-    {
-      "type": "individual",
-      "url": "https://EthAddress/0xd02fa2738dcbba988904b5a9ef123f7a957dbb3e"
-    }
-  ],
   "author": "Jean Regisser <jean.regisser@gmail.com> (https://github.com/jeanregisser)",
   "keywords": [
     "react-component",
@@ -36,11 +26,8 @@
     "type": "git",
     "url": "git@github.com:jeanregisser/react-native-slider.git"
   },
-  "peerDependencies": {
-    "deprecated-react-native-prop-types": "^2.3.0",
-    "react-native-gesture-handler": ">=1.1.0"
-  },
   "dependencies": {
+    "deprecated-react-native-prop-types": "^2.3.0",
     "prop-types": "^15.5.6"
   },
   "devDependencies": {
