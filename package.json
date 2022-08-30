@@ -28,8 +28,7 @@
   },
   "dependencies": {
     "deprecated-react-native-prop-types": "^2.3.0",
-    "prop-types": "^15.5.6",
-    "react-native-slider": "https://github.com/tianxiaotouyuna/react-native-slider.git"
+    "prop-types": "^15.5.6"
   },
   "devDependencies": {
     "babel-cli": "^6.6.5",
