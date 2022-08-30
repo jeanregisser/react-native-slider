@@ -24,7 +24,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:jeanregisser/react-native-slider.git"
+    "url": "git@github.com:tianxiaotouyuna/react-native-slider.git"
   },
   "dependencies": {
     "deprecated-react-native-prop-types": "^2.3.0",
