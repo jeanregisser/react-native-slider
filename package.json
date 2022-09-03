@@ -2,7 +2,7 @@
   "name": "react-native-slider",
   "version": "0.11.0",
   "description": "A pure JavaScript <Slider /> component for react-native",
-  "main": "lib/Slider.js",
+  "main": "src/Slider.js",
   "files": [
     "lib",
     "src"
@@ -23,10 +23,11 @@
     "prepublish": "npm run clean && npm run build"
   },
   "repository": {
-    "type": "git",
-    "url": "git@github.com:jeanregisser/react-native-slider.git"
+    "type": "https",
+    "url": "https://github.com/tianxiaotouyuna/react-native-slider.git"
   },
   "dependencies": {
+    "deprecated-react-native-prop-types": "^2.3.0",
     "prop-types": "^15.5.6"
   },
   "devDependencies": {
