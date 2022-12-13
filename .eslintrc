@@ -6,9 +6,7 @@
   "ecmaFeatures": {
     "jsx": true
   },
-  "plugins": [
-    "react"
-  ],
+  "plugins": ["react"],
   "globals": {
     "__DEV__": true,
     "__dirname": false,
@@ -40,27 +38,11 @@
     "pit": false
   },
   "rules": {
-    "indent": [
-      2,
-      2
-    ],
-    "quotes": [
-      2,
-      "single",
-      "avoid-escape"
-    ],
-    "linebreak-style": [
-      2,
-      "unix"
-    ],
-    "semi": [
-      2,
-      "always"
-    ],
-    "strict": [
-      2,
-      "global"
-    ],
+    "indent": [2, 2],
+    "quotes": [2, "double", "avoid-escape"],
+    "linebreak-style": [2, "unix"],
+    "semi": [2, "always"],
+    "strict": [2, "global"],
     "global-strict": 0,
     "no-use-before-define": 0,
     "comma-dangle": 0,
